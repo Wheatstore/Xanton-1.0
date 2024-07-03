@@ -10,6 +10,7 @@ function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("")
+    const [showPassword, setShowpassword] = useState(false) 
 
     const emailChange = (e) => {
         setEmail(e.target.value);
@@ -62,8 +63,8 @@ function Signup() {
                         <input placeholder="Email" value={email} onChange={emailChange} type="text" className="email-input" />
                     </div>
                     <div className="password-input-container">
-                        <input placeholder="Password" value={password} onChange={passwordChange} type="password" className="password-input" />
-                        <button type="button" className="show-password-button">show</button>
+                        <input placeholder="Password" value={password} onChange={passwordChange} type={showPassword ? "text" : "password" } className="password-input" />
+                        <button type="button" onClick={() => setShowpassword(prev => (!prev))} className="show-password-button">show</button>
                     </div>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                     <div className="signup-button-container">

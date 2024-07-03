@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom"
 function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [showPassword, setShowpassword] = useState(false)
     const [error, setError] = useState("")
 
     const navigate = useNavigate()
@@ -58,8 +59,8 @@ function Login() {
                         <input placeholder="Email" value={email} onChange={emailChange} type="email" className="email-input"/>
                     </div>
                     <div className="password-input-container">
-                        <input placeholder="Password" value={password} onChange={passwordChange} type="password" className="password-input" />
-                        <button type="button" className="show-password-button">show</button>
+                        <input placeholder="Password" value={password} onChange={passwordChange} type={showPassword ? "text" : "password" } className="password-input" />
+                        <button type="button" className="show-password-button" onClick={() => setShowpassword(prev => (!prev))}>show</button>
                     </div>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                     <div className="forgot-password-container">
@@ -69,7 +70,7 @@ function Login() {
                         <button type="submit" className="login-button">Login</button>
                     </div>
                     <div className="login-page-link-sign-up-page-container">
-                        <p>Not apart of Xanton <a href="/login">Join</a> now</p>
+                        <p>Not apart of Xanton <a href="/signup">Join</a> now</p>
                     </div>
                     <div className="divider">
                         <hr className="divider-line"/>
