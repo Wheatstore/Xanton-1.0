@@ -68,6 +68,10 @@ function Sidebar() {
           </div>
         ))}
       </div>
+      <div className="user-sidebar-account-information">
+        <img src={user.photoURL} alt="" />
+        <h3>{user.displayName}</h3>
+      </div>
     </div>
   );
 }
