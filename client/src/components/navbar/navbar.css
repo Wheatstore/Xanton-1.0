@@ -63,15 +63,20 @@
     top: 100%;
     right: 0;
     border-radius: 20px;
-    background-color: #000000;
+    background-color: #131313d4;
     color: white;
     height: fit-content;
     width: fit-content;
     text-align: center;
-    width: 120px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    padding: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.8);
     z-index: 1;
     align-items: center;
+}
+
+.user-photoUrl-navbar-authenticated{
+    width: 50px;
+    border-radius: 50%;
 }
 
 .dropdown-menu span {

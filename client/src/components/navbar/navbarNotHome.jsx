@@ -1,6 +1,5 @@
 import "./navbar.css"; // Import the navbar CSS
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
 function NavbarNotHome() {

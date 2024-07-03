@@ -6,14 +6,12 @@ import { generateFromEmail, generateUsername } from "unique-username-generator";
 const signUpEmailPassword = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    console.log("A new user has been created: ", userCredential);
     const user = userCredential.user;
 
     const username = generateUsername()
 
     if (!user.photoURL){
       await updateProfile(user, {photoURL: "/images/Default_pfp.svg.png"})
-      console.log(user)
     }
     await updateProfile(user, {displayName: username})
     // Additional user logic here if needed
