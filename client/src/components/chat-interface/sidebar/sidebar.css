@@ -1,0 +1,212 @@
+.sidebar-container {
+    height: 100vh;
+    margin-top: 0px;
+    width: 13.5%;
+    background-color: rgb(24, 24, 24);
+    padding-top: 30px;
+    border-right: 1px solid rgba(0, 0, 0, 0.291);
+    overflow-y: auto;
+    transition: width 0.3s ease;
+}
+
+.logo-heading-container {
+    text-align: left;
+}
+
+.logo-heading-container button {
+    background-color: transparent;
+    border: transparent;
+    cursor: pointer;
+}
+
+.sidebar-logo-heading {
+    margin-left: 30px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 40px;
+    font-weight: 500;
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(90deg, #0011ff, pink, #e100ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.explore-xanton-button-container {
+    margin-left: 20px;
+    margin-top: 0px;
+    padding: 0px;
+}
+
+.explore-xanton-button {
+    padding: 10px;
+    cursor: pointer;
+    background-color: transparent;
+    border: transparent;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 80%;
+    color: white;
+    font-size: 14px;
+    font-family: "Inter", sans-serif;
+    font-weight: 350;
+    transition: 0.5s ease-in-out;
+}
+
+.mr-1 {
+    color: white;
+}
+
+.explore-xanton-button:hover {
+    background-color: rgba(252, 56, 187, 0.396);
+}
+
+.previous-chats-container {
+    margin-left: 25px;
+    margin-top: 10px;
+    height: fit-content;
+    max-height: 70vh;
+}
+
+.previous-chats-heading {
+    color: white;
+    margin-left: 8px;
+    font-weight: 450;
+    font-size: 14px;
+    font-family: "Inter", sans-serif;
+}
+
+.chat-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 5px;
+    margin-top: 20px;
+    width: 95%;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    transition: 0.2s ease-in;
+}
+
+.chat-item:hover {
+    background-color: rgba(114, 114, 114, 0.576);
+}
+
+.chat-item-image {
+    width: 55px;
+    border-radius: 50%;
+}
+
+.chat-item {
+    font-family: "Inter";
+    color: white;
+    font-size: 14px;
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+    .sidebar-container {
+        width: 20%;
+    }
+
+    .sidebar-logo-heading {
+        font-size: 30px;
+    }
+
+    .explore-xanton-button {
+        font-size: 14px;
+    }
+
+    .previous-chats-heading {
+        font-size: 14px;
+    }
+
+    .chat-item {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar-container {
+        width: 25%;
+    }
+
+    .sidebar-logo-heading {
+        font-size: 25px;
+    }
+
+    .explore-xanton-button {
+        font-size: 13px;
+    }
+
+    .previous-chats-heading {
+        font-size: 13px;
+    }
+
+    .chat-item {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar-container {
+        width: 40%;
+    }
+
+    .sidebar-logo-heading {
+        font-size: 20px;
+    }
+
+    .explore-xanton-button {
+        font-size: 12px;
+    }
+
+    .previous-chats-heading {
+        font-size: 12px;
+    }
+
+    .chat-item {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar-container {
+        width: 100%;
+        height: auto;
+    }
+
+    .sidebar-logo-heading {
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+    .explore-xanton-button-container {
+        margin-left: 10px;
+    }
+
+    .previous-chats-container {
+        margin-left: 10px;
+    }
+
+    .user-account-information-container {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .user-photo-user-account-information {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    .username-user-account-information {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,32 @@
+.product-card-container {
+    margin-top: 35px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(25%, 1fr));
+    gap: 30px;
+    justify-content: center;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+/* product.css */
+
+.product-card-page-container {
+    padding: 20px;
+}
+
+@keyframes fadeInPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.bot-card {
+    animation: fadeInPop 0.5s ease-in-out;
+    /* To add a slight delay for staggered effect */
+    animation-delay: calc(var(--delay) * 0.1s);
+    animation-fill-mode: both; /* Keep the animation's end state */
+}

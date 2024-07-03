@@ -1,0 +1,11 @@
+.chat-page-container{
+    margin: 0px;
+    background-color: rgb(34, 34, 34);
+    display: flex;
+    flex-direction: row;
+}
+
+.user-interface-chat-container{
+    flex-grow: 1;
+    width: 80%;
+}

@@ -1,0 +1,118 @@
+.display-message-container{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.display-input-container-chat-window{
+    margin-top: 10px;
+    padding-left: 18%;
+    padding-right: 18%;
+}
+
+
+.messages-wrapper{
+    overflow-y: auto;
+    scrollbar-color: red, orange;
+    scrollbar-width: thin;
+    padding-left: 22%;
+    padding-right: 22%;
+    height: 86vh;
+}
+
+.welcome-message-image-chatWindow{
+    width: 150px;
+    border-radius: 50%;
+}
+
+.welcome-message-container{
+    margin-top: 30px;
+    color: rgb(238, 238, 238);
+    font-family: "Inter", sans-serif;
+}
+
+.welcome-message{
+    font-weight: 600;
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(90deg, #0f19a9, rgb(254, 90, 175), #e100ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+
+.message-input {
+    position: relative;
+    width: 80%;
+    max-width: 100%;
+    padding: 15px;
+    white-space-collapse: preserve;
+    margin-top: 0px;
+    font-size: 14.5px;
+    border: none;
+    border-radius: 25px;
+    background-color: #333;
+    color: #fff;
+    resize: none;
+    overflow-wrap: break-word;
+    outline: none;
+    font-family: "Inter", sans-serif;
+    transition: all 0.2s ease;
+    margin-bottom: 0px;
+}
+
+.use-scrollbar-message{
+    font-size: 10px;
+    margin-top: 0px;
+    color: white;
+    font-family: "Inter";
+}
+
+.message-input::placeholder {
+    color: #888;
+}
+
+.skeleton-image {
+    width: 40px;
+    background-color: #454545;
+    animation: pulse 1.5s infinite;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.skeleton-content {
+    width: 50%;
+    background-color: #454545;
+    animation: pulse 1.5s infinite;
+    height: 50px;
+    border-radius: 20px;
+}
+
+.skeleton-text-container {
+    display: flex;
+    margin-bottom: 10vh;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.skeleton-profile-picture-doctor{
+    width: 150px;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+    background-color: #454545;
+}
+
+@keyframes pulse {
+    0% {
+        background-color: #454545;
+    }
+    50% {
+        background-color: #454545;
+    }
+    100% {
+        background-color: #454545;
+    }
+}
