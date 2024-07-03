@@ -33,7 +33,9 @@ function Product() {
     return (
         <>
             <div className="product-card-page-container">
-                {loadingBots ? <div className="skeleton-card"></div> : 
+                {loadingBots ? <div className="skeleton-card-container"><div className="skeleton-card"><div className="skeleton-card-image"></div></div>
+                    <div className="skeleton-card"><div className="skeleton-card-image"></div></div><div className="skeleton-card"><div className="skeleton-card-image"></div></div>
+                </div> : 
                 <div className="product-card-container">
                     {bots.map(bot => (
                         <BotCard key={bot.id} person={bot} />
