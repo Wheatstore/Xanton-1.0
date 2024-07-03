@@ -149,7 +149,7 @@ function ChatWindow() {
             <div className="messages-wrapper" ref={messageWrapperRef}>
                 <div className="welcome-message-container">
                     <div className="welcome-message-image-container">
-                        {botProfilePicture ? <img src={botProfilePicture} alt="" className="welcome-message-image-chatWindow" /> :<div className="skeleton-profile-picture"></div>}
+                        {!botProfilePicture ? <div className="skeleton-profile-picture-container"><div className="skeleton-profile-picture"></div></div> : <img src={botProfilePicture} alt="" className="welcome-message-image-chatWindow" />}
                     </div>
                     <h2 className="welcome-message">Welcome to your conversation with {botName}</h2>
                 </div>

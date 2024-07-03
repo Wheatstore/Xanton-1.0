@@ -98,8 +98,14 @@
     gap: 15px;
 }
 
-.skeleton-profile-picture-doctor{
+.skeleton-profile-picture-container{
+    display: flex;
+    justify-content: center;
+}
+
+.skeleton-profile-picture{
     width: 150px;
+    height: 150px;
     border-radius: 50%;
     animation: pulse 1.5s infinite;
     background-color: #454545;

@@ -6,6 +6,7 @@ import { collection, getDocs, query, addDoc } from "firebase/firestore";
 
 function Product() {
     const [bots, setBots] = useState([]);
+    const [loadingBots, setLoadingBots] = useState(true)
 
     useEffect(() => {
         const getBots = async () => {
@@ -20,6 +21,7 @@ function Product() {
                 }));
 
                 setBots(botsList);
+                setLoadingBots(false)
             } catch (error) {
                 console.error("Error fetching bots: ", error);
             }
@@ -31,11 +33,12 @@ function Product() {
     return (
         <>
             <div className="product-card-page-container">
+                {loadingBots ? <div className="skeleton-card"></div> : 
                 <div className="product-card-container">
                     {bots.map(bot => (
                         <BotCard key={bot.id} person={bot} />
                     ))}
-                </div>
+                </div>}
             </div>
         </>
     );
