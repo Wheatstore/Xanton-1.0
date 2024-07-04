@@ -167,7 +167,6 @@
     background-color: #303030;
   }
   
-  
   .sidebar-dropdown-item {
     display: block;
     padding: 5px;
@@ -181,5 +180,112 @@
   
   .sidebar-dropdown-item:hover {
     background-color: darken(#f8f9fa, 9%);
+  }
+  
+  /* Responsive CSS */
+  @media (max-width: 768px) {
+    .sidebar-container {
+      width: 100%;
+      height: auto;
+    }
+  
+    .sidebar-logo-heading {
+      font-size: 30px;
+      margin-left: 15px;
+    }
+  
+    .explore-xanton-button-container {
+      margin-left: 10px;
+    }
+  
+    .explore-xanton-button {
+      width: 90%;
+      font-size: 12px;
+    }
+  
+    .previous-chats-container {
+      margin-left: 15px;
+      height: auto;
+      max-height: none;
+    }
+  
+    .user-sidebar-account-information {
+      margin-left: 15px;
+      margin-right: 10px;
+    }
+  
+    .user-sidebar-account-information img {
+      height: 25px;
+      width: 25px;
+    }
+  
+    .user-sidebar-account-information h3 {
+      font-size: 12px;
+    }
+  
+    .dropdown-toggle {
+      font-size: 12px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .sidebar-logo-heading {
+      font-size: 25px;
+      margin-left: 10px;
+    }
+  
+    .explore-xanton-button-container {
+      margin-left: 5px;
+    }
+  
+    .explore-xanton-button {
+      width: 95%;
+      font-size: 10px;
+    }
+  
+    .previous-chats-container {
+      margin-left: 10px;
+    }
+  
+    .chat-item {
+      gap: 5px;
+      padding: 3px;
+      margin-top: 10px;
+    }
+  
+    .chat-item-image {
+      width: 45px;
+    }
+  
+    .chat-item {
+      font-size: 12px;
+    }
+  
+    .user-sidebar-account-information {
+      margin-left: 10px;
+      margin-right: 5px;
+    }
+  
+    .user-sidebar-account-information img {
+      height: 20px;
+      width: 20px;
+    }
+  
+    .user-sidebar-account-information h3 {
+      font-size: 10px;
+    }
+  
+    .dropdown-toggle {
+      font-size: 10px;
+    }
+  
+    .sidebar-dropdown-menu {
+      padding: 5px 5px;
+    }
+  
+    .sidebar-dropdown-item {
+      padding: 3px;
+      font-size: 12px;
+    }
   }
   

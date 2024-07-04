@@ -6,7 +6,9 @@ function Chat(){
   return (
     <>
     <div className="chat-page-container">
-        <Sidebar />
+        <div className="sidebar-chat-page-container">
+          <Sidebar />
+        </div>
         <div className="user-interface-chat-container">
           <ChatWindow />
         </div>
