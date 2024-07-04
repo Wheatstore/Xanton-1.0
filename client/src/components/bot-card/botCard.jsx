@@ -50,9 +50,9 @@ function BotCard({ person, index, delay }) {
             <h2 className="person-name">{person.name}</h2>
             <p className="person-description">{person.description}</p>
           </div>
-          <div className="button-container">
-            <button className="chat-with-button" onClick={() => onClick(person.id)}>Chat with</button>
-          </div>
+        </div>
+        <div className="button-container">
+          <button className="chat-with-button" onClick={() => onClick(person.id)}>Chat with</button>
         </div>
       </div>
     </div>
