@@ -1,24 +1,26 @@
+/* Existing CSS */
 .sidebar-container {
     height: 100vh;
     margin-top: 0px;
-    width: 15%;
+    width: fit-content;
     background-color: rgb(24, 24, 24);
     padding-top: 30px;
     border-right: 1px solid rgba(0, 0, 0, 0.291);
     transition: width 0.3s ease;
-}
-
-.logo-heading-container {
+    position: relative; /* Add this to contain the dropdown within the sidebar */
+  }
+  
+  .logo-heading-container {
     text-align: left;
-}
-
-.logo-heading-container button {
+  }
+  
+  .logo-heading-container button {
     background-color: transparent;
     border: transparent;
     cursor: pointer;
-}
-
-.sidebar-logo-heading {
+  }
+  
+  .sidebar-logo-heading {
     margin-left: 30px;
     margin-top: 0px;
     margin-bottom: 10px;
@@ -30,15 +32,15 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-}
-
-.explore-xanton-button-container {
+  }
+  
+  .explore-xanton-button-container {
     margin-left: 20px;
     margin-top: 0px;
     padding: 0px;
-}
-
-.explore-xanton-button {
+  }
+  
+  .explore-xanton-button {
     padding: 10px;
     cursor: pointer;
     background-color: transparent;
@@ -53,33 +55,33 @@
     font-family: "Inter", sans-serif;
     font-weight: 350;
     transition: 0.5s ease-in-out;
-}
-
-.mr-1 {
+  }
+  
+  .mr-1 {
     color: white;
-}
-
-.explore-xanton-button:hover {
+  }
+  
+  .explore-xanton-button:hover {
     background-color: rgba(252, 56, 187, 0.396);
-}
-
-.previous-chats-container {
+  }
+  
+  .previous-chats-container {
     margin-left: 25px;
     margin-top: 10px;
     overflow-y: auto;
-    height: 75vh;
-    max-height: 75vh;
-}
-
-.previous-chats-heading {
+    height: 73vh;
+    max-height: 73vh;
+  }
+  
+  .previous-chats-heading {
     color: white;
     margin-left: 8px;
     font-weight: 450;
     font-size: 14px;
     font-family: "Inter", sans-serif;
-}
-
-.chat-item {
+  }
+  
+  .chat-item {
     display: flex;
     gap: 10px;
     align-items: center;
@@ -90,25 +92,26 @@
     margin-bottom: 10px;
     border-radius: 10px;
     transition: 0.2s ease-in;
-}
-
-.chat-item:hover {
+  }
+  
+  .chat-item:hover {
     background-color: rgba(114, 114, 114, 0.576);
-}
-
-.chat-item-image {
+  }
+  
+  .chat-item-image {
     width: 55px;
     border-radius: 50%;
-}
-
-.chat-item {
+  }
+  
+  .chat-item {
     font-family: "Inter";
     color: white;
     font-size: 14px;
-}
-
-.user-sidebar-account-information{
+  }
+  
+  .user-sidebar-account-information {
     display: flex;
+    max-width: 500px;
     gap: 10px;
     border-radius: 20px;
     border: transparent;
@@ -118,124 +121,65 @@
     align-items: center;
     flex-direction: row;
     transition: 0.3s ease-in;
-}
-
-.user-sidebar-account-information:hover{
+  }
+  
+  .user-sidebar-account-information:hover {
     background-color: rgba(114, 114, 114, 0.576);
-}
-
-.user-sidebar-account-information img{
+  }
+  
+  .user-sidebar-account-information img {
     height: 30px;
     width: 30px;
-}
-
-.user-sidebar-account-information h3{
+  }
+  
+  .user-sidebar-account-information h3 {
     color: white;
     font-family: "Inter", sans-serif;
     font-weight: 350;
     font-size: 14px;
-}
-
-/* Responsive Styles */
-@media (max-width: 1200px) {
-    .sidebar-container {
-        width: 20%;
-    }
-
-    .sidebar-logo-heading {
-        font-size: 30px;
-    }
-
-    .explore-xanton-button {
-        font-size: 14px;
-    }
-
-    .previous-chats-heading {
-        font-size: 14px;
-    }
-
-    .chat-item {
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 768px) {
-    .sidebar-container {
-        width: 25%;
-    }
-
-    .sidebar-logo-heading {
-        font-size: 25px;
-    }
-
-    .explore-xanton-button {
-        font-size: 13px;
-    }
-
-    .previous-chats-heading {
-        font-size: 13px;
-    }
-
-    .chat-item {
-        font-size: 13px;
-    }
-}
-
-@media (max-width: 576px) {
-    .sidebar-container {
-        width: 40%;
-    }
-
-    .sidebar-logo-heading {
-        font-size: 20px;
-    }
-
-    .explore-xanton-button {
-        font-size: 12px;
-    }
-
-    .previous-chats-heading {
-        font-size: 12px;
-    }
-
-    .chat-item {
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .sidebar-container {
-        width: 100%;
-        height: auto;
-    }
-
-    .sidebar-logo-heading {
-        font-size: 20px;
-        margin-left: 10px;
-    }
-
-    .explore-xanton-button-container {
-        margin-left: 10px;
-    }
-
-    .previous-chats-container {
-        margin-left: 10px;
-    }
-
-    .user-account-information-container {
-        display: flex;
-        align-items: center;
-        margin-left: 10px;
-        margin-bottom: 10px;
-    }
-
-    .user-photo-user-account-information {
-        width: 40px;
-        height: 40px;
-        margin-right: 10px;
-    }
-
-    .username-user-account-information {
-        font-size: 14px;
-    }
-}
+  }
+  
+  .dropdown-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  /* New CSS for dropdown menu */
+  .sidebar-dropdown-menu {
+    display: block;
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    padding-left: 0px;
+    box-shadow: none;
+    max-height: 0;
+    text-align: left;
+    width: 100%;
+    transform: translateY(-180px);
+    max-height: 500px;
+    border-radius: 20px;
+    padding: 10px 10px;
+    visibility: visible;
+    overflow: hidden;
+    background-color: #303030;
+  }
+  
+  
+  .sidebar-dropdown-item {
+    display: block;
+    padding: 5px;
+    color: white;
+    font-size: 14px;
+    font-family: "Inter";
+    font-weight: 350;
+    background-color: #303030;
+    cursor: pointer;
+  }
+  
+  .sidebar-dropdown-item:hover {
+    background-color: darken(#f8f9fa, 9%);
+  }
+  
