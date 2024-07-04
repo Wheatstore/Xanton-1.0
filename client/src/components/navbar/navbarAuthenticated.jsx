@@ -26,6 +26,7 @@ function NavbarAuthenticated({ username }) {
                 <a href="/user" className="to-home-button-navbar">Xanton</a>
             </div>
             <div className="buttons-authenticated-container">
+                <button className="create-a-new-bot">Request a new bot</button>
                 <button onClick={toggleDropdown} className="profile-button">
                     <span className="material-symbols-outlined" id="account-circle-image-google-fonts">account_circle</span>
                 </button>

@@ -98,3 +98,18 @@
     background: none;
     width: 100%;
 }
+
+.create-a-new-bot{
+    border: transparent;
+    border-radius: 30px;
+    padding: 12px 24px;
+    font-size: 18px;
+    color: white;
+    background-color: black;
+    font-weight: 500;
+    transition: 0.3s ease-in-out;
+}
+
+.create-a-new-bot:hover{
+    transform: scale(1.1);
+}
