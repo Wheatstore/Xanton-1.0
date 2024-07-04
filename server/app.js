@@ -59,6 +59,16 @@ app.post("/chat/:uid/:characterId", async (req, res) => {
     }
 });
 
+app.post("/api/create-new-bot", (req, res) => {
+    try {
+        console.log(req.body)
+        res.sendStatus(200)
+    } catch (error){
+        console.error("There was an error sending it to you")
+        throw error
+    }
+})
+
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html')); // Send the file to the user

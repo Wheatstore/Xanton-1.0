@@ -1,14 +1,17 @@
 .new-bot-container {
-    max-width: 600px;
+    max-width: 70%;
+    height: 816;
     margin: 0 auto;
+    flex-grow: 1;
     padding: 20px;
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
 .new-bot-container h2 {
     text-align: center;
+    font-family: "Inter";
     margin-bottom: 20px;
 }
 
@@ -18,17 +21,24 @@
 
 .new-bot-form label {
     display: block;
+    font-family: "Inter";
     margin-bottom: 5px;
-    font-weight: bold;
+    font-weight: 500;
+}
+
+.new-bot-form input{
+    height: 40px;
 }
 
 .new-bot-form input,
 .new-bot-form textarea {
+    font-family: "Inter";
     width: calc(100% - 10px); /* to adjust for padding */
     padding: 5px;
+    outline: transparent;
     font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #c6c6c6;
+    border-radius: 10px;
 }
 
 .new-bot-form textarea {
@@ -36,17 +46,55 @@
     resize: vertical;
 }
 
+.create-bot-submit-container{
+    text-align: center;
+    margin-top: 20px;
+}
+
 .new-bot-form button {
-    width: 100%;
-    padding: 10px;
+    text-align: center;
+    width: 50%;
+    padding: 15px 20px;
+    font-family: "Inter";
     background-color: #007bff;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 30px;
     font-size: 16px;
     cursor: pointer;
 }
 
 .new-bot-form button:hover {
     background-color: #0056b3;
+}
+
+
+.guidelines-container {
+    max-width: 30%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.guidelines-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.guidelines-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.guidelines-container li {
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.guidelines-container li strong {
+    display: block;
+    margin-bottom: 5px;
 }
