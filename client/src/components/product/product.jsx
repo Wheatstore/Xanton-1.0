@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import BotCard from "../bot-card/botCard";
 import "./product.css";
 import { db } from "../../firebase";
-import { collection, getDocs, query, addDoc } from "firebase/firestore";
+import { collection, getDocs, query, addDoc, doc, getDoc, setDoc } from "firebase/firestore";
 
 function Product() {
     const [bots, setBots] = useState([]);
     const [loadingBots, setLoadingBots] = useState(true)
+    
 
     useEffect(() => {
         const getBots = async () => {

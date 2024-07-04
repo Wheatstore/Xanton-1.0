@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 
 function HeroSection(){
     const location = useLocation()
+    const navigate = useNavigate()
 
     return (
         <>
@@ -17,7 +18,7 @@ function HeroSection(){
                 <h3>Step into the past and converse with the most influential figures in human history. With just your typing, unlock the wisdom, insights, and stories of legendary leaders, thinkers, and pioneers.</h3>
             </div>
             {location.pathname === "/" && <div className="join-now-button-container">
-                <button onSubmit={() => useNavigate("/signup")} className="join-now-hero-section-button">Get Started</button>
+                <button onClick={() => navigate("/signup")} className="join-now-hero-section-button">Get Started</button>
             </div>}
         </>
     )
