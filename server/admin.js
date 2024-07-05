@@ -1,5 +1,5 @@
 var admin = require("firebase-admin");
-var serviceAccount = require("C:/Users/syoo2/OneDrive/Documents/Xanton-1.0-important/xanton-1-firebase-adminsdk-sxkma-926b7c4612.json");
+var serviceAccount = require("C:/Users/yoona/OneDrive/Documents/Xanton-1.0-important/xanton-1-firebase-adminsdk-sxkma-926b7c4612.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
