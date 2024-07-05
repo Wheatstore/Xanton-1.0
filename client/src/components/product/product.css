@@ -103,3 +103,26 @@
         font-size: 14px;
     }
 }
+
+@media (min-width: 1024px){
+    .person-container {
+        height: fit-content;
+    }
+
+    .content-container{
+        height: 425px;
+    }
+
+    .information-container{
+        height: fit-content;
+        margin: 0px;
+    }
+
+    .person-description{
+        margin-bottom: 10px;
+    }
+    .chat-with-button{
+        margin-top: 10px;
+        width: 60%;
+    }
+}

@@ -7,7 +7,7 @@
     background: url('https://flow-computing.com/uploads/images/transforms/_xlargeWebp/1868/flow-bubble.webp') no-repeat center center fixed;
     background-size: cover;
     background-color: white;
-    height: 100vh;
+    height: fit-content;
 }
 
 .new-bot-form-page-container{
