@@ -5,6 +5,7 @@ import { auth } from './firebase';
 import { useAuthState } from "react-firebase-hooks/auth";
 import AuthenticatedPage from './pages/authenticated/authenticated';
 import NewBotPage from './pages/newBotPage/newBotPage';
+import Admin from './pages/admin/admin';
 
 function App() {
   const [user, loading] = useAuthState(auth)
@@ -27,6 +28,7 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/user" element={user ? <AuthenticatedPage /> : <Navigate to="/login"/>} />
             <Route path="/create-new-bot" element={user? <NewBotPage /> : <Navigate to="/login" />} />
+            <Route path="/admin" element={user && user.email === "yoonate25@gmail.com" ? <Admin /> : <Navigate to="/" />} />
           </Routes>
         </Router>
     </>

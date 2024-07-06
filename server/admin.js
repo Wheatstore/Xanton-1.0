@@ -1,4 +1,5 @@
 var admin = require("firebase-admin");
+const {FieldValue} = require('firebase-admin/firestore');
 var serviceAccount = require("C:/Users/yoona/OneDrive/Documents/Xanton-1.0-important/xanton-1-firebase-adminsdk-sxkma-926b7c4612.json");
 
 admin.initializeApp({
@@ -30,6 +31,7 @@ async function setNewBot(name, creator, creatorId, greeting, description, additi
             greeting: greeting,
             description: description,
             additionalMessage: additionalMessage,   
+            timestamp: FieldValue.serverTimestamp()
         })
         console.log("A new doc was created")
     } catch (error){

@@ -61,6 +61,7 @@ app.post("/chat/:uid/:characterId", async (req, res) => {
 
 app.post("/api/create-new-bot", async (req, res) => {
     try {
+        console.log(req.body)
         const { name, creator, creatorId, greeting, description, additionalMessage } = req.body
         await setNewBot(name, creator, creatorId, greeting, description, additionalMessage)
         res.sendStatus(200)

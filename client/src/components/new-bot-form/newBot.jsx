@@ -15,7 +15,6 @@ function NewBot(){
 
     const handleSubmit = async () => {
         try {
-            console.log(aMessage)
             const response = await axios.post("http://localhost:3000/api/create-new-bot", {
                 name: name,
                 creator: user.displayName,
@@ -25,7 +24,7 @@ function NewBot(){
                 additionalMessage: aMessage
             })
             if (response.status === 200){
-                
+                navigate("/user")
             }
         } catch (error) {
             console.error(error)
