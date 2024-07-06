@@ -1,10 +1,13 @@
 import "./newBot.css"
 import axios from "axios"
 import { useState } from "react"
+import { useAuthState } from "react-firebase-hooks/auth"
 import { useNavigate } from "react-router-dom"
+import { auth } from "../../firebase"
 
 function NewBot(){
     const navigate = useNavigate()
+    const [user] = useAuthState(auth)
     const [name, setName] = useState("")
     const [greeting, setGreeting] = useState("")
     const [description, setDescription] = useState("")
@@ -12,11 +15,14 @@ function NewBot(){
 
     const handleSubmit = async () => {
         try {
+            console.log(aMessage)
             const response = await axios.post("http://localhost:3000/api/create-new-bot", {
                 name: name,
+                creator: user.displayName,
+                creatorId: user.uid,
                 greeting: greeting,
                 description: description,
-                additonalMessage: aMessage
+                additionalMessage: aMessage
             })
             if (response.status === 200){
                 

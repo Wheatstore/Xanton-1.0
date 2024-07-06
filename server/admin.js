@@ -19,4 +19,23 @@ async function updateMessage(messageId, userId, characterId, reply){
     }
     
 }
-module.exports = { updateMessage }
+
+async function setNewBot(name, creator, creatorId, greeting, description, additionalMessage) {
+    try {
+        const newBotref = db.collection('newBotRequest')
+        await newBotref.add({
+            name: name,
+            creator: creator, 
+            creatorId: creatorId,
+            greeting: greeting,
+            description: description,
+            additionalMessage: additionalMessage,   
+        })
+        console.log("A new doc was created")
+    } catch (error){
+        console.error("There was an error setting a new Bot", error)
+        throw error
+    }
+}
+
+module.exports = { updateMessage, setNewBot }

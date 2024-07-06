@@ -4,7 +4,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const axios = require("axios");
-const { updateMessage } = require("./admin")
+const { updateMessage, setNewBot } = require("./admin")
 
 const API_KEY = process.env.OPENAI_API_KEY;
 
@@ -59,9 +59,10 @@ app.post("/chat/:uid/:characterId", async (req, res) => {
     }
 });
 
-app.post("/api/create-new-bot", (req, res) => {
+app.post("/api/create-new-bot", async (req, res) => {
     try {
-        console.log(req.body)
+        const { name, creator, creatorId, greeting, description, additionalMessage } = req.body
+        await setNewBot(name, creator, creatorId, greeting, description, additionalMessage)
         res.sendStatus(200)
     } catch (error){
         console.error("There was an error sending it to you")
