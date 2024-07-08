@@ -1,0 +1,99 @@
+.user-information-edit-container{
+    margin-top: 7%;
+    text-align: center;
+}
+
+.heading-container-user-information-edit{
+    font-family: "Inter";
+}
+
+.heading-container-user-information-edit h1{
+    color: white;
+    font-weight: 350;
+}
+
+
+.user-information-user-information-edit img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.user-information-user-information-edit h1{
+    color: white;
+    font-family: "Inter";
+    font-weight: 350;
+}
+
+.user-information-user-information-input-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.user-username-input-container{
+    padding: 8px;
+    margin-top: 20px;
+    width: 40%;
+    height: 40px;
+    font-size: 18px;
+    font-family: "Inter";
+    border-radius: 15px;
+    outline: transparent;
+}
+
+.user-bio-input-container{
+    margin-top: 30px;
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 18px;
+    font-family: "Inter";
+    height: 150px;
+    width: 40%;
+    outline: transparent;
+}
+
+.feedback-text-area-container{
+    margin-top: 30px;
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 18px;
+    font-family: "Inter";
+    height: 100px;
+    width: 40%;
+    outline: transparent;
+}
+
+.button-container-user-profile{
+    margin-top: 20px;
+    text-align: right;
+    padding-right: 30%;
+}
+
+.button-user-profile-cancel{
+    margin-top: 30px;
+    margin-right: 15px;
+    border: transparent;
+    border: transparent;
+    border-radius: 30px;
+    padding: 12px 24px;
+    font-size: 18px;
+    color: black;
+    cursor: grab;
+    background-color: white;
+    font-weight: 500;
+}
+
+.button-user-profile-save{
+    cursor: grab;
+    margin-top: 30px;
+    border: transparent;
+    border-radius: 30px;
+    padding: 12px 24px;
+    font-size: 18px;
+    color: white;
+    background-color: black;
+    font-weight: 500;
+}

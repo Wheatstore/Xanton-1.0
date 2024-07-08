@@ -40,4 +40,15 @@ async function setNewBot(name, creator, creatorId, greeting, description, additi
     }
 }
 
-module.exports = { updateMessage, setNewBot }
+async function createNewUser(user){
+    try {   
+        const userDatabaseRef = db.collection('userDatabase')
+        await userDatabaseRef.add(user)
+        console.log("New user-created")
+    } catch (error){
+        console.error("Error creating user adding to database:", error);
+        throw error
+    }
+}
+
+module.exports = { updateMessage, setNewBot, createNewUser }

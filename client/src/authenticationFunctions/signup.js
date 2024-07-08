@@ -1,5 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
+import axios from "axios"
 import { generateFromEmail, generateUsername } from "unique-username-generator";
 
 // Function to sign up with email and password
@@ -15,6 +16,7 @@ const signUpEmailPassword = async (email, password) => {
     }
     await updateProfile(user, {displayName: username})
     // Additional user logic here if needed
+    axios.post("http://localhost:3000/create/user", user)
   } catch (error) {
     console.error("There was an error creating a new user: ", error.code, error.message);
     throw error
@@ -25,11 +27,10 @@ const signUpEmailPassword = async (email, password) => {
 const signupLoginGoogle = async () => {
   const provider = new GoogleAuthProvider();
   try {
-    const result = await signInWithPopup(auth, provider);
-    console.log("User signed in with Google: ", result);
+    const result = await signInWithPopup(auth, provider);;
     const user = result.user;
-    console.log(user)
     // Additional user logic here if needed
+    axios.post("http://localhost:3000/create/user", user)
   } catch (error) {
     console.error("There was an error signing in with Google: ", error.code, error.message);
     throw (error)

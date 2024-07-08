@@ -4,7 +4,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const axios = require("axios");
-const { updateMessage, setNewBot } = require("./admin")
+const { updateMessage, setNewBot, createNewUser } = require("./admin")
 
 const API_KEY = process.env.OPENAI_API_KEY;
 
@@ -68,6 +68,14 @@ app.post("/api/create-new-bot", async (req, res) => {
     } catch (error){
         console.error("There was an error sending it to you")
         throw error
+    }
+})
+
+app.post("/create/user", async (req, res) => {
+    try {
+        await createNewUser(req.body)
+    } catch (error) {
+        console.error("Failed to add user to database: ", error);
     }
 })
 

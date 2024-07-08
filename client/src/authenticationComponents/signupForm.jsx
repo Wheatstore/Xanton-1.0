@@ -25,7 +25,7 @@ function Signup() {
         try {
             console.log("New user creation initiated")
             await signUpEmailPassword(email, password)
-            navigate("/")
+            navigate("/user")
         } catch(error) {
             console.error(error)
             switch (error.code) {

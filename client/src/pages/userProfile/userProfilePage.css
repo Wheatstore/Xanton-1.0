@@ -1,5 +1,7 @@
 .user-profile-page-container{
     display: flex;
+    margin: 0px;
+    padding: 0;
     flex-direction: row;
 }
 
@@ -9,4 +11,6 @@
 
 .user-profile-container-user-profile-page{
     width: 83%;
+    margin-top: 0px;
+    background-color: rgba(18, 18, 18, 0.944);
 }
