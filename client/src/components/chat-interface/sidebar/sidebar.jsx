@@ -32,16 +32,6 @@ function Sidebar() {
     }
   }, [user]);
 
-  const onLogoutClick = () => {
-    try{
-      userSignOut()
-        .then(navigate("/"))
-    }catch(error){
-      console.error("There was an error logging out: ", error );
-    }
-  }
-
-
   return (
     <div className="sidebar-container">
       <div className="logo-heading-container">
@@ -89,7 +79,6 @@ function Sidebar() {
       {showSettings && (
           <ul className="sidebar-dropdown-menu">
             <li className="sidebar-dropdown-item" onClick={() => navigate(`/profile/${user.displayName}`)}>Settings</li>
-            <li className="sidebar-dropdown-item" onClick={onLogoutClick}>Logout</li>
           </ul>
         )}
     </div>

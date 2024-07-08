@@ -1,7 +1,7 @@
 import "./loginForm.css"
 import { useState } from "react"
 import loginEmailPassword from "../authenticationFunctions/login"
-import { signupLoginGoogle } from "../authenticationFunctions/signup"
+import { loginGoogle } from "../authenticationFunctions/signup"
 import { useNavigate } from "react-router-dom"
 
 function Login() {
@@ -22,7 +22,7 @@ function Login() {
 
     const onGoogleClick = async () => {
         try {
-            await signupLoginGoogle()
+            await loginGoogle()
             navigate("/user")
         } catch (error) {
             console.error(error)

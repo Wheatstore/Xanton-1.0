@@ -37,4 +37,15 @@ const signupLoginGoogle = async () => {
   }
 }
 
-export { signUpEmailPassword, signupLoginGoogle };
+const loginGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);;
+    const user = result.user;
+  } catch (error) {
+    console.error("There was an error signing in with Google: ", error.code, error.message);
+    throw (error)
+  }
+}
+
+export { signUpEmailPassword, signupLoginGoogle, loginGoogle };

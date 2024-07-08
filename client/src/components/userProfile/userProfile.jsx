@@ -57,12 +57,12 @@ function UserProfile(){
                 <textarea placeholder="Bio" className="user-bio-input-container" onChange={(e) => setBio(e.target.value) || setShowButton(true)} value={bio}></textarea>
                 <textarea className="feedback-text-area-container" onChange={(e) => setFeedback(e.target.value) || setShowButton(true)} value={feedback} placeholder="Feedback"></textarea>
             </div>
-            {showButton && 
+
             <div className="button-container-user-profile">
                 <button className="button-user-profile-cancel"onClick={handleCancelButton}>Cancel</button> 
                 <button className="button-user-profile-save" onClick={handleButtonSubmit}>Save</button>
             </div>
-            }
+            
         </div>
     )
 
