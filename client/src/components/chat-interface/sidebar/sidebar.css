@@ -303,6 +303,13 @@
 
 @media (min-width: 1440px) {
   .previous-chats-container {
+    height: 75vh; /* Further increase height for very large screens */
+    max-height: 75vh; /* Adjust max-height accordingly */
+  }
+}
+
+@media (min-width: 2000px){
+  .previous-chats-container {
     height: 80vh; /* Further increase height for very large screens */
     max-height: 80vh; /* Adjust max-height accordingly */
   }

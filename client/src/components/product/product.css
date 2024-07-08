@@ -33,14 +33,14 @@
     animation-fill-mode: both; /* Keep the animation's end state */
 }
 
-.skeleton-card-container{
+.skeleton-card-container {
     margin-top: 35px;
     display: flex;
     gap: 30px;
     justify-content: center;
 }
 
-.skeleton-card{
+.skeleton-card {
     width: 417px;
     height: 599px;
     background-color: rgba(69, 69, 69, 0.347);
@@ -48,7 +48,7 @@
     padding: 15px;
 }
 
-.skeleton-card-image{
+.skeleton-card-image {
     background-color: rgba(107, 107, 107, 0.474);
     height: 379px;
     width: 100%;
@@ -104,25 +104,56 @@
     }
 }
 
-@media (min-width: 1024px){
+@media (min-width: 1024px) {
+    .product-card-container {
+        grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+
     .person-container {
         height: fit-content;
     }
 
-    .content-container{
+    .content-container {
         height: 425px;
     }
 
-    .information-container{
+    .information-container {
         height: fit-content;
         margin: 0px;
     }
 
-    .person-description{
+    .person-description {
         margin-bottom: 10px;
     }
-    .chat-with-button{
+
+    .chat-with-button {
         margin-top: 10px;
         width: 60%;
+    }
+}
+
+@media (min-width: 1440px) {
+    .product-card-container {
+        grid-template-columns: repeat(auto-fill, minmax(25%, 1fr));
+        margin-left: 15%;
+        margin-right: 15%;
+    }
+
+    .content-container {
+        display: flex;
+        flex-direction: column;
+        height: 510px;
+        margin-left: 5px;
+    }
+
+    .person-image-container {
+        width: 100%;
+        border-radius: 20px;
+    }
+
+    .chat-with-button {
+        margin-top: 10px;
     }
 }
