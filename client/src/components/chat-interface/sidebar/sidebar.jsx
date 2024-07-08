@@ -77,7 +77,6 @@ function Sidebar() {
       </div>
       {showSettings && (
           <ul className="sidebar-dropdown-menu">
-            <li className="sidebar-dropdown-item">Public profile</li>
             <li className="sidebar-dropdown-item">Settings</li>
             <li className="sidebar-dropdown-item">Logout</li>
           </ul>

@@ -2,7 +2,7 @@
 .sidebar-container {
   height: 100vh;
   margin-top: 0px;
-  width: fit-content;
+  width: 100%;
   background-color: rgb(24, 24, 24);
   padding-top: 30px;
   border-right: 1px solid rgba(0, 0, 0, 0.291);
@@ -99,7 +99,8 @@
 }
 
 .chat-item-image {
-  width: 55px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
 }
 
@@ -128,8 +129,9 @@
 }
 
 .user-sidebar-account-information img {
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  border-radius: 50%;
+  width: 40px;
 }
 
 .user-sidebar-account-information h3 {
@@ -143,7 +145,9 @@
   background: none;
   border: none;
   color: white;
-  font-size: 14px;
+  margin-left: 30%;
+  font-family: 300;
+  font-size: 12px;
   cursor: pointer;
 }
 
@@ -158,7 +162,7 @@
   max-height: 0;
   text-align: left;
   width: 100%;
-  transform: translateY(-180px);
+  transform: translateY(-160px);
   max-height: 500px;
   border-radius: 20px;
   padding: 10px 10px;
@@ -268,6 +272,7 @@
 
   .user-sidebar-account-information img {
     height: 20px;
+    border-radius: 50%;
     width: 20px;
   }
 
