@@ -1,0 +1,12 @@
+.user-profile-page-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar-container-user-profile-page{
+    width: 17%;
+}
+
+.user-profile-container-user-profile-page{
+    width: 83%;
+}

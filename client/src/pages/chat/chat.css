@@ -7,11 +7,11 @@
   
   .user-interface-chat-container {
     flex-grow: 1;
-    width: 80%;
+    width: 83%;
   }
   
   .sidebar-chat-page-container {
-    width: 20%;
+    width: 17%;
   }
   
   /* Media query to hide sidebar on smaller screens */

@@ -112,7 +112,7 @@
 
 .user-sidebar-account-information {
   display: flex;
-  max-width: 500px;
+  max-width: 95%;
   gap: 10px;
   border-radius: 20px;
   border: transparent;
@@ -145,7 +145,7 @@
   background: none;
   border: none;
   color: white;
-  margin-left: 30%;
+  margin-left: 10%;
   font-family: 300;
   font-size: 12px;
   cursor: pointer;

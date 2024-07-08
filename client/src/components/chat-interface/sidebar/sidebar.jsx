@@ -31,6 +31,7 @@ function Sidebar() {
     }
   }, [user]);
 
+
   return (
     <div className="sidebar-container">
       <div className="logo-heading-container">
@@ -77,7 +78,7 @@ function Sidebar() {
       </div>
       {showSettings && (
           <ul className="sidebar-dropdown-menu">
-            <li className="sidebar-dropdown-item">Settings</li>
+            <li className="sidebar-dropdown-item" onClick={() => navigate(`/profile/${user.displayName}`)}>Settings</li>
             <li className="sidebar-dropdown-item">Logout</li>
           </ul>
         )}
