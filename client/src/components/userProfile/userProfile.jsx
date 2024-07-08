@@ -34,10 +34,13 @@ function UserProfile(){
         if (usernameCount >= 1){
             await updateProfile(user, {displayName: username})
         }
-        if (bio) {
-            await updateProfile(user, {bio: bio})
-            console.log(user)
-        }
+        navigate("/user")
+    }
+
+    const handleCancelButton = () => {
+        setUsername(user.displayName)
+        setBio("")
+        setFeedback("")
     }
 
     return (
@@ -52,11 +55,11 @@ function UserProfile(){
             <div className="user-information-user-information-input-container">
                 <textarea className="user-username-input-container" onChange={handleUsernameInput} value={username} type="text" placeholder={`${user.displayName}`}/>
                 <textarea placeholder="Bio" className="user-bio-input-container" onChange={(e) => setBio(e.target.value) || setShowButton(true)} value={bio}></textarea>
-                <textarea className="feedback-text-area-container" onChange={(e) => setFeedback(e.target.value) || setShowButton(true)} placeholder="Feedback"></textarea>
+                <textarea className="feedback-text-area-container" onChange={(e) => setFeedback(e.target.value) || setShowButton(true)} value={feedback} placeholder="Feedback"></textarea>
             </div>
             {showButton && 
             <div className="button-container-user-profile">
-                <button className="button-user-profile-cancel">Cancel</button> 
+                <button className="button-user-profile-cancel"onClick={handleCancelButton}>Cancel</button> 
                 <button className="button-user-profile-save" onClick={handleButtonSubmit}>Save</button>
             </div>
             }

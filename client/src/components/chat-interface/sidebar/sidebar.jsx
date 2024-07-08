@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../../../firebase";
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { userSignOut } from "../../../authenticationFunctions/signout";
 
 function Sidebar() {
   const [user] = useAuthState(auth);
@@ -30,6 +31,15 @@ function Sidebar() {
       return () => unsubscribe();
     }
   }, [user]);
+
+  const onLogoutClick = () => {
+    try{
+      userSignOut()
+        .then(navigate("/"))
+    }catch(error){
+      console.error("There was an error logging out: ", error );
+    }
+  }
 
 
   return (
@@ -79,7 +89,7 @@ function Sidebar() {
       {showSettings && (
           <ul className="sidebar-dropdown-menu">
             <li className="sidebar-dropdown-item" onClick={() => navigate(`/profile/${user.displayName}`)}>Settings</li>
-            <li className="sidebar-dropdown-item">Logout</li>
+            <li className="sidebar-dropdown-item" onClick={onLogoutClick}>Logout</li>
           </ul>
         )}
     </div>
