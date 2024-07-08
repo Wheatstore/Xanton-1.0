@@ -4,6 +4,7 @@ import Product from "../../components/product/product";
 import "./landing.css"
 import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Footer from "../../components/footer/footer";
 
 function LandingPage(){
     const [user, loading] = useAuthState(auth)
@@ -22,6 +23,7 @@ function LandingPage(){
                 <NavbarHome/>
                 <HeroSection/>
                 <Product/>
+                <Footer />
             </div>
         </>
     )

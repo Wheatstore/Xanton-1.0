@@ -1,0 +1,48 @@
+import React from 'react';
+import './footer.css';
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+
+const Footer = () => {
+  return (
+    <footer className="footer">
+      <div className="footer-content">
+        <div className="footer-section">
+          <h1 className="footer-logo">YourLogo</h1>
+          <p className="footer-description">Your company’s tagline or mission statement goes here.</p>
+        </div>
+        <div className="footer-section">
+          <h2 className="footer-heading">About Us</h2>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/team">Team</a></li>
+            <li><a href="/careers">Careers</a></li>
+          </ul>
+        </div>
+        <div className="footer-section">
+          <h2 className="footer-heading">Services</h2>
+          <ul>
+            <li><a href="/services">Service 1</a></li>
+            <li><a href="/services">Service 2</a></li>
+            <li><a href="/services">Service 3</a></li>
+          </ul>
+        </div>
+        <div className="footer-section">
+          <h2 className="footer-heading">Contact Us</h2>
+          <ul>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/support">Support</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div className="footer-social-media">
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><FaLinkedinIn /></a>
+      </div>
+    </footer>
+  );
+}
+
+export default Footer;

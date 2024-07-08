@@ -1,3 +1,4 @@
+import Footer from "../../components/footer/footer"
 import NavbarAuthenticated from "../../components/navbar/navbarAuthenticated"
 import NewBot from "../../components/new-bot-form/newBot"
 import NewBotGuidelines from "../../components/new-bot-form/newBotGuidlines"
@@ -12,6 +13,7 @@ function NewBotPage(){
                     <NewBot />
                     <NewBotGuidelines />
                 </div>
+                <Footer />
             </div>
         </>
     )

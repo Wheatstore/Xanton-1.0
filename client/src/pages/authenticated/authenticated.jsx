@@ -4,6 +4,7 @@ import Product from "../../components/product/product";
 import "./authenticated.css"
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase";
+import Footer from "../../components/footer/footer";
 
 function AuthenticatedPage (){
     const [user, loading] = useAuthState(auth)
@@ -24,6 +25,7 @@ function AuthenticatedPage (){
                 <NavbarAuthenticated username={username} />
                 <HeroSection />
                 <Product />
+                <Footer />
             </div>
         </>
     )
