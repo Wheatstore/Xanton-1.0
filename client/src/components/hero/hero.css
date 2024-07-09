@@ -8,31 +8,32 @@
 
 .hero-section-container {
   position: relative;
-  display: flex;
   padding-top: 30px;
+  display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 5vh;
+  padding-top: 10vh;
   text-align: center;
-  height: fit-content;
-  background: black; /* White background */
-  color: white;
+  height: 50vh;
+  background: #000; /* Ensure the background is black */
+  color: #fff;
   margin-left: 10%;
   margin-right: 10%;
   overflow: hidden;
 }
 
-/* .grid-background {
+.grid-background {
   position: absolute;
   top: 0;
   left: 0;
-  width: 150%;
-  height: 100vh;
-  z-index: 1;
-  background: linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px),
-              linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px),
-              linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px);
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
   background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
   background-position: 0 0, 10px 10px, 0 0, 50px 50px;
 }
@@ -43,10 +44,83 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5));
+  background: linear-gradient(135deg, rgba(127,0,255,0.5), rgba(255,0,255,0.5));
   mix-blend-mode: overlay;
   opacity: 0.3;
-} */
+}.website-mockup-container {
+  position: relative;
+  text-align: center;
+  padding-top: 60px;
+  padding-bottom: 40px;
+  overflow: hidden;
+}
+
+.website-mockup-container img {
+  width: 60%;
+  border-radius: 20px;
+  border: 2px solid white;
+  animation: borderColorChange 3s infinite;
+}
+
+@keyframes borderColorChange {
+  0% {
+    border-color: rgb(214, 214, 214);
+  }
+  33% {
+    border-color: rgb(212, 2, 205);
+  }
+  66% {
+    border-color: rgb(5, 5, 189);
+  }
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: float 5s infinite;
+  mix-blend-mode: screen;
+}
+
+.circle:nth-child(1) {
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 0, 255, 0.3);
+  top: 10%;
+  left: 5%;
+  animation-delay: 0s;
+}
+
+.circle:nth-child(2) {
+  width: 150px;
+  height: 150px;
+  background: rgba(0, 0, 255, 0.3);
+  top: 60%;
+  left: 10%;
+  animation-delay: 2s;
+}
+
+.circle:nth-child(3) {
+  width: 200px;
+  height: 200px;
+  background-color: rgb(255, 255, 255);
+  top: 60%;
+  left: 83%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 
 .hero-heading,
 .welcome-heading-hero-section {

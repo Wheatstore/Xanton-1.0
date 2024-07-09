@@ -18,10 +18,16 @@ function HeroSection() {
         <div className="hero-description-container">
           <h3>Step into the past and converse with the most influential figures in human history. With just your typing, unlock the wisdom, insights, and stories of legendary leaders, thinkers, and pioneers.</h3>
         </div>
+        {location.pathname === "/" && <div className="join-now-button-container">
+          <button onClick={() => navigate("/signup")} className="join-now-hero-section-button">Get Started</button>
+        </div>}
       </div>
-      {location.pathname === "/" && <div className="join-now-button-container">
-        <button onClick={() => navigate("/signup")} className="join-now-hero-section-button">Get Started</button>
-      </div>}
+      <div className="website-mockup-container">
+        <div className="circle"></div>
+        <div className="circle"></div>
+        <div className="circle"></div>
+        <img src="/images/mockup-hero.png" alt="" />
+      </div>
     </>
   );
 }
