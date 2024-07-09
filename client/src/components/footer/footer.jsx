@@ -7,8 +7,8 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-content">
         <div className="footer-section">
-          <h1 className="footer-logo">YourLogo</h1>
-          <p className="footer-description">Your company’s tagline or mission statement goes here.</p>
+          <h1 className="footer-logo">Xanton</h1>
+          <p className="footer-description">Connecting our world to the past</p>
         </div>
         <div className="footer-section">
           <h2 className="footer-heading">About Us</h2>

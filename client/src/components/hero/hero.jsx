@@ -22,12 +22,13 @@ function HeroSection() {
           <button onClick={() => navigate("/signup")} className="join-now-hero-section-button">Get Started</button>
         </div>}
       </div>
+      {location.pathname === "/" && 
       <div className="website-mockup-container">
         <div className="circle"></div>
         <div className="circle"></div>
         <div className="circle"></div>
         <img src="/images/mockup-hero.png" alt="" />
-      </div>
+      </div> }
     </>
   );
 }

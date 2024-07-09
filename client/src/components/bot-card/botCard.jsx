@@ -1,23 +1,23 @@
-import "./botCard.css";
-import { useNavigate } from "react-router-dom";
-import { db, auth } from "../../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { collection, query, where, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
+import React from 'react';
+import './botCard.css'; // Import the updated CSS
+import { useNavigate } from 'react-router-dom';
+import { db, auth } from '../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 
 function BotCard({ person, index, delay }) {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
 
   const onClick = async (botid) => {
-    if (!user){
+    if (!user) {
       navigate(`/chat/${botid}`);
-    }
-    else{
+    } else {
       try {
         const previousChatsRef = collection(db, 'users', user.uid, 'previousChats');
         const q = query(previousChatsRef, where('character', '==', botid));
         const querySnapshot = await getDocs(q);
-  
+
         if (querySnapshot.empty) {
           await addDoc(previousChatsRef, {
             img: person.img,

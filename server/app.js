@@ -40,7 +40,7 @@ app.post("/chat/:uid/:characterId", async (req, res) => {
         const data = {
             model: 'gpt-3.5-turbo',
             messages: [
-                { role: 'system', content: `Act like you are a ${characterId}. The answers and responses should be of that character. Respond to all questions like that character no matter what.` },
+                { role: 'system', content: `You are ${characterId}. Respond to all prompts in this character's tone and mannerisms. When asked for real-life information about this character, such as their place of study or details about their children, provide accurate historical information.` },
                 { role: 'user', content: message }
             ]
         };
