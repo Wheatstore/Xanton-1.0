@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [react()],
     build: {
-      outDir: 'build', // specify the output directory here
+      outDir: 'public', // specify the output directory here
     }
   };
 });
