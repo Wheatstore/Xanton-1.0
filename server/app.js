@@ -1,10 +1,10 @@
 // Import all necessary files and dependencies
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config();
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const axios = require("axios");
-const { updateMessage, setNewBot, createNewUser } = require("./admin")
+const { updateMessage, setNewBot, createNewUser } = require("./admin");
 
 const API_KEY = process.env.OPENAI_API_KEY;
 
@@ -14,7 +14,7 @@ const headers = {
 };
 
 const corsOptions = {
-    origin: 'http://localhost:5173', // Your React app's URL
+    origin: process.env.CLIENT_URL || 'http://localhost:5173', // Your React app's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Allow cookies to be sent with requests
     optionsSuccessStatus: 204
@@ -26,16 +26,14 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true })); // Increase limit for URL-encoded payloads
 app.use(express.json({ limit: '50mb' })); // Increase limit for JSON payloads
-app.use(express.static(path.join(__dirname, '../client/build')));
 
+// API Routes
 app.post("/chat/:uid/:characterId", async (req, res) => {
     try {
-        const userId = req.params.uid;
-        const characterId = req.params.characterId;
-        const message = req.body.message; // Assuming message is sent as { message: "your message" }
-        const messageId = req.body.messageId
+        const { uid: userId, characterId } = req.params;
+        const { message, messageId } = req.body; // Assuming message is sent as { message: "your message" }
 
-        console.log(req.body)
+        console.log(req.body);
 
         const data = {
             model: 'gpt-3.5-turbo',
@@ -48,7 +46,7 @@ app.post("/chat/:uid/:characterId", async (req, res) => {
         const completion = await axios.post('https://api.openai.com/v1/chat/completions', data, { headers });
         const reply = completion.data.choices[0].message.content;
 
-        await updateMessage(messageId, userId, characterId, reply)
+        await updateMessage(messageId, userId, characterId, reply);
 
         res.status(200).json({ reply });
     } catch (error) {
@@ -61,31 +59,32 @@ app.post("/chat/:uid/:characterId", async (req, res) => {
 
 app.post("/api/create-new-bot", async (req, res) => {
     try {
-        console.log(req.body)
-        const { name, creator, creatorId, greeting, description, additionalMessage } = req.body
-        await setNewBot(name, creator, creatorId, greeting, description, additionalMessage)
-        res.sendStatus(200)
-    } catch (error){
-        console.error("There was an error sending it to you")
-        throw error
+        console.log(req.body);
+        const { name, creator, creatorId, greeting, description, additionalMessage } = req.body;
+        await setNewBot(name, creator, creatorId, greeting, description, additionalMessage);
+        res.sendStatus(200);
+    } catch (error) {
+        console.error("There was an error sending it to you", error);
+        res.status(500).json({ error: 'Failed to create new bot' });
     }
-})
+});
 
 app.post("/create/user", async (req, res) => {
     try {
-        await createNewUser(req.body)
+        await createNewUser(req.body);
+        res.sendStatus(200);
     } catch (error) {
         console.error("Failed to add user to database: ", error);
+        res.status(500).json({ error: 'Failed to create user' });
     }
-})
+});
 
+// Serve the frontend
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html')); // Send the file to the user
 });
 
-const PORT = process.env.PORT || 3000; // Initialize the port and configure it
-
-app.listen(PORT, () => {
-    console.log(`Server on port ${PORT}...`);
-});
+// Export the app for Vercel's serverless functions
+module.exports = app;
