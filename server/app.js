@@ -80,10 +80,10 @@ app.post("/create/user", async (req, res) => {
 });
 
 // Serve the frontend
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html')); // Send the file to the user
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html')); // Send the file to the user
 });
 
 // Export the app for Vercel's serverless functions
