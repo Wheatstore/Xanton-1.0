@@ -7,10 +7,18 @@
     "firebase-admin": "^12.2.0",
     "googleapis": "^140.0.1",
     "nodemailer": "^6.9.14",
+    "nodemon": "^3.1.4",
     "openai": "^4.52.2",
     "path": "^0.12.7"
   },
   "scripts": {
     "start": "node --watch app.js"
-  }
+  },
+  "name": "server",
+  "version": "1.0.0",
+  "main": "admin.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
