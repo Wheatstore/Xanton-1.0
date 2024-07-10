@@ -14,7 +14,7 @@ const headers = {
 };
 
 const corsOptions = {
-    origin: process.env.CLIENT_URL || 'https://xanton-1-0.vercel.app', // Your React app's URL
+    origin: process.env.CLIENT_URL || 'https://xanton-1-0-bb1mg76s0-nate-yoos-projects.vercel.app/', // Your React app's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Allow cookies to be sent with requests
     optionsSuccessStatus: 204
