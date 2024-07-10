@@ -14,7 +14,7 @@ const headers = {
 };
 
 const corsOptions = {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173', // Your React app's URL
+    origin: process.env.CLIENT_URL || 'https://xanton-1-0.vercel.app', // Your React app's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Allow cookies to be sent with requests
     optionsSuccessStatus: 204
@@ -29,6 +29,7 @@ app.use(express.json({ limit: '50mb' })); // Increase limit for JSON payloads
 
 // API Routes
 app.post("/chat/:uid/:characterId", async (req, res) => {
+    console.log("Request received")
     try {
         const { uid: userId, characterId } = req.params;
         const { message, messageId } = req.body; // Assuming message is sent as { message: "your message" }
