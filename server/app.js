@@ -8,6 +8,8 @@ const { updateMessage, setNewBot, createNewUser } = require("./admin");
 const API_KEY = process.env.OPENAI_API_KEY;
 const CLIENT_URL = process.env.CLIENT_URL;
 
+console.log(CLIENT_URL)
+
 const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${API_KEY}`
@@ -44,6 +46,7 @@ app.post("/chat/:uid/:characterId", async (req, res) => {
         const reply = completion.data.choices[0].message.content;
 
         await updateMessage(messageId, userId, characterId, reply);
+        console.log(req.body)
 
         res.status(200).json({ reply });
     } catch (error) {
