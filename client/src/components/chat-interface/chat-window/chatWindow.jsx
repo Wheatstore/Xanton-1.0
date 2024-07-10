@@ -61,6 +61,8 @@ function ChatWindow() {
         textarea.style.height = `${newTextareaHeight}px`;
     };
 
+    const api_url = import.meta.env.CLIENT_URL
+
     const handleSendMessage = async (e) => {
         e.preventDefault();
         if (input.trim() !== "") {
@@ -86,9 +88,9 @@ function ChatWindow() {
                     timestamp: serverTimestamp(),
                 });
 
-                console.log(input)
-    
-                const response = await axios.post(`/chat/${user.uid}/${params.id}`, { message: input, messageId: docRef.id });
+                console.log(input)  
+                console.log()
+                const response = await axios.post(`${api_url}/chat/${user.uid}/${params.id}`, { message: input, messageId: docRef.id });
     
                 console.log(response)
                 setMessages((prevMessages) =>

@@ -8,8 +8,6 @@ const { updateMessage, setNewBot, createNewUser } = require("./admin");
 const API_KEY = process.env.OPENAI_API_KEY;
 const CLIENT_URL = process.env.CLIENT_URL;
 
-console.log(CLIENT_URL)
-
 const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${API_KEY}`
@@ -31,6 +29,7 @@ app.use(express.json({ limit: '50mb' }));
 // API Routes
 app.post("/chat/:uid/:characterId", async (req, res) => {
     try {
+        console.log("Connection Recieved IT WORKED")
         const { uid: userId, characterId } = req.params;
         const { message, messageId } = req.body;
 
@@ -59,6 +58,7 @@ app.post("/chat/:uid/:characterId", async (req, res) => {
 
 app.post("/api/create-new-bot", async (req, res) => {
     try {
+        console.log(CLIENT_URL)
         const { name, creator, creatorId, greeting, description, additionalMessage } = req.body;
         await setNewBot(name, creator, creatorId, greeting, description, additionalMessage);
         console.log(req.body)
