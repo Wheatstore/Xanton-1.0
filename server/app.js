@@ -13,12 +13,12 @@ const headers = {
     'Authorization': `Bearer ${API_KEY}`
 };
 
-const corsOptions = {
-    origin: CLIENT_URL, // Use the CLIENT_URL environment variable
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-    optionsSuccessStatus: 204
-};
+// const corsOptions = {
+//     origin: CLIENT_URL, // Use the CLIENT_URL environment variable
+//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//     credentials: true,
+//     optionsSuccessStatus: 204
+// };
 
 const app = express();
 
@@ -58,7 +58,7 @@ app.post("/chat/:uid/:characterId", async (req, res) => {
 
 app.post("/api/create-new-bot", async (req, res) => {
     try {
-        console.log(CLIENT_URL)
+        console.log(API_KEY)
         const { name, creator, creatorId, greeting, description, additionalMessage } = req.body;
         await setNewBot(name, creator, creatorId, greeting, description, additionalMessage);
         console.log(req.body)
