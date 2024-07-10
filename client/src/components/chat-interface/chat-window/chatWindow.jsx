@@ -78,7 +78,7 @@ function ChatWindow() {
             setDisplay("");
             setInput("");
             adjustTextareaHeight(textareaRef.current);
-    
+
             try {
                 const messagesRef = collection(db, 'users', user.uid, 'characters', params.id, 'messages');
                 const docRef = await addDoc(messagesRef, {
@@ -88,17 +88,17 @@ function ChatWindow() {
                     timestamp: serverTimestamp(),
                 });
 
-                console.log(input)  
-                console.log()
+                console.log(input)
+                console.log(api_url)
                 const response = await axios.post(`${api_url}/chat/${user.uid}/${params.id}`, { message: input, messageId: docRef.id });
-    
-                console.log(response)
+
+                console.log(response, response.status)
                 setMessages((prevMessages) =>
                     prevMessages.map((msg) =>
                         msg.id === docRef.id ? { ...msg, reply: response.data.reply, loading: false } : msg
                     )
                 );
-    
+
             } catch (error) {
                 console.error('Error sending message:', error);
                 setMessages((prevMessages) => prevMessages.filter(msg => msg.id !== newMessage.id));
