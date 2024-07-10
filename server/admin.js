@@ -1,10 +1,11 @@
 var admin = require("firebase-admin");
 const {FieldValue} = require('firebase-admin/firestore');
-var serviceAccount = require("C:/Users/syoo2/OneDrive/Documents/Xanton-1.0-important/xanton-1-firebase-adminsdk-sxkma-926b7c4612.json");
+
+const serviceAccount = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf8'));
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://your-project-id.firebaseio.com'
+    databaseURL: 'https://xanton-1.firebaseio.com'
 });
 
 const db = admin.firestore();
