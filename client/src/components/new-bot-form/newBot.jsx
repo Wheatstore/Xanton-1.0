@@ -15,7 +15,7 @@ function NewBot(){
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post("http://localhost:3000/api/create-new-bot", {
+            const response = await axios.post("/api/create-new-bot", {
                 name: name,
                 creator: user.displayName,
                 creatorId: user.uid,
