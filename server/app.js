@@ -1,4 +1,3 @@
-// Import all necessary files and dependencies
 require('dotenv').config();
 const express = require("express");
 const path = require("path");
@@ -7,6 +6,7 @@ const axios = require("axios");
 const { updateMessage, setNewBot, createNewUser } = require("./admin");
 
 const API_KEY = process.env.OPENAI_API_KEY;
+const CLIENT_URL = process.env.CLIENT_URL;
 
 const headers = {
     'Content-Type': 'application/json',
@@ -14,27 +14,23 @@ const headers = {
 };
 
 const corsOptions = {
-    origin: process.env.CLIENT_URL || 'https://xanton-1-0-9f2bxp4fg-nate-yoos-projects.vercel.app/', // Your React app's URL
+    origin: CLIENT_URL, // Use the CLIENT_URL environment variable
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Allow cookies to be sent with requests
+    credentials: true,
     optionsSuccessStatus: 204
 };
 
-// Initialize app as express
 const app = express();
 
 app.use(cors(corsOptions));
-app.use(express.urlencoded({ extended: true })); // Increase limit for URL-encoded payloads
-app.use(express.json({ limit: '50mb' })); // Increase limit for JSON payloads
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
 
 // API Routes
 app.post("/chat/:uid/:characterId", async (req, res) => {
-    console.log("Request received")
     try {
         const { uid: userId, characterId } = req.params;
-        const { message, messageId } = req.body; // Assuming message is sent as { message: "your message" }
-
-        console.log(req.body);
+        const { message, messageId } = req.body;
 
         const data = {
             model: 'gpt-3.5-turbo',
@@ -60,9 +56,9 @@ app.post("/chat/:uid/:characterId", async (req, res) => {
 
 app.post("/api/create-new-bot", async (req, res) => {
     try {
-        console.log(req.body);
         const { name, creator, creatorId, greeting, description, additionalMessage } = req.body;
         await setNewBot(name, creator, creatorId, greeting, description, additionalMessage);
+        console.log(req.body)
         res.sendStatus(200);
     } catch (error) {
         console.error("There was an error sending it to you", error);
@@ -84,7 +80,7 @@ app.post("/create/user", async (req, res) => {
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist', 'index.html')); // Send the file to the user
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
 // Export the app for Vercel's serverless functions

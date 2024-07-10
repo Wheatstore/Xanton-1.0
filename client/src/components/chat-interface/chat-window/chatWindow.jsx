@@ -70,13 +70,13 @@ function ChatWindow() {
                 reply: null,
                 sender: 'user',
                 timestamp: new Date(),
-                loading: true, // Mark the message as loading
+                loading: true,
             };
             setMessages((prevMessages) => [...prevMessages, newMessage]);
             setDisplay("");
             setInput("");
             adjustTextareaHeight(textareaRef.current);
-
+    
             try {
                 const messagesRef = collection(db, 'users', user.uid, 'characters', params.id, 'messages');
                 const docRef = await addDoc(messagesRef, {
@@ -85,15 +85,15 @@ function ChatWindow() {
                     sender: 'user',
                     timestamp: serverTimestamp(),
                 });
-
+    
                 const response = await axios.post(`/chat/${user.uid}/${params.id}`, { message: input, messageId: docRef.id });
-
+    
                 setMessages((prevMessages) =>
                     prevMessages.map((msg) =>
                         msg.id === docRef.id ? { ...msg, reply: response.data.reply, loading: false } : msg
                     )
                 );
-
+    
             } catch (error) {
                 console.error('Error sending message:', error);
                 setMessages((prevMessages) => prevMessages.filter(msg => msg.id !== newMessage.id));
