@@ -19,8 +19,9 @@
       "dest": "/server/app.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/client/index.html"
+      "src": "/[^.]+",
+      "dest": "/",
+      "status": 200
     }
   ]
 }
