@@ -20,7 +20,6 @@ app.use(express.json({ limit: '50mb' }));
 // API Routes
 app.post("/api/chat/:uid/:characterId", async (req, res) => {
     try {
-        console.log("Connection Recieved IT WORKED")
         const { uid: userId, characterId } = req.params;
         const { message, messageId } = req.body;
 
@@ -76,6 +75,10 @@ app.use(express.static(path.join(__dirname, '../client/dist')));
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
+
+app.get("/login", (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+})
 
 // Export the app for Vercel's serverless functions
 module.exports = app;
