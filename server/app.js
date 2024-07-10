@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '50mb' }));
 
 // API Routes
-app.post("/chat/:uid/:characterId", async (req, res) => {
+app.post("/api/chat/:uid/:characterId", async (req, res) => {
     try {
         console.log("Connection Recieved IT WORKED")
         const { uid: userId, characterId } = req.params;

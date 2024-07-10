@@ -87,7 +87,7 @@ function ChatWindow() {
                 });
 
                 console.log(input)
-                const response = await axios.post(`/chat/${user.uid}/${params.id}`, { message: input, messageId: docRef.id });
+                const response = await axios.post(`/api/chat/${user.uid}/${params.id}`, { message: input, messageId: docRef.id });
 
                 console.log(response, response.status)
                 setMessages((prevMessages) =>
