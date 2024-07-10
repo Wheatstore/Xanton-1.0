@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require("express");
 const path = require("path");
-const cors = require("cors");
 const axios = require("axios");
 const { updateMessage, setNewBot, createNewUser } = require("./admin");
 
@@ -13,16 +12,8 @@ const headers = {
     'Authorization': `Bearer ${API_KEY}`
 };
 
-// const corsOptions = {
-//     origin: CLIENT_URL, // Use the CLIENT_URL environment variable
-//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//     credentials: true,
-//     optionsSuccessStatus: 204
-// };
-
 const app = express();
 
-app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '50mb' }));
 
