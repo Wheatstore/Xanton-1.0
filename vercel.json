@@ -15,14 +15,14 @@
   ],
   "rewrites": [
     {
-      "src": "/api/(.*)",
+      "source": "/api/(.*)",
       "dest": "/server/app.js"
     },
     {
       "handle": "filesystem"
     },
     {
-      "src": "/(.*)",
+      "source": "/(.*)",
       "dest": "/client/dist/index.html",
       "status": 200
     }
