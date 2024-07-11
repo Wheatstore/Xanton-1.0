@@ -12,8 +12,6 @@ server/dist/
 dist/
 dist-ssr/
 
-vercel.json
-
 # Node.js dependencies
 client/node_modules/
 server/node_modules/

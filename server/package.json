@@ -12,7 +12,8 @@
     "path": "^0.12.7"
   },
   "scripts": {
-    "start": "node --watch app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "name": "server",
   "version": "1.0.0",
