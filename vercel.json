@@ -19,9 +19,6 @@
       "destination": "/server/app.js"
     },
     {
-      "handle": "filesystem"
-    },
-    {
       "source": "/(.*)",
       "destination": "/client/dist/index.html",
       "status": 200
