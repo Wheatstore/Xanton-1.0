@@ -13,7 +13,7 @@
       "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
       "src": "/api/(.*)",
       "dest": "/server/app.js"
@@ -23,7 +23,8 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/client/$1"
+      "dest": "/client/dist/index.html",
+      "status": 200
     }
   ]
 }

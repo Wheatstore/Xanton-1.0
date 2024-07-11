@@ -75,5 +75,6 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
+
 // Export the app for Vercel's serverless functions
 module.exports = app;
