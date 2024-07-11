@@ -16,7 +16,7 @@
   },
   "name": "server",
   "version": "1.0.0",
-  "main": "admin.js",
+  "main": "app.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
