@@ -19,8 +19,12 @@
       "dest": "/server/app.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/client/client"
+      "handle": "filesystem"
+    },
+    {
+      "src": "/[^.]+",
+      "dest": "/client/dist/index.html",
+      "status": 200
     }
   ]
 }

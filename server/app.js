@@ -5,7 +5,6 @@ const axios = require("axios");
 const { updateMessage, setNewBot, createNewUser } = require("./admin");
 
 const API_KEY = process.env.OPENAI_API_KEY;
-const CLIENT_URL = process.env.CLIENT_URL;
 
 const headers = {
     'Content-Type': 'application/json',
@@ -35,7 +34,7 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
         const reply = completion.data.choices[0].message.content;
 
         await updateMessage(messageId, userId, characterId, reply);
-        console.log(req.body)
+        console.log(req.body);
 
         res.status(200).json({ reply });
     } catch (error) {
@@ -48,10 +47,9 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
 
 app.post("/api/create-new-bot", async (req, res) => {
     try {
-        console.log(API_KEY)
         const { name, creator, creatorId, greeting, description, additionalMessage } = req.body;
         await setNewBot(name, creator, creatorId, greeting, description, additionalMessage);
-        console.log(req.body)
+        console.log(req.body);
         res.sendStatus(200);
     } catch (error) {
         console.error("There was an error sending it to you", error);
@@ -69,13 +67,13 @@ app.post("/create/user", async (req, res) => {
     }
 });
 
-// Serve the frontend
+// Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
-app.get("*", (req, res) => {
+// The "catchall" handler: for any request that doesn't match one above, send back index.html so that React can handle routing.
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
-
 
 // Export the app for Vercel's serverless functions
 module.exports = app;
