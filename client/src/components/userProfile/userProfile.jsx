@@ -30,7 +30,6 @@ function UserProfile(){
     }
 
     const handleButtonSubmit = async () => {
-        console.log(usernameCount)
         if (usernameCount >= 1){
             await updateProfile(user, {displayName: username})
         }

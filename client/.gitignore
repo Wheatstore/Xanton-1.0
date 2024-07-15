@@ -13,6 +13,8 @@ server/dist/
 dist/
 dist-ssr/
 
+client/src/test.jsx
+
 # Node.js dependencies
 client/node_modules/
 server/node_modules/
