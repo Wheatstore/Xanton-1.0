@@ -28,6 +28,10 @@ function NavbarAuthenticated({ username }) {
                 <a href="/user" className="to-home-button-navbar">Xanton</a>
             </div>
             <div className="buttons-authenticated-container">
+                <button className="help-button-support-button" onClick={() => navigate("/feedback")}>
+                    <span class="material-symbols-outlined" id="help-button-support" >support</span>
+                    Feedback
+                </button>
                 <button className="create-a-new-bot" onClick={() => navigate("/create-new-bot")}>Request a new bot</button>
                 <button onClick={toggleDropdown} className="profile-button">
                     <span className="material-symbols-outlined" id="account-circle-image-google-fonts">account_circle</span>
