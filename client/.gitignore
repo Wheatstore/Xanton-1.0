@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Build directories
+build
 server/dist/
 dist/
 dist-ssr/
