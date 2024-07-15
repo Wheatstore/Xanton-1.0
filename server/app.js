@@ -15,7 +15,7 @@ const app = express();
 
 // Enable CORS for specific origin
 const corsOptions = {
-    origin: 'https://xanton-1-frontend.vercel.app',
+    origin: 'https://www.xantonai.com/',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
