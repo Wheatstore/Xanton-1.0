@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require("express");
+const cors = require("cors");
 const axios = require("axios");
 const { updateMessage, setNewBot, createNewUser } = require("./admin");
 
@@ -11,6 +12,9 @@ const headers = {
 };
 
 const app = express();
+
+// Enable CORS
+app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '50mb' }));
