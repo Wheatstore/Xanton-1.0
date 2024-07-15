@@ -19,6 +19,9 @@ function Feedback(){
                     <textarea onChange={(e) => setDescription(e.target.value)} value={feedbackDescription} placeholder="Describe the problem in detail..." required></textarea>
                     <button>Submit</button>
                 </div>
+                <div className="contact-support-div">
+                    <h3><span class="material-symbols-outlined">mail</span> support@xantonai.com</h3>
+                </div>
             </div>    
         </>
     )
