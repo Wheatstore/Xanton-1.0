@@ -13,8 +13,13 @@ const headers = {
 
 const app = express();
 
-// Enable CORS
-app.use(cors());
+// Enable CORS for specific origin
+const corsOptions = {
+    origin: 'https://xanton-1-frontend.vercel.app',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '50mb' }));
