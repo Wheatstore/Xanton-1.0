@@ -19,19 +19,10 @@ const Footer = () => {
           </ul>
         </div>
         <div className="footer-section">
-          <h2 className="footer-heading">Services</h2>
-          <ul>
-            <li><a href="/services">Service 1</a></li>
-            <li><a href="/services">Service 2</a></li>
-            <li><a href="/services">Service 3</a></li>
-          </ul>
-        </div>
-        <div className="footer-section">
           <h2 className="footer-heading">Contact Us</h2>
           <ul>
-            <li><a href="/contact">Contact</a></li>
-            <li><a href="/support">Support</a></li>
-            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/feedback">Contact</a></li>
+            <li><a href="/feedback">Support</a></li>
           </ul>
         </div>
       </div>
