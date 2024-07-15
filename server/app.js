@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require("express");
-const path = require("path");
 const axios = require("axios");
 const { updateMessage, setNewBot, createNewUser } = require("./admin");
 
@@ -67,13 +66,9 @@ app.post("/create/user", async (req, res) => {
     }
 });
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client', 'dist')));
-
 app.get('/', (req, res) => {
-    res.send("server is running")
-    // res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+    res.send("server is running");
 });
 
 // Export the app for Vercel's serverless functions
-app.listen(5000, console.log("server has started"))
+module.exports = app;
