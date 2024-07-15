@@ -15,7 +15,7 @@ function NewBot(){
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post("/api/create-new-bot", {
+            const response = await axios.post("https://xanton-1-0-server.vercel.app/api/create-new-bot", {
                 name: name,
                 creator: user.displayName,
                 creatorId: user.uid,
