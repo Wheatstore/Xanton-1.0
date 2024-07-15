@@ -65,8 +65,9 @@ app.post("/api/create-new-bot", async (req, res) => {
     }
 });
 
-app.post("/create/user", async (req, res) => {
+app.post("/api/create/user", async (req, res) => {
     try {
+        console.log("Initiated user creation", req.body)
         await createNewUser(req.body);
         res.sendStatus(200);
     } catch (error) {

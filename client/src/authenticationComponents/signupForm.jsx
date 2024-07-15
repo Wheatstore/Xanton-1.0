@@ -3,6 +3,7 @@ import { useState } from "react";
 import { signUpEmailPassword } from "../authenticationFunctions/signup";
 import { signupLoginGoogle } from "../authenticationFunctions/signup";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 function Signup() {
     const navigate = useNavigate()
@@ -23,7 +24,6 @@ function Signup() {
     const onFormSignupEmail = async (e) => {
         e.preventDefault()
         try {
-            console.log("New user creation initiated")
             await signUpEmailPassword(email, password)
             navigate("/user")
         } catch(error) {

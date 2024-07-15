@@ -45,6 +45,12 @@ async function setNewBot(name, creator, creatorId, greeting, description, additi
 async function createNewUser(user) {
     try {
         const userDatabaseRef = db.collection('userDatabase')
+        const snapshot = await userDatabaseRef.where('email', '==', user.email).get();
+
+        if (!snapshot.empty){
+            console.log("User already exisits ")
+        }
+
         await userDatabaseRef.add(user)
         console.log("New user-created")
     } catch (error) {
