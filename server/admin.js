@@ -12,6 +12,7 @@ const db = admin.firestore();
 
 async function updateMessage(messageId, userId, characterId, reply) {
     try {
+        console.log(serviceAccount)
         const docRef = db.collection('users').doc(userId).collection('characters').doc(characterId).collection('messages').doc(messageId);
         await docRef.update({ reply: reply });
         console.log('Document successfully updated');
