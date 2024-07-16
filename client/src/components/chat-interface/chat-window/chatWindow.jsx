@@ -36,8 +36,6 @@ function ChatWindow() {
                 const photoUrl = data.img;
                 setBotName(botName);
                 setBotProfilePicture(photoUrl);
-            } else {
-                console.log("No bot found");
             }
         } catch (error) {
             console.error("Error fetching bot data: ", error);

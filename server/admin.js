@@ -12,10 +12,8 @@ const db = admin.firestore();
 
 async function updateMessage(messageId, userId, characterId, reply) {
     try {
-        console.log(serviceAccount)
         const docRef = db.collection('users').doc(userId).collection('characters').doc(characterId).collection('messages').doc(messageId);
         await docRef.update({ reply: reply });
-        console.log('Document successfully updated');
     } catch (error) {
         console.error('Error updating document:', error);
         throw error;
@@ -35,7 +33,6 @@ async function setNewBot(name, creator, creatorId, greeting, description, additi
             additionalMessage: additionalMessage,
             timestamp: FieldValue.serverTimestamp()
         })
-        console.log("A new doc was created")
     } catch (error) {
         console.error("There was an error setting a new Bot", error)
         throw error
@@ -48,11 +45,10 @@ async function createNewUser(user) {
         const snapshot = await userDatabaseRef.where('email', '==', user.email).get();
 
         if (!snapshot.empty){
-            console.log("User already exisits ")
+            console.error("There was an error creating the user")
         }
 
         await userDatabaseRef.add(user)
-        console.log("New user-created")
     } catch (error) {
         console.error("Error creating user adding to database:", error);
         throw error

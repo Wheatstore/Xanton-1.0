@@ -141,16 +141,6 @@
   font-size: 14px;
 }
 
-.dropdown-toggle {
-  background: none;
-  border: none;
-  color: white;
-  margin-left: 40%;
-  font-family: 300;
-  font-size: 12px;
-  cursor: pointer;
-}
-
 /* New CSS for dropdown menu */
 .sidebar-dropdown-menu {
   display: block;
@@ -162,7 +152,7 @@
   max-height: 0;
   text-align: left;
   width: 100%;
-  transform: translateY(-160px);
+  transform: translateY(-130px);
   max-height: 500px;
   border-radius: 20px;
   padding: 10px 10px;

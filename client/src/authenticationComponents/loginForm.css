@@ -129,21 +129,5 @@
 
 .alternative-login-button-container {
     margin-bottom: 16px;
-}
-
-.alternative-login-button {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #ccc;
-    border-radius: 24px;
-    background-color: white;
-    color: #333;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.alternative-login-button:hover {
-    background-color: #f7f7f7;
+    text-align: center;
 }

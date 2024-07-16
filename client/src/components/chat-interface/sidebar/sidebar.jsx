@@ -72,9 +72,6 @@ function Sidebar() {
       <div onClick={() => setShowSettings((prev) => !prev)} className="user-sidebar-account-information">
         <img src={user.photoURL} alt="" />
         <h3>{user.displayName}</h3>
-        <button className="dropdown-toggle" >
-          <span>▼</span>
-        </button>
       </div>
       {showSettings && (
           <ul className="sidebar-dropdown-menu">

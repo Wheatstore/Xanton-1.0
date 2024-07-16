@@ -1,8 +1,8 @@
 import "./loginForm.css"
 import { useState } from "react"
 import loginEmailPassword from "../authenticationFunctions/login"
-import { loginGoogle } from "../authenticationFunctions/signup"
 import { useNavigate } from "react-router-dom"
+import GoogleSignInButton from "../components/buttons/googleSignin"
 
 function Login() {
     const [email, setEmail] = useState("")
@@ -18,15 +18,6 @@ function Login() {
 
     const passwordChange = (e) => {
         setPassword(e.target.value)
-    }
-
-    const onGoogleClick = async () => {
-        try {
-            await loginGoogle()
-            navigate("/user")
-        } catch (error) {
-            console.error(error)
-        }
     }
 
     const onFormSubmit = async (e) => {
@@ -79,7 +70,7 @@ function Login() {
                     </div>
                 </form>
                 <div className="alternative-login-button-container">
-                    <button className="alternative-login-button" onClick={onGoogleClick}>Sign in with Google</button>
+                    <GoogleSignInButton />
                 </div>
             </div>
         </div>

@@ -37,6 +37,8 @@ const signupLoginGoogle = async () => {
   }
 }
 
+//There are two functions because they both serve different purposes the first is only for when users signup while the second is for when users login
+
 const loginGoogle = async () => {
   const provider = new GoogleAuthProvider();
   try {

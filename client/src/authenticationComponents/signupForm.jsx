@@ -1,9 +1,8 @@
 import "./signupForm.css";
 import { useState } from "react";
 import { signUpEmailPassword } from "../authenticationFunctions/signup";
-import { signupLoginGoogle } from "../authenticationFunctions/signup";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import GoogleSignupButton from "../components/buttons/googleSignup";
 
 function Signup() {
     const navigate = useNavigate()
@@ -44,15 +43,6 @@ function Signup() {
         }
     }
 
-    const googleSignIn = async () => {
-        try { 
-            await signupLoginGoogle()
-            navigate("/user")
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
     return (
         <div className="signup-page-container">
             <div className="signup-form-container">
@@ -79,7 +69,7 @@ function Signup() {
                         <hr className="divider-line" />
                     </div>
                     <div className="alternative-signup-button-container">
-                        <button onClick={googleSignIn} className="alternative-signup-button">Sign up with Google</button>
+                        <GoogleSignupButton />
                     </div>
                 </form>
             </div>
