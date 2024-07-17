@@ -5,6 +5,7 @@ import "./landing.css"
 import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Footer from "../../components/footer/footer";
+import Carousel from "../../components/carousel/carousel";
 
 function LandingPage(){
     const [user, loading] = useAuthState(auth)
@@ -22,6 +23,7 @@ function LandingPage(){
             <div className="landing-page-container">
                 <NavbarHome/>
                 <HeroSection/>
+                <Carousel />
                 <Product/>
                 <Footer />
             </div>

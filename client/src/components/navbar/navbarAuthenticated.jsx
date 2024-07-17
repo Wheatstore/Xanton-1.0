@@ -33,7 +33,7 @@ function NavbarAuthenticated({ username }) {
                 <a href="/user" className="to-home-button-navbar">Xanton </a>
                 <svg width="100" height="50" xmlns="http://www.w3.org/2000/svg">
                     <rect width="100" height="50" fill="#FF0080" rx="20" ry="20"/>
-                    <text x="10" y="35" font-family="Inter" fontWeight="600" font-size="30" fill="white">BETA</text>
+                    <text x="10" y="35" fontFamily="Inter" fontWeight="600" fontSize="30" fill="white">BETA</text>
                 </svg>
             </div>
             <div className="buttons-authenticated-container">

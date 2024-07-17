@@ -70,7 +70,8 @@ app.post("/api/feedback", async (req, res)=> {
     const {sender, title, email, description} = req.body
     try{
         await addFeedback(sender, title, email, description)
-        res.status(200)
+        console.log(req.body)
+        res.sendStatus(200)
     } catch (error){
         console.error("There was an error sending an email", error)
     }
