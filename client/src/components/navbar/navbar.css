@@ -14,6 +14,17 @@
     font-weight: 550;
 }
 
+.navbar-header{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar-header svg{
+    margin-top: 2px;
+}
+
+
 .buttons-container {
     display: flex;
     margin-right: 20px;
