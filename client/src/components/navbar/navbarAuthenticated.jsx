@@ -25,7 +25,11 @@ function NavbarAuthenticated({ username }) {
     return (
         <nav className="navbar-container">
             <div className="navbar-header">
-                <a href="/user" className="to-home-button-navbar">Xanton</a>
+                <a href="/user" className="to-home-button-navbar">Xanton </a>
+                <svg width="100" height="50" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="50" fill="#FF0080" rx="20" ry="20"/>
+                    <text x="10" y="35" font-family="Inter" fontWeight="600" font-size="30" fill="white">BETA</text>
+                </svg>
             </div>
             <div className="buttons-authenticated-container">
                 <button className="help-button-support-button" onClick={() => navigate("/feedback")}>
