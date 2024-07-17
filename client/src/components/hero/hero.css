@@ -39,7 +39,7 @@
 @media (max-width: 1024px) {
   .hero-section-container {
     width: 70%;
-    height: 80vh;
+    height: 70vh;
   }
 
   .hero-heading,
@@ -67,6 +67,7 @@
 @media (max-width: 480px) {
   .hero-section-container {
     width: 90%;
+    padding-top: 12%;
     padding-left: 5%;
     padding-right: 5%;
     height: 45vh;
