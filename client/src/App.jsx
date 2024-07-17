@@ -9,6 +9,7 @@ import Admin from './pages/admin/admin';
 import UserProfile from './components/userProfile/userProfile';
 import UserProfilePage from './pages/userProfile/userProfilePage';
 import FeedbackPage from './pages/feedbackPage/feedbackPage';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   const [user, loading] = useAuthState(auth)
@@ -35,6 +36,7 @@ function App() {
             <Route path="/profile/:username" element={user ? <UserProfilePage />: <Navigate to="/chat" />} />
             <Route path="/feedback" element={user ? <FeedbackPage /> : <Navigate to="/" />} />
           </Routes>
+          <Analytics />
         </Router>
     </>
   )
