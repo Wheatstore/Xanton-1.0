@@ -18,7 +18,7 @@ function Feedback(){
                 sender: user,
                 title: inputFeedback,
                 email: email,
-                description: description
+                description: feedbackDescription
             }
             const response = await axios.post("https://xanton-1-0-server.vercel.app/api/feedback", body)
             if (response.status === 200){
