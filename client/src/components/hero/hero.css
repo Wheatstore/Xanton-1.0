@@ -1,60 +1,69 @@
+/* Keyframes for gradient animation */
+@keyframes gradientAnimation {
+  0% {
+    background: radial-gradient(circle at center, #6b4db0, #66a3b7);
+  }
+  25% {
+    background: radial-gradient(circle at center, #5fd0f6, #7840fa);
+  }
+  50% {
+    background: radial-gradient(circle at center, #8450ff, #1bc6ff);
+  }
+  75% {
+    background: radial-gradient(circle at center, #5fd0f6, #7840fa);
+  }
+  100% {
+    background: radial-gradient(circle at center, #6b4db0, #66a3b7);
+  }
+}
+
 .hero-section-container {
-  position: relative;
-  padding-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 5vh;
-  padding-top: 10vh;
+  justify-content: center;
   text-align: center;
-  height: 50vh;
-  background: #000; /* Ensure the background is black */
-  color: #fff;
-  margin-left: 10%;
-  margin-right: 10%;
+  width: 45%;
+  padding: 0 2%;
+  height: 90vh;
+  color: black;
+  animation: gradientAnimation 15s ease infinite;
+  border-radius: 50%;
+  background-size: 400% 400%;
   overflow: hidden;
+  margin: 0 auto;
+  transition: 1s ease-in-out;
 }
 
-.grid-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  border-radius: 30%;
-  height: 100%;
-  z-index: 0;
-  background: linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
-  background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
-  background-position: 0 0, 10px 10px, 0 0, 50px 50px;
-}
 
+/* Grid overlay styling */
 .grid-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(127,0,255,0.5), rgba(255,0,255,0.5));
+  background: linear-gradient(135deg, rgba(128, 0, 255, 0.718), rgba(255, 0, 255, 0.5));
   mix-blend-mode: overlay;
-  opacity: 0.3;
-}.website-mockup-container {
+  opacity: 0.2;
+}
+
+/* Website mockup container styling */
+.website-mockup-container {
   position: relative;
   text-align: center;
-  padding-top: 60px;
-  padding-bottom: 40px;
+  padding: 100px 0 40px;
   overflow: hidden;
 }
 
 .website-mockup-container img {
   width: 60%;
   border-radius: 20px;
-  border: 2px solid white;
-  animation: borderColorChange 3s infinite;
+  border: 2px solid #fff;
+  animation: borderColorChange 1s infinite;
 }
 
+/* Keyframes for border color change */
 @keyframes borderColorChange {
   0% {
     border-color: rgb(214, 214, 214);
@@ -67,6 +76,7 @@
   }
 }
 
+/* Circle styling for animation */
 .circle {
   position: absolute;
   border-radius: 50%;
@@ -78,7 +88,7 @@
 .circle:nth-child(1) {
   width: 100px;
   height: 100px;
-  background: rgba(255, 0, 255, 0.3);
+  background: rgba(247, 0, 247, 0.624);
   top: 10%;
   left: 5%;
   animation-delay: 0s;
@@ -96,12 +106,13 @@
 .circle:nth-child(3) {
   width: 200px;
   height: 200px;
-  background-color: rgb(255, 255, 255);
+  background-color: #fff;
   top: 60%;
   left: 83%;
   animation-delay: 4s;
 }
 
+/* Keyframes for floating animation */
 @keyframes float {
   0% {
     transform: translateY(0);
@@ -114,24 +125,24 @@
   }
 }
 
-
+/* Hero heading styling */
 .hero-heading,
 .welcome-heading-hero-section {
   position: relative;
   z-index: 1;
-  color: white;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  font-size: 60px; /* Adjust size as needed */
-  font-weight: bolder;
+  color: black;
+  margin: 0;
+  font-size: 60px;
+  font-weight: 549;
   font-family: 'SF Pro Text', Arial, Helvetica, sans-serif;
 }
 
+/* Highlighted heading styling */
 .heading--highlight {
-  font-size: 60px; /* Adjust size as needed */
-  font-weight: 650;
+  font-size: 60px;
+  font-weight: 500;
   font-family: 'SF Pro Text', Arial, Helvetica, sans-serif;
-  background: linear-gradient(90deg, #7f00ff, pink, #e100ff);
+  background: linear-gradient(90deg, #f7bebe, rgb(205, 127, 140), #f248e1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -140,14 +151,13 @@
   animation: colorChange 3s ease-in-out infinite alternate;
 }
 
+/* Hero description container styling */
 .hero-description-container {
-  margin-left: 23%;
-  margin-right: 23%;
+  margin: 0 2% 20px;
   text-align: center;
-  margin-bottom: 20px;
   position: relative;
   z-index: 1;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .hero-description-container h3 {
@@ -155,6 +165,7 @@
   animation: fadeIn 3s ease-out;
 }
 
+/* Join now button container styling */
 .join-now-button-container {
   text-align: center;
   margin-bottom: 30px;
@@ -162,6 +173,7 @@
   z-index: 1;
 }
 
+/* Join now button styling */
 .join-now-hero-section-button {
   border: transparent;
   border-radius: 30px;
@@ -181,6 +193,7 @@
   box-shadow: 12px 12px 2px 1px rgba(0, 0, 0, 0.5);
 }
 
+/* Keyframes for fade-in animation */
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -192,6 +205,7 @@
   }
 }
 
+/* Keyframes for color change animation */
 @keyframes colorChange {
   0% {
     color: purple;
