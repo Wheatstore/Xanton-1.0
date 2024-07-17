@@ -2,8 +2,11 @@ import { useState } from "react"
 import "./feedback.css"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import { useAuthState } from "react-firebase-hooks/auth"
+import { auth } from "../../firebase"
 
 function Feedback(){
+    const [user] = useAuthState(auth)
     const navigate = useNavigate()
     const [inputFeedback, setInput] = useState("")
     const [email, setEmail] = useState("")
@@ -11,7 +14,13 @@ function Feedback(){
 
     const sendFeedback = async () => {
         try {
-            const response = await axios.post("https://xanton-1-0-server.vercel.app/api/feedback")
+            const body = {
+                sender: user,
+                title: inputFeedback,
+                email: email,
+                description: description
+            }
+            const response = await axios.post("https://xanton-1-0-server.vercel.app/api/feedback", body)
             if (response.status === 200){
                 navigate("/user")
             }

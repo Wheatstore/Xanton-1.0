@@ -55,4 +55,18 @@ async function createNewUser(user) {
     }
 }
 
-module.exports = { updateMessage, setNewBot, createNewUser }
+async function addFeedback(sender, title, email, description){
+    try {
+        const feedbackRef = db.collection("feedback")
+        await feedbackRef.add({
+            sender: sender,
+            title: title,
+            email: email,
+            description: description,
+        })
+    } catch (error){
+
+    }
+}
+
+module.exports = { updateMessage, setNewBot, createNewUser, addFeedback }
