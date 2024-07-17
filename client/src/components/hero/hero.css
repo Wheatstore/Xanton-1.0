@@ -36,18 +36,6 @@
 }
 
 
-/* Grid overlay styling */
-.grid-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(128, 0, 255, 0.718), rgba(255, 0, 255, 0.5));
-  mix-blend-mode: overlay;
-  opacity: 0.2;
-}
-
 /* Website mockup container styling */
 .website-mockup-container {
   position: relative;
@@ -66,7 +54,7 @@
 /* Keyframes for border color change */
 @keyframes borderColorChange {
   0% {
-    border-color: rgb(214, 214, 214);
+    border-color: rgb(143, 120, 120);
   }
   33% {
     border-color: rgb(212, 2, 205);
@@ -76,54 +64,6 @@
   }
 }
 
-/* Circle styling for animation */
-.circle {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.6;
-  animation: float 5s infinite;
-  mix-blend-mode: screen;
-}
-
-.circle:nth-child(1) {
-  width: 100px;
-  height: 100px;
-  background: rgba(247, 0, 247, 0.624);
-  top: 10%;
-  left: 5%;
-  animation-delay: 0s;
-}
-
-.circle:nth-child(2) {
-  width: 150px;
-  height: 150px;
-  background: rgba(0, 0, 255, 0.3);
-  top: 60%;
-  left: 10%;
-  animation-delay: 2s;
-}
-
-.circle:nth-child(3) {
-  width: 200px;
-  height: 200px;
-  background-color: #fff;
-  top: 60%;
-  left: 83%;
-  animation-delay: 4s;
-}
-
-/* Keyframes for floating animation */
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
 
 /* Hero heading styling */
 .hero-heading,
