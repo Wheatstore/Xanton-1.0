@@ -36,20 +36,47 @@
   margin-bottom: 80px;
 }
 
+@media (max-width: 1024px) {
+  .hero-section-container {
+    width: 70%;
+    height: 80vh;
+  }
 
-/* Website mockup container styling */
-.website-mockup-container {
-  position: relative;
-  text-align: center;
-  padding: 100px 0 40px;
-  overflow: hidden;
+  .hero-heading,
+  .welcome-heading-hero-section,
+  .heading--highlight {
+    font-size: 50px;
+  }
 }
 
-.website-mockup-container img {
-  width: 60%;
-  border-radius: 20px;
-  border: 2px solid #fff;
-  animation: borderColorChange 1s infinite;
+@media (max-width: 768px) {
+  .hero-section-container {
+    width: 70%;
+    padding-left: 2%;
+    padding-right: 2%;
+    height: 70vh;
+  }
+
+  .hero-heading,
+  .welcome-heading-hero-section,
+  .heading--highlight {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section-container {
+    width: 90%;
+    padding-left: 5%;
+    padding-right: 5%;
+    height: 45vh;
+  }
+
+  .hero-heading,
+  .welcome-heading-hero-section,
+  .heading--highlight {
+    font-size: 20px;
+  }
 }
 
 /* Keyframes for border color change */
@@ -65,7 +92,6 @@
   }
 }
 
-
 /* Hero heading styling */
 .hero-heading,
 .welcome-heading-hero-section {
@@ -76,6 +102,20 @@
   font-size: 60px;
   font-weight: 549;
   font-family: 'SF Pro Text', Arial, Helvetica, sans-serif;
+}
+
+@media (max-width: 768px) {
+  .hero-heading,
+  .welcome-heading-hero-section {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-heading,
+  .welcome-heading-hero-section {
+    font-size: 18px;
+  }
 }
 
 /* Highlighted heading styling */
@@ -92,6 +132,18 @@
   animation: colorChange 3s ease-in-out infinite alternate;
 }
 
+@media (max-width: 768px) {
+  .heading--highlight {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading--highlight {
+    font-size: 18px;
+  }
+}
+
 /* Hero description container styling */
 .hero-description-container {
   margin: 0 2% 20px;
@@ -104,6 +156,22 @@
 .hero-description-container h3 {
   font-weight: 530;
   animation: fadeIn 3s ease-out;
+}
+
+@media (max-width: 768px) {
+  .hero-description-container h3 {
+    font-size: 12px;
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-description-container h3 {
+    font-size: 10px;
+    margin-left: 2%;
+    margin-right: 2%;
+  }
 }
 
 /* Join now button container styling */
@@ -132,6 +200,20 @@
 .join-now-hero-section-button:hover {
   transform: scale(1.1);
   box-shadow: 12px 12px 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+  .join-now-hero-section-button {
+    padding: 10px 30px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .join-now-hero-section-button {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
 }
 
 /* Keyframes for fade-in animation */
