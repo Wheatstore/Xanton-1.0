@@ -50,17 +50,7 @@ function NavbarAuthenticated({ username }) {
                         </div>
                     )}
                 </div>
-                <div className="hamburger-menu" onClick={toggleSidebar}>
-                    &#9776;
-                </div>
             </nav>
-            <div className={`sidebar ${isSidebarVisible ? 'visible' : ''}`}>
-                <span className="close-btn" onClick={toggleSidebar}>&times;</span>
-                <a href="/user" onClick={toggleSidebar}>Home</a>
-                <button onClick={() => { navigate("/feedback"); toggleSidebar(); }}>Feedback</button>
-                <button onClick={() => { navigate("/create-new-bot"); toggleSidebar(); }}>Request a new bot</button>
-                <button onClick={onSignOutClick} className="dropdown-item">Sign Out <div><span className="material-symbols-outlined">logout</span></div></button>
-            </div>
         </>
     );
 }
