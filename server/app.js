@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
+const nodeMailer = require("nodemailer")
 const { updateMessage, setNewBot, createNewUser } = require("./admin");
 
 const API_KEY = process.env.OPENAI_API_KEY;
@@ -64,6 +65,21 @@ app.post("/api/create-new-bot", async (req, res) => {
         res.status(500).json({ error: 'Failed to create new bot' });
     }
 });
+
+app.post("/api/feedback", async (req, res)=> {
+    const feedback = req.body
+    try{
+        const html = 
+            <h1>Feedback</h1>;
+
+        nodeMailer.createTransport({
+            
+        })
+        res.sendStatus(200)
+    } catch (error){
+        console.error("There was an error sending an email", error)
+    }
+})
 
 app.post("/api/create/user", async (req, res) => {
     try {

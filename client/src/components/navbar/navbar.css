@@ -36,15 +36,15 @@
     background-color: transparent;
     font-size: 20px;
     color: white;
+    transition: 0.5s ease-in-out;
 }
 
 #help-button-support{
     font-size: 50px;
     color: white;
-    transition: 0.5s ease-in-out;
 }
 
-#help-button-support:hover{
+.help-button-support-button:hover{
     transform: scale(1.1);
 }
 
