@@ -148,6 +148,11 @@
 @media (max-width: 768px) {
     .hamburger-menu {
         display: block;
+        position: fixed;
+    }
+
+    .dropdown-menu{
+        display: none;
     }
 
     .buttons-authenticated-container {

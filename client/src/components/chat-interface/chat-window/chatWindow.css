@@ -11,6 +11,7 @@
   margin-top: 10px;
   padding-left: 18%;
   padding-right: 18%;
+  overflow: hidden;
 }
 
 .close-sidebar-480-button{
@@ -53,13 +54,13 @@
   padding: 15px;
   white-space-collapse: preserve;
   margin-top: 0px;
-  font-size: 14.5px;
+  font-size: 16px; /* Ensure this is at least 16px */
   border: none;
   border-radius: 25px;
   background-color: #333;
   color: #fff;
   resize: none;
-  overflow: auto; /* Ensures scrollbar appears only when necessary */
+  overflow: auto;
   overflow-wrap: break-word;
   outline: none;
   font-family: "Inter", sans-serif;

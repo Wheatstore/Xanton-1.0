@@ -32,7 +32,7 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
         const { message, messageId } = req.body;
 
         const data = {
-            model: 'gpt-3.5-turbo',
+            model: 'gpt-4o-mini',
             messages: [
                 { role: 'system', content: `You are ${characterId}. Respond to all prompts in this character's tone and mannerisms. When asked for real-life information about this character, such as their place of study or details about their children, provide accurate historical information.` },
                 { role: 'user', content: message }

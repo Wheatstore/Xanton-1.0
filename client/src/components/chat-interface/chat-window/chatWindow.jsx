@@ -194,6 +194,7 @@ function ChatWindow() {
                             type="text"
                             className="message-input"
                             rows="1"
+                            style={{ overflow: 'auto' }} // Ensures scrollbar appears only when necessary
                         />
                     </form>
                     <p className="use-scrollbar-message">This character may provide false information</p>
