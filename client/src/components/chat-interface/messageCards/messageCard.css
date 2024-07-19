@@ -4,12 +4,14 @@
     text-align: left;
     width: 70%;
     display: flex;
+    flex-direction: row;
     gap: 15px;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .botMessage-image {
     width: 40px;
+    margin-top: 15px;
     border-radius: 50%;
 }
 
