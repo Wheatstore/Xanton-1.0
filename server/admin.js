@@ -69,4 +69,23 @@ async function addFeedback(sender, title, email, description){
     }
 }
 
-module.exports = { updateMessage, setNewBot, createNewUser, addFeedback }
+async function countAllUsers(count, nextPageToken){
+    const listUsers =  await admin.auth().listUsers(1000, nextPageToken)
+    listUsers.users.map(user => {
+        count++
+    })
+    if (listUsers.pageToken) {
+        count = await countUsers(count, listUsers.pageToken);
+    }   
+
+    return count;
+}
+
+async function countDatabase(collection){
+    const query = db.collection(collection);
+    const snapshot = await query.get();
+    const count = snapshot.size;
+    console.log(count)
+}
+
+module.exports = { updateMessage, setNewBot, createNewUser, addFeedback, countAllUsers, countDatabase }

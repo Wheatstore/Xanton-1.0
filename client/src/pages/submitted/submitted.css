@@ -1,16 +1,17 @@
-body{
-    background-color: black ;
+.submitted-page-form{
+    height: 100vh;
+    background-color: black;
     text-align: center;
 }
 
-h1{
+.submitted-page-form h1{
     color: white;
     font-family: "Inter";
     font-size: 100px;
     margin-bottom: 5px;
 }
 
-h3{
+.submitted-page-form h3{
     margin-top: 10px;
     color: white;
     font-family: sans-serif;
