@@ -12,6 +12,7 @@ function NewBot(){
     const [greeting, setGreeting] = useState("")
     const [description, setDescription] = useState("")
     const [aMessage, setAMessage] = useState("")
+    const [filledOut, setFilled] = useState(false)
 
     const handleSubmit = async () => {
         try {
@@ -20,11 +21,12 @@ function NewBot(){
                 creator: user.displayName,
                 creatorId: user.uid,
                 greeting: greeting,
-                description: description,
+                description: description,   
                 additionalMessage: aMessage
             })
+            setFilled(true) 
             if (response.status === 200){
-                navigate("/user")
+                navigate("/submitted")
             }
         } catch (error) {
             console.error(error)
