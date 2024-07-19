@@ -41,11 +41,10 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
 
         const completion = await axios.post('https://api.openai.com/v1/chat/completions', data, { headers });
         const reply = completion.data.choices[0].message.content;
-
-        await updateMessage(messageId, userId, characterId, reply);
         console.log(req.body);
 
         res.status(200).json({ reply });
+        await updateMessage(messageId, userId, characterId, reply);
     } catch (error) {
         console.error('Error calling OpenAI API:', error.response ? error.response.data : error.message);
         res.status(error.response ? error.response.status : 500).json({
