@@ -6,6 +6,7 @@ import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Footer from "../../components/footer/footer";
 import Carousel from "../../components/carousel/carousel";
+import Featured from "../../components/carousel/featured/featured";
 
 function LandingPage(){
     const [user, loading] = useAuthState(auth)

@@ -1,3 +1,14 @@
-h1{
+.carousel-container {
+    margin-top: 150px;
+    margin-left: 13%;
+    text-align: center;
+    margin-right: 13%;
+}
+
+.carousel-container h1{
     color: white;
+    font-size: 3.5em;
+    font-weight: 550;
+    margin-bottom: 0px;
+    font-family: "Inter";
 }

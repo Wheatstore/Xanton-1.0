@@ -64,13 +64,13 @@ function Sidebar() {
         <h3 className="previous-chats-heading">Chats</h3>
         {previousChats.map((chat) => (
           <div onClick={() => navigate(`/chat/${chat.character}`)} key={chat.id} className="chat-item">
-            <img className="chat-item-image" src={chat.img} alt="" />
+            <img className="chat-item-image" src={chat.img} alt="Chat item" loading="lazy" />
             <p>{chat.name}</p>
           </div>
         ))}
       </div>
       <div onClick={() => setShowSettings((prev) => !prev)} className="user-sidebar-account-information">
-        <img src={user.photoURL} alt="" />
+        <img src={user.photoURL} alt="user photo url" loading="lazy" />
         <h3>{user.displayName}</h3>
       </div>
       {showSettings && (

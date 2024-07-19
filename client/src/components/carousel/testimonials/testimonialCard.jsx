@@ -5,7 +5,7 @@ function Testimonial(){
         {
             user: "Emma Johnson",
             picture: "https://randomuser.me/api/portraits/women/1.jpg",
-            review: "Chatting with Gandhi was an enlightening experience. His insights on non-violence and peace are incredibly relevant even today. Xanton makes history come alive in a way I've never seen before. The interface is user-friendly, and the responses are surprisingly accurate and detailed."
+            review: "Chatting with Gandhi was an enlightening experience. His insights on non-violence and peace are incredibly relevant even today. Xanton makes history come alive in a way I've never seen before. The interface is user-friendly."
         },
         {
             user: "Liam Smith",

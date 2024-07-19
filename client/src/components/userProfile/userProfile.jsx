@@ -48,7 +48,7 @@ function UserProfile(){
                 <h1>Public Profile</h1>
             </div>
             <div className="user-information-user-information-edit">
-                <img src={user.photoURL} alt="" />
+                <img src={user.photoURL} alt="user-information" loading="lazy" />
                 <h1>{user.displayName}</h1>
             </div>
             <div className="user-information-user-information-input-container">

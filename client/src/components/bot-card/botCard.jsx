@@ -43,7 +43,8 @@ function BotCard({ person, index, delay }) {
             <img
               className="person-image-container"
               src={person.img}
-              alt=""
+              alt={`${person.name} image`}
+              loading='lazy'
             />
           )}
           <div className="information-container">
