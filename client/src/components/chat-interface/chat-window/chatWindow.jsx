@@ -7,6 +7,7 @@ import axios from "axios";
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, where, getDocs } from "firebase/firestore";
 import UserMessage from "../messageCards/userMessage";
 import BotMessage from "../messageCards/botMessage";
+import Sidebar from "../sidebar/sidebar";
 
 function ChatWindow() {
     const params = useParams();
@@ -17,6 +18,11 @@ function ChatWindow() {
     const [botProfilePicture, setBotProfilePicture] = useState("");
     const [botName, setBotName] = useState("");
     const [loadingMessages, setLoadingMessages] = useState(true);
+    const [isSidebarVisible, setSidebarVisible] = useState(false);
+
+    const toggleSidebar = () => {
+        setSidebarVisible(!isSidebarVisible);
+    };
 
     const messageWrapperRef = useRef(null);
     const messageInputContainerRef = useRef(null);
@@ -152,7 +158,6 @@ function ChatWindow() {
                     <h2 className="welcome-message">Welcome to your conversation with {botName}</h2>
                 </div>
                 {loadingMessages ? (
-                    // Show skeleton screen while loading messages
                     <>
                         <div className="skeleton-text-container">
                             <div className="skeleton-image"></div>
@@ -194,8 +199,20 @@ function ChatWindow() {
                     <p className="use-scrollbar-message">This character may provide false information</p>
                 </div>
             </div>
+            <button className="hamburger-menu-chat" onClick={toggleSidebar}>
+                <span className="material-symbols-outlined" id="material-hamburger-menu-chat">menu</span>
+            </button>
+            {isSidebarVisible && (
+                <div className="sidebar-chatwin">
+                    <button onClick={toggleSidebar}className="close-sidebar-480-button">
+                        <span className="material-symbols-outlined" id="close-button-sidebar-chatwin">close</span>
+                    </button>
+                    <Sidebar />
+                </div>
+            )}
         </div>
     );
 }
+
 
 export default ChatWindow;

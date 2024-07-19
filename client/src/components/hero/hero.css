@@ -38,14 +38,16 @@
 
 @media (max-width: 1024px) {
   .hero-section-container {
-    width: 70%;
-    height: 70vh;
+    width: 60%;
+    height: 90vh;
   }
 
   .hero-heading,
   .welcome-heading-hero-section,
   .heading--highlight {
     font-size: 50px;
+    font-family: "Inter";
+    font-weight: 350;
   }
 }
 
@@ -99,7 +101,7 @@
   z-index: 1;
   color: black;
   margin: 0;
-  font-size: 60px;
+  font-size: 85px;
   font-weight: 549;
   font-family: 'SF Pro Text', Arial, Helvetica, sans-serif;
 }
@@ -120,7 +122,6 @@
 
 /* Highlighted heading styling */
 .heading--highlight {
-  font-size: 60px;
   font-weight: 500;
   font-family: 'SF Pro Text', Arial, Helvetica, sans-serif;
   background: linear-gradient(90deg, #f7bebe, rgb(205, 127, 140), #f248e1);

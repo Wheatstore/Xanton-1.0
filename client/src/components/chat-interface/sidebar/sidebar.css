@@ -203,6 +203,10 @@
     max-height: 65vh;
   }
 
+  .chat-item:hover {
+    background-color: rgba(114, 114, 114, 0.576);
+  }
+
   .user-sidebar-account-information {
     margin-left: 15px;
     margin-right: 10px;
@@ -223,8 +227,13 @@
 }
 
 @media (max-width: 480px) {
+  .sidebar-container{
+    padding-top: 5px;
+    height: 96.5vh;
+  }
   .sidebar-logo-heading {
-    font-size: 25px;
+    font-size: 30px;
+    margin-top: 0px;
     margin-left: 10px;
   }
 
@@ -234,25 +243,29 @@
 
   .explore-xanton-button {
     width: 95%;
-    font-size: 10px;
+    font-size: 20px;
   }
 
   .previous-chats-container {
-    margin-left: 10px;
+    margin-left: 5px;
+    height: 74vh;
+    max-height: 74vh;
+    text-align: left;
   }
 
   .chat-item {
-    gap: 5px;
+    gap: 10px;
     padding: 3px;
     margin-top: 10px;
   }
 
   .chat-item-image {
     width: 45px;
+    height: 45px;
   }
 
   .chat-item {
-    font-size: 12px;
+    font-size: 18px;
   }
 
   .user-sidebar-account-information {
@@ -261,13 +274,13 @@
   }
 
   .user-sidebar-account-information img {
-    height: 20px;
+    height: 30px;
     border-radius: 50%;
-    width: 20px;
+    width: 30px;
   }
 
   .user-sidebar-account-information h3 {
-    font-size: 10px;
+    font-size: 15px;
   }
 
   .dropdown-toggle {
@@ -275,12 +288,12 @@
   }
 
   .sidebar-dropdown-menu {
-    padding: 5px 5px;
+    padding: 8px 8px;
   }
 
   .sidebar-dropdown-item {
     padding: 3px;
-    font-size: 12px;
+    font-size: 18px;
   }
 }
 

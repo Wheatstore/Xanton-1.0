@@ -1,197 +1,254 @@
 .display-message-container {
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+  text-align: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  flex-direction: column;
+  position: relative; /* Added to position the hamburger menu */
+}
+
+.display-input-container-chat-window {
+  margin-top: 10px;
+  padding-left: 18%;
+  padding-right: 18%;
+}
+
+.close-sidebar-480-button{
+  display: none;
+}
+
+.messages-wrapper {
+  overflow-y: auto;
+  scrollbar-color: red, orange;
+  scrollbar-width: thin;
+  padding-left: 22%;
+  padding-right: 22%;
+  height: 86vh;
+}
+
+.welcome-message-image-chatWindow {
+  width: 150px;
+  border-radius: 50%;
+}
+
+.welcome-message-container {
+  margin-top: 30px;
+  color: rgb(238, 238, 238);
+  font-family: "Inter", sans-serif;
+}
+
+.welcome-message {
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(90deg, #0f19a9, rgb(254, 90, 175), #e100ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.message-input {
+  position: relative;
+  width: 80%;
+  max-width: 100%;
+  padding: 15px;
+  white-space-collapse: preserve;
+  margin-top: 0px;
+  font-size: 14.5px;
+  border: none;
+  border-radius: 25px;
+  background-color: #333;
+  color: #fff;
+  resize: none;
+  overflow: auto; /* Ensures scrollbar appears only when necessary */
+  overflow-wrap: break-word;
+  outline: none;
+  font-family: "Inter", sans-serif;
+  transition: all 0.2s ease;
+  margin-bottom: 0px;
+}
+
+
+.use-scrollbar-message {
+  font-size: 10px;
+  margin-top: 0px;
+  color: white;
+  font-family: "Inter";
+}
+
+.message-input::placeholder {
+  color: #888;
+}
+
+.skeleton-image {
+  width: 40px;
+  background-color: #454545;
+  animation: pulse 1.5s infinite;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.skeleton-content {
+  width: 50%;
+  background-color: #454545;
+  animation: pulse 1.5s infinite;
+  height: 50px;
+  border-radius: 20px;
+}
+
+.skeleton-text-container {
+  display: flex;
+  margin-bottom: 10vh;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+}
+
+.skeleton-profile-picture-container {
+  display: flex;
+  justify-content: center;
+}
+
+.skeleton-profile-picture {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+  background-color: #454545;
+}
+
+@keyframes pulse {
+  0% {
+      background-color: #454545;
   }
-  
-  .display-input-container-chat-window {
-    margin-top: 10px;
-    padding-left: 18%;
-    padding-right: 18%;
+  50% {
+      background-color: #454545;
   }
-  
+  100% {
+      background-color: #454545;
+  }
+}
+
+/* Hamburger menu button */
+.hamburger-menu-chat {
+  display: none;
+  background-color: transparent;
+  color: white;
+  border: transparent;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+#material-hamburger-menu-chat {
+  font-size: 37px;
+}
+
+/* Sidebar */
+.sidebar-chatwin {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background-color: rgb(24, 24, 24);
+  z-index: 1000;
+}
+
+
+.close-sidebar-480-button{
+  background-color: transparent;
+  border: transparent;
+  padding: 0px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: left;
+  margin-left: 15px;
+}
+
+#close-button-sidebar-chatwin{
+  color: white;
+  font-size: 30px;
+}
+
+/* Responsive CSS */
+@media (max-width: 1024px) {
+  .display-input-container-chat-window,
   .messages-wrapper {
-    overflow-y: auto;
-    scrollbar-color: red, orange;
-    scrollbar-width: thin;
-    padding-left: 22%;
-    padding-right: 22%;
-    height: 86vh;
-  }
-  
-  .welcome-message-image-chatWindow {
-    width: 150px;
-    border-radius: 50%;
-  }
-  
-  .welcome-message-container {
-    margin-top: 30px;
-    color: rgb(238, 238, 238);
-    font-family: "Inter", sans-serif;
-  }
-  
-  .welcome-message {
-    font-weight: 600;
-    font-family: "Inter", sans-serif;
-    background: linear-gradient(90deg, #0f19a9, rgb(254, 90, 175), #e100ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  
-  .message-input {
-    position: relative;
-    width: 80%;
-    max-width: 100%;
-    padding: 15px;
-    white-space-collapse: preserve;
-    margin-top: 0px;
-    font-size: 14.5px;
-    border: none;
-    border-radius: 25px;
-    background-color: #333;
-    color: #fff;
-    resize: none;
-    overflow-wrap: break-word;
-    outline: none;
-    font-family: "Inter", sans-serif;
-    transition: all 0.2s ease;
-    margin-bottom: 0px;
-  }
-  
-  .use-scrollbar-message {
-    font-size: 10px;
-    margin-top: 0px;
-    color: white;
-    font-family: "Inter";
-  }
-  
-  .message-input::placeholder {
-    color: #888;
-  }
-  
-  .skeleton-image {
-    width: 40px;
-    background-color: #454545;
-    animation: pulse 1.5s infinite;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .skeleton-content {
-    width: 50%;
-    background-color: #454545;
-    animation: pulse 1.5s infinite;
-    height: 50px;
-    border-radius: 20px;
-  }
-  
-  .skeleton-text-container {
-    display: flex;
-    margin-bottom: 10vh;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .skeleton-profile-picture-container {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .skeleton-profile-picture {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-    background-color: #454545;
-  }
-  
-  @keyframes pulse {
-    0% {
-      background-color: #454545;
-    }
-    50% {
-      background-color: #454545;
-    }
-    100% {
-      background-color: #454545;
-    }
-  }
-  
-  /* Responsive CSS */
-  @media (max-width: 1024px) {
-    .display-input-container-chat-window,
-    .messages-wrapper {
       padding-left: 15%;
       padding-right: 15%;
-    }
-  
-    .message-input {
-      width: 90%;
-    }
   }
-  
-  @media (max-width: 768px) {
-    .display-input-container-chat-window,
-    .messages-wrapper {
+
+  .message-input {
+      width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .display-input-container-chat-window,
+  .messages-wrapper {
       padding-left: 10%;
       padding-right: 10%;
-    }
-  
-    .welcome-message-image-chatWindow {
+  }
+
+  .welcome-message-image-chatWindow {
       width: 120px;
-    }
-  
-    .message-input {
+  }
+
+  .message-input {
       width: 95%;
       font-size: 13px;
-    }
-  
-    .welcome-message {
-      font-size: 16px;
-    }
   }
-  
-  @media (max-width: 480px) {
-    .display-input-container-chat-window,
-    .messages-wrapper {
+
+  .welcome-message {
+      font-size: 16px;
+  }
+
+  .hamburger-menu-chat {
+      display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .display-input-container-chat-window,
+  .messages-wrapper {
       padding-left: 5%;
       padding-right: 5%;
-    }
-  
-    .welcome-message-image-chatWindow {
+  }
+
+  .welcome-message-image-chatWindow {
       width: 100px;
-    }
-  
-    .message-input {
+  }
+
+  .message-input {
       width: 100%;
       font-size: 12px;
-    }
-  
-    .welcome-message {
+  }
+
+  .welcome-message {
       font-size: 14px;
-    }
-  
-    .skeleton-image {
+  }
+
+  .skeleton-image {
       width: 30px;
       height: 30px;
-    }
-  
-    .skeleton-content {
+  }
+
+  .skeleton-content {
       width: 70%;
       height: 40px;
-    }
-  
-    .skeleton-profile-picture {
+  }
+
+  .skeleton-profile-picture {
       width: 120px;
       height: 120px;
-    }
-  
-    .skeleton-text-container {
-      gap: 10px;
-    }
   }
-  
+
+  .skeleton-text-container {
+      gap: 10px;
+  }
+
+  .hamburger-menu-chat {
+      display: block;
+  }
+}
