@@ -1,7 +1,8 @@
 var admin = require("firebase-admin");
 const { FieldValue } = require('firebase-admin/firestore');
 
-const serviceAccount = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf8'));
+// const serviceAccount = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf8'));
+const serviceAccount = require("C:/Users/syoo2/OneDrive/Documents/Xanton-1.0-important/xanton-1-firebase-adminsdk-sxkma-926b7c4612.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -12,7 +13,6 @@ const db = admin.firestore();
 
 async function updateMessage(messageId, userId, characterId, reply) {
     try {
-        console.log(serviceAccount)
         const docRef = db.collection('users').doc(userId).collection('characters').doc(characterId).collection('messages').doc(messageId);
         await docRef.update({ reply: reply });
         console.log('Document successfully updated');
@@ -73,4 +73,22 @@ async function addFeedback(sender, title, email, description){
     }
 }
 
+async function countAllUsers(count, nextPageToken){
+    const listUsers =  await admin.auth().listUsers(1000, nextPageToken)
+    listUsers.users.map(user => {
+        count++
+    })
+    if (listUsers.pageToken) {
+        count = await countUsers(count, listUsers.pageToken);
+    }   
+
+    return count;
+}
+
+async function countDatabase(){
+    const query = db.collection("userDatabase");
+    const snapshot = await query.get();
+    const count = snapshot.size;
+    console.log(count)
+}
 module.exports = { updateMessage, setNewBot, createNewUser, addFeedback }
