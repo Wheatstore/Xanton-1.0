@@ -3,7 +3,19 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const nodeMailer = require("nodemailer")
-const { updateMessage, setNewBot, createNewUser, addFeedback } = require("./admin");
+    // const { updateMessage, setNewBot, createNewUser, addFeedback } = require("./admin");
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.simple()
+  ),
+  transports: [
+    new winston.transports.Console()
+  ],
+});
 
 const API_KEY = process.env.OPENAI_API_KEY;
 
@@ -41,7 +53,7 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
 
         const completion = await axios.post('https://api.openai.com/v1/chat/completions', data, { headers });
         const reply = completion.data.choices[0].message.content;
-        console.log(req.body);
+        logger.info(req.body);
 
         res.status(200).json({ reply });
         await updateMessage(messageId, userId, characterId, reply);
@@ -57,7 +69,7 @@ app.post("/api/create-new-bot", async (req, res) => {
     try {
         const { name, creator, creatorId, greeting, description, additionalMessage } = req.body;
         await setNewBot(name, creator, creatorId, greeting, description, additionalMessage);
-        console.log(req.body);
+        logger.info(req.body);
         res.sendStatus(200);
     } catch (error) {
         console.error("There was an error sending it to you", error);
@@ -69,7 +81,7 @@ app.post("/api/feedback", async (req, res)=> {
     const {sender, title, email, description} = req.body
     try{
         await addFeedback(sender, title, email, description)
-        console.log(req.body)
+        logger.info(req.body)
         res.sendStatus(200)
     } catch (error){
         console.error("There was an error sending an email", error)
@@ -78,7 +90,7 @@ app.post("/api/feedback", async (req, res)=> {
 
 app.post("/api/create/user", async (req, res) => {
     try {
-        console.log("Initiated user creation", req.body)
+        logger.info("Initiated user creation", req.body)
         await createNewUser(req.body);
         res.sendStatus(200);
     } catch (error) {
