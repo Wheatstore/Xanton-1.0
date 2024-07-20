@@ -53,10 +53,10 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
 
         const completion = await axios.post('https://api.openai.com/v1/chat/completions', data, { headers });
         const reply = completion.data.choices[0].message.content;
+        await updateMessage(messageId, userId, characterId, reply);
         logger.info(req.body);
 
         res.status(200).json({ reply });
-        await updateMessage(messageId, userId, characterId, reply);
     } catch (error) {
         logger.error('Error calling OpenAI API:', error.response ? error.response.data : error.message);
         res.status(error.response ? error.response.status : 500).json({
@@ -99,7 +99,7 @@ app.post("/api/create/user", async (req, res) => {
     }
 });
 
-app.get("/api/user-count", (req, res)=> {
+app.get("/api/user-count", async (req, res)=> {
     try{
 
     } catch(error){
