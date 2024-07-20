@@ -113,6 +113,7 @@
   }
 }
 
+/* Heading size for screens (mobile IOS android browsers) */
 @media (max-width: 480px) {
   .hero-heading,
   .welcome-heading-hero-section {

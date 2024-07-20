@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const nodeMailer = require("nodemailer")
-    // const { updateMessage, setNewBot, createNewUser, addFeedback } = require("./admin");
+const { updateMessage, setNewBot, createNewUser, addFeedback, countAllUser, countDatabase } = require("./admin");
 const winston = require('winston');
 
 const logger = winston.createLogger({
@@ -58,7 +58,7 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
         res.status(200).json({ reply });
         await updateMessage(messageId, userId, characterId, reply);
     } catch (error) {
-        console.error('Error calling OpenAI API:', error.response ? error.response.data : error.message);
+        logger.error('Error calling OpenAI API:', error.response ? error.response.data : error.message);
         res.status(error.response ? error.response.status : 500).json({
             error: error.response ? error.response.data : 'Internal Server Error'
         });
@@ -72,7 +72,7 @@ app.post("/api/create-new-bot", async (req, res) => {
         logger.info(req.body);
         res.sendStatus(200);
     } catch (error) {
-        console.error("There was an error sending it to you", error);
+        logger.error("There was an error sending it to you", error);
         res.status(500).json({ error: 'Failed to create new bot' });
     }
 });
@@ -84,7 +84,7 @@ app.post("/api/feedback", async (req, res)=> {
         logger.info(req.body)
         res.sendStatus(200)
     } catch (error){
-        console.error("There was an error sending an email", error)
+        logger.error("There was an error sending an email", error)
     }
 })
 
@@ -94,10 +94,18 @@ app.post("/api/create/user", async (req, res) => {
         await createNewUser(req.body);
         res.sendStatus(200);
     } catch (error) {
-        console.error("Failed to add user to database: ", error);
+        logger.error("Failed to add user to database: ", error);
         res.status(500).json({ error: 'Failed to create user' });
     }
 });
+
+app.get("/api/user-count", (req, res)=> {
+    try{
+
+    } catch(error){
+        logger.error("There was an error fetching info", error)
+    }
+})
 
 app.get('/', (req, res) => {
     res.send("server is running");
