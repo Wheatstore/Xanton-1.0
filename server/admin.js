@@ -69,7 +69,7 @@ async function addFeedback(sender, title, email, description){
     }
 }
 
-async function countAllUsers(count, nextPageToken){
+async function countAllUsers(count, nextPageToken = undefined){
     const listUsers =  await admin.auth().listUsers(1000, nextPageToken)
     listUsers.users.map(user => {
         count++

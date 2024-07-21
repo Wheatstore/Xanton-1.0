@@ -1,4 +1,4 @@
-import "./navbar.css"; // Import the navbar CSS
+import "./navbarNotHome.css"
 import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
@@ -8,15 +8,19 @@ function NavbarNotHome() {
 
     return (
         <nav className="navbar-container">
-            <div className="navbar-header"><a href="/" className="to-home-button-navbar">Xanton</a>
-            <svg width="100" height="50" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="100" height="50" fill="#FF0080" rx="20" ry="20"/>
-                    <text x="10" y="35" fontFamily="Inter" fontWeight="600" fontSize="30" fill="white">BETA</text>
-            </svg>
-            </div>
-            <div className="buttons-container">
-                {location.pathname === "/signup" ? <button onClick={() => navigate("/login")} className="login-button-navbar">Login</button>: <button className="sign-up-button" onClick={() => navigate("/signup")}>Join</button>}
-                <button type="button" className="learn-more-button-not-home-page">Learn more</button>
+            <div className="inner-navbar-container-div-nothome">
+                <div className="navbar-header">
+                    <a href="/" className="to-home-button-navbar">
+                            <img src="/images/logo.png" alt="Xanton Logo" />
+                    </a>
+                </div>
+                <div className="buttons-container">
+                    {location.pathname === "/signup" ? <button onClick={() => navigate("/login")} className="login-button-navbar">Login</button>: <button className="sign-up-button" onClick={() => navigate("/signup")}>Join</button>}
+                    <button type="button" className="learn-more-button-landing">Learn more</button>
+                    <button className="about-button-landing">About</button>
+                    <button className="learn-more-button-landing">Learn more</button>
+                    <button className="meet-team-button-landing">Meet the Team</button>
+                </div>
             </div>
         </nav>
     );

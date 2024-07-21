@@ -43,9 +43,11 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
         const { uid: userId, characterId } = req.params;
         const { message, messageId } = req.body;
 
+        //user gets data from the openai api
         const data = {
             model: 'gpt-4o-mini',
             messages: [
+                //prompt for the openAI api
                 { role: 'system', content: `You are ${characterId}. Respond to all prompts in this character's tone and mannerisms. When asked for real-life information about this character, such as their place of study or details about their children, provide accurate historical information.` },
                 { role: 'user', content: message }
             ]
@@ -53,11 +55,15 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
 
         const completion = await axios.post('https://api.openai.com/v1/chat/completions', data, { headers });
         const reply = completion.data.choices[0].message.content;
+
+        //new function to update the message in the database
         await updateMessage(messageId, userId, characterId, reply);
         logger.info(req.body);
 
+        //once the server gets that data from the api sends it back to the client or frontend to be displayed
         res.status(200).json({ reply });
     } catch (error) {
+        //if there is an error display the error as a log in vercel
         logger.error('Error calling OpenAI API:', error.response ? error.response.data : error.message);
         res.status(error.response ? error.response.status : 500).json({
             error: error.response ? error.response.data : 'Internal Server Error'
@@ -67,9 +73,9 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
 
 app.post("/api/create-new-bot", async (req, res) => {
     try {
-        const { name, creator, creatorId, greeting, description, additionalMessage } = req.body;
-        await setNewBot(name, creator, creatorId, greeting, description, additionalMessage);
-        logger.info(req.body);
+        const { name, creator, creatorId, greeting, description, additionalMessage } = req.body; //defining the variables that come from the user
+        await setNewBot(name, creator, creatorId, greeting, description, additionalMessage); //set a new bot in firestore
+        logger.info(req.body); //log that information in vercel
         res.sendStatus(200);
     } catch (error) {
         logger.error("There was an error sending it to you", error);
@@ -78,10 +84,10 @@ app.post("/api/create-new-bot", async (req, res) => {
 });
 
 app.post("/api/feedback", async (req, res)=> {
-    const {sender, title, email, description} = req.body
+    const {sender, title, email, description} = req.body //define variables from the user
     try{
-        await addFeedback(sender, title, email, description)
-        logger.info(req.body)
+        await addFeedback(sender, title, email, description) //add this to a new collection in firestore
+        logger.info(req.body) //log the body in vercel
         res.sendStatus(200)
     } catch (error){
         logger.error("There was an error sending an email", error)
@@ -90,6 +96,7 @@ app.post("/api/feedback", async (req, res)=> {
 
 app.post("/api/create/user", async (req, res) => {
     try {
+        //this route is called whenever a new user signs up or is created
         logger.info("Initiated user creation", req.body)
         await createNewUser(req.body);
         res.sendStatus(200);
@@ -101,6 +108,7 @@ app.post("/api/create/user", async (req, res) => {
 
 app.get("/api/user-count", async (req, res)=> {
     try{
+        countAllUser(0)
 
     } catch(error){
         logger.error("There was an error fetching info", error)

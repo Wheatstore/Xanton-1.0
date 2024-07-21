@@ -4,7 +4,8 @@
     padding-top: 20px;
 }
 
-.inner-navbar-container-div{
+.inner-navbar-container-div-nothome{
+    margin-top: 20px;
     width: fit-content;
     padding: 10px;
     display: flex;
@@ -32,7 +33,7 @@
     gap: 0px;
 }
 
-.login-button-navbar-home, .sign-up-button{
+.login-button-navbar, .sign-up-button{
     background-color: rgb(10, 88, 255);
     border-radius: 30px;
     border: 0px;

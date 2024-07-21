@@ -1,0 +1,247 @@
+.cta-container-signup{
+    display: flex;
+    background-color: black;
+    flex-direction: column;
+    padding-top: 7vh;
+    text-align: center;
+    padding-bottom: 9vh;
+}
+
+.cta-container-signup h1{
+    height: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    font-weight: 700;
+    font-style: normal;
+    font-family: "Inter", "Inter Placeholder", sans-serif;
+    color: white;
+    font-size: 50px;
+    letter-spacing: -2.6px;
+    line-height: 1.2;
+    margin-bottom: 0;   
+}
+
+.cta-container-signup h3{
+    height: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    overflow: visible;
+    font-weight: 500;
+    font-style: normal;
+    font-family: "Inter", "Inter Placeholder", sans-serif;
+    color: #888888;
+    font-size: 24px;
+    letter-spacing: -0.5px;
+    line-height: 1.5;
+}
+
+.button-container-cta{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+}
+
+.cta-getstarted{
+    padding: 12px 18px 12px 18px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 4px 10px -2px rgba(0, 0, 0, 0.05), 0px 2px 2px -1px rgba(0, 0, 0, 0.1), 0px 0px 0px 1px rgba(255, 69, 51, 0.12);
+    background-color: #ff4533;
+    overflow: visible;
+    align-content: center;
+    flex-wrap: nowrap;
+    gap: 10;
+    border: transparent;
+    border-radius: 30px;
+    white-space: pre;
+    font-weight: 500;
+    font-style: normal;
+    font-family: "Inter";
+    color: var(--Heading, #fcfcfa);
+    font-size: 16px;
+    letter-spacing: -0.02em;
+    line-height: 24px;
+}
+
+.cta-learnmore{
+    box-sizing: border-box;
+    width: min-content;
+    height: min-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 18px 12px 18px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 4px 10px -2px rgba(0, 0, 0, 0.1), 0px 2px 2px -1px rgba(0, 0, 0, 0.1), 0px 0px 0px 1px rgba(255, 255, 255, 0.08);
+    background-color: rgba(10, 10, 10, 0.5);
+    overflow: visible;
+    align-content: center;
+    flex-wrap: nowrap;
+    gap: 10;
+    border: transparent;
+    border-radius: 30px;
+    width: auto;
+    white-space: pre;
+    font-weight: 500;
+    font-style: normal;
+    font-family: "Satoshi", "Satoshi Placeholder", sans-serif;
+    color: var(--Heading, #fcfcfa);
+    font-size: 16px;
+    letter-spacing: -0.02em;
+    line-height: 24px;
+}
+
+.cta-contact-info-container{
+    padding: 35px 20% 35px 20%;
+}
+
+.cta-newsletter-signup{
+    box-sizing: border-box;
+    width: 100%;
+    height: min-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 160px 60px 110px;
+    background: linear-gradient(140.06451559643327deg, #1a1a1a 0%, rgb(13, 13, 13) 100%);
+    overflow: hidden;
+    align-content: center;
+    flex-wrap: nowrap;
+    gap: 32;
+    border-radius: 24px;
+}
+
+.cta-newsletter-signup h1{
+    width: auto;
+    height: auto;
+    white-space: pre;
+    font-weight: 500;
+    font-style: normal;
+    font-family: "Satoshi", "Satoshi Placeholder", sans-serif;
+    color: var(--Heading, #fcfcfa);
+    font-size: 55px;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+.cta-newsletter-signup h3{
+    margin-top: 0px;
+    height: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    overflow: visible;
+    font-weight: 500;
+    font-style: normal;
+    font-family: "Inter", "Inter Placeholder", sans-serif;
+    color: #888888;
+    font-size: 24px;
+    letter-spacing: -0.5px;
+    line-height: 1.5;
+    margin-bottom: 40px;
+}
+
+.input-form-newsletter-container{
+    display: flex;
+    flex: row;
+}
+
+.input-form-newsletter-container input{
+    background-color: rgba(0, 0, 0, 0.488);
+    padding: 20px;
+    outline: transparent;
+    color: white;
+    border: 1px transparent;
+    border-radius: 30px;
+    font-size: 16px;
+    width: 400px
+}
+
+.input-form-newsletter-container input::placeholder{
+    color: rgba(255, 255, 255, 0.81);
+}
+
+.input-form-newsletter-container button{
+    padding: 16px 28px 16px 28px;
+    background-color: #ddff00;
+    overflow: visible;
+    align-content: center;
+    border-radius: 50px;
+    width: auto;
+    height: auto;
+    white-space: pre;
+    line-height: 1.2;
+    border: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+    font-family: "Inter";
+}
+
+
+/* Extra Small Devices (Phones, < 576px) */
+@media (max-width: 575.98px) {
+    .cta-contact-info-container{
+        padding: 20px;
+        margin-left: 10px;
+    }
+    .cta-newsletter-signup{
+        padding: 20px;
+    }
+
+    .cta-newsletter-signup h3{
+        font-size: 15px;
+    }
+
+    .cta-newsletter-signup h1{
+        font-size: 30px;
+        text-align: center;
+    }
+
+    .input-form-newsletter-container input{
+        width: fit-content;
+    }
+    .input-form-newsletter-container .button{
+        width: 30px;
+    }
+}
+
+/* Small Devices (Landscape Phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .cta-contact-info-container{
+        display: none;
+    }
+}
+
+/* Medium Devices (Tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .cta-contact-info-container{
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+}
+
+/* Large Devices (Laptops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .cta-contact-info-container{
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+}
+
+/* Extra Large Devices (Large Laptops and Desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        padding: 50px;
+    }
+}

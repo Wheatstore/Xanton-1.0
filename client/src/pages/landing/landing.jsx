@@ -6,7 +6,8 @@ import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Footer from "../../components/footer/footer";
 import Carousel from "../../components/carousel/carousel";
-import Featured from "../../components/carousel/featured/featured";
+import ProductLanding from "../../components/product/productLanding";
+import Cta from "../../components/CTA/cta";
 
 function LandingPage(){
     const [user, loading] = useAuthState(auth)
@@ -25,7 +26,8 @@ function LandingPage(){
                 <NavbarHome/>
                 <HeroSection/>
                 <Carousel />
-                <Product/>
+                <ProductLanding />
+                <Cta />
                 <Footer />
             </div>
         </>

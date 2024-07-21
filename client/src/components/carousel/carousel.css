@@ -1,14 +1,90 @@
 .carousel-container {
     margin-top: 150px;
     margin-left: 13%;
-    text-align: center;
     margin-right: 13%;
+}
+
+.testimonials-container-product{
+    margin-top: 80px;
+    margin-bottom: 50px;
 }
 
 .carousel-container h1{
     color: white;
+    margin-left: 30px;
     font-size: 3.5em;
-    font-weight: 550;
     margin-bottom: 0px;
-    font-family: "Inter";
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    font-weight: 700;
+    font-style: normal;
+    font-family: "Inter", "Inter Placeholder", sans-serif;
+    color: #ffffff;
+    font-size: 70px;
+    letter-spacing: -2.6px;
+    line-height: 1.2;
 }
+
+.h3-container h3{
+    width: fit-content;
+    margin-left: 40%;
+    height: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    font-weight: 500;
+    font-style: normal;
+    font-family: "Inter", "Inter Placeholder", sans-serif;
+    color: #888888;
+    font-size: 24px;
+    letter-spacing: -0.5px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* Extra Small Devices (Phones, < 576px) */
+@media (max-width: 575.98px) {
+    .carousel-container{
+        margin: 0px;
+    }
+    .testimonials-container-product{
+        margin-top: 10px;
+    }
+
+    .carousel-container h1{
+        font-size: 40px;
+    }
+
+    .h3-container h3{
+        margin-left: 5%;
+        text-align: left;
+        width: 100%;
+    }
+
+}
+
+
+/* Medium Devices (Tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .container {
+        padding: 30px;
+    }
+}
+
+/* Large Devices (Laptops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .container {
+        padding: 40px;
+    }
+}
+
+/* Extra Large Devices (Large Laptops and Desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        padding: 50px;
+    }
+}
+

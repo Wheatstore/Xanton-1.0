@@ -1,6 +1,8 @@
 import React from 'react';
+import Marquee from 'react-fast-marquee';
 import './hero.css'; // Import the hero CSS
 import { useLocation, useNavigate } from 'react-router-dom';
+import Featured from '../carousel/featured/featured';
 
 function HeroSection() {
   const location = useLocation();
@@ -9,20 +11,18 @@ function HeroSection() {
   return (
     <>
       <div className="hero-section-container">
-        <div className="grid-background"></div>
-        <div className="grid-overlay"></div>
-        {location.pathname === "/user" ? <h1 className="welcome-heading-hero-section">Welcome! 😊</h1> : <h1 className="welcome-heading-hero-section">Welcome to Xanton</h1>}
         <h1 className="hero-heading">
-          <span className="heading--highlight">Interact with people </span>from the past for free.
+          Ready to talk to Gandhi and Einstein?
         </h1>
-        {location.pathname === "/" && <div className="join-now-button-container">
+        <h3>Join Xanton to learn the past from those who built it.</h3>
+        <div className="button-section-container-hero">
           <button onClick={() => navigate("/signup")} className="join-now-hero-section-button">Get Started</button>
-        </div>}
+          <button className='learn-more-button-hero'>Learn more</button>
+        </div>
+        <Marquee direction="left" autoFill={true} speed={30}>
+            <Featured />
+        </Marquee>
       </div>
-      {/* {location.pathname === "/" && 
-      <div className="website-mockup-container">
-        <img src="/images/mockup-hero.png" alt="" />
-      </div> } */}
     </>
   );
 }

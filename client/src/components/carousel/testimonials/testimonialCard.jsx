@@ -58,10 +58,13 @@ function Testimonial(){
         <div className="testimonials-container">
             {reviews.map((review, index) => (
                 <div className="testimonial-card" key={index}>
-                    <img src={review.picture} alt={`${review.user}'s profile`} className="profile-picture" />
-                    <h3>{review.user}</h3>
-                    <p>{review.review}</p>
-                    <small>- {review.figure}</small>
+                    <div className="review-card-div-testimonial-container">
+                        <p>{review.review}</p>
+                    </div>
+                    <div className="review-information-card">
+                        <img src={review.picture} alt={`${review.user}'s profile`} className="profile-picture" />
+                        <h3>{review.user}</h3>
+                    </div>
                 </div>
             ))}
         </div>
@@ -69,3 +72,4 @@ function Testimonial(){
 }
 
 export default Testimonial
+
