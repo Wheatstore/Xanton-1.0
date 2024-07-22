@@ -21,6 +21,7 @@ function ChatWindow() {
     const [loadingMessages, setLoadingMessages] = useState(true);
     const [isSidebarVisible, setSidebarVisible] = useState(false);
 
+
     const toggleSidebar = () => {
         setSidebarVisible(!isSidebarVisible);
     };
@@ -121,6 +122,7 @@ function ChatWindow() {
             adjustTextareaHeight(textareaRef.current);
         }
 
+        //get the messages and update the messae list to be rendered
         if (!loading) {
             const messagesRef = collection(db, 'users', user.uid, 'characters', params.id, 'messages');
             const q = query(messagesRef, orderBy('timestamp', 'asc'));
@@ -132,7 +134,9 @@ function ChatWindow() {
                 }));
                 getBotById();
                 setMessages(messagesData);
+                console.log(loading)
                 setLoadingMessages(false);
+                console.log(loading)
                 scrollToEnd();
             });
 
@@ -151,10 +155,9 @@ function ChatWindow() {
     const combinedMessages = [
         {
             id: 'welcome',
-            message: welcomeMessage,
+            reply: welcomeMessage,
             sender: 'bot',
             timestamp: new Date(),
-            reply: null,
         },
         ...messages,
     ];
@@ -173,22 +176,23 @@ function ChatWindow() {
                     <h2 className="welcome-message">Welcome to your conversation with {botName}</h2>
                 </div>
                 {loadingMessages ? (
-                    <>
-                        <div className="skeleton-text-container">
-                            <div className="skeleton-image"></div>
-                            <div className="skeleton-content"></div>
-                        </div>
-                    </>
+                    <div className="skeleton-text-container">
+                        <div className="skeleton-image"></div>
+                        <div className="skeleton-content"></div>
+                    </div>
                 ) : (
                     combinedMessages.map((msg) => (
                         <div key={msg.id}>
-                            {msg.sender === 'user' ? (
+                            {msg.message &&
                                 <UserMessage userMessage={msg.message} />
-                            ) : (
-                                <BotMessage image={botProfilePicture} botMessage={msg.message} />
-                            )}
-                            {msg.reply && (
+                            }
+                            {msg.reply ? (
                                 <BotMessage image={botProfilePicture} botMessage={msg.reply} />
+                            ) : (
+                                <div className="skeleton-text-container">
+                                    <div className="skeleton-image"></div>
+                                    <div className="skeleton-content"></div>
+                                </div>
                             )}
                         </div>
                     ))
