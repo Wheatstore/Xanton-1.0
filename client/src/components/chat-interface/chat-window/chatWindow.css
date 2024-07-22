@@ -47,6 +47,28 @@
   background-clip: text;
 }
 
+.suggested-questions-div{
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.suggested-question{
+  color: white;
+  font-weight: 500;
+  font-style: normal;
+  font-family: "Inter", "Inter Placeholder", sans-serif;
+  border-radius: 30px;
+  border: transparent;
+  background: linear-gradient(140.06451559643327deg, #1a1a1a 0%, rgb(13, 13, 13) 100%);
+  padding: 15px;
+  font-size: 12px;
+  letter-spacing: -0.5px;
+  line-height: 1.5;
+}
+
 .message-input {
   position: relative;
   width: 80%;

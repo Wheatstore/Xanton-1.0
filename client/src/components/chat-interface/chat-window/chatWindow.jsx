@@ -15,6 +15,7 @@ function ChatWindow() {
     const [user, loading] = useAuthState(auth);
     const [messages, setMessages] = useState([]);
     const [display, setDisplay] = useState("");
+    const [welcomeMessage, setWelcomeMessage] = useState("");
     const [botProfilePicture, setBotProfilePicture] = useState("");
     const [botName, setBotName] = useState("");
     const [loadingMessages, setLoadingMessages] = useState(true);
@@ -30,6 +31,11 @@ function ChatWindow() {
     const formRef = useRef(null);
     const endOfMessagesRef = useRef(null);
 
+    const onSuggestedClick = (message) => {
+        setDisplay(message);
+        setInput(message);
+    };
+
     const getBotById = async () => {
         try {
             const q = query(collection(db, 'bots'), where('id', '==', params.id));
@@ -38,10 +44,9 @@ function ChatWindow() {
             if (!loading) {
                 const doc = querySnapshot.docs[0];
                 const data = doc.data();
-                const botName = data.name;
-                const photoUrl = data.img;
-                setBotName(botName);
-                setBotProfilePicture(photoUrl);
+                setWelcomeMessage(data.welcomeMessage);
+                setBotName(data.name);
+                setBotProfilePicture(data.img);
             }
         } catch (error) {
             console.error("Error fetching bot data: ", error);
@@ -58,7 +63,6 @@ function ChatWindow() {
         textarea.style.height = "auto";
         const scrollHeight = textarea.scrollHeight;
         const maxHeight = 90;
-        const lineHeight = 10;
 
         const newTextareaHeight = Math.min(scrollHeight, maxHeight);
 
@@ -144,6 +148,17 @@ function ChatWindow() {
         scrollToEnd();
     }, [messages]);
 
+    const combinedMessages = [
+        {
+            id: 'welcome',
+            message: welcomeMessage,
+            sender: 'bot',
+            timestamp: new Date(),
+            reply: null,
+        },
+        ...messages,
+    ];
+
     if (loading) {
         return (<><div className="loading-div"></div></>);
     }
@@ -165,16 +180,15 @@ function ChatWindow() {
                         </div>
                     </>
                 ) : (
-                    messages.map((msg) => (
+                    combinedMessages.map((msg) => (
                         <div key={msg.id}>
-                            <UserMessage userMessage={msg.message} />
-                            {msg.reply ? (
-                                <BotMessage image={botProfilePicture} botMessage={msg.reply} />
+                            {msg.sender === 'user' ? (
+                                <UserMessage userMessage={msg.message} />
                             ) : (
-                                <div className="skeleton-text-container">
-                                    <div className="skeleton-image"></div>
-                                    <div className="skeleton-content"></div>
-                                </div>
+                                <BotMessage image={botProfilePicture} botMessage={msg.message} />
+                            )}
+                            {msg.reply && (
+                                <BotMessage image={botProfilePicture} botMessage={msg.reply} />
                             )}
                         </div>
                     ))
@@ -182,6 +196,12 @@ function ChatWindow() {
                 <div ref={endOfMessagesRef} />
             </div>
             <div className="display-input-container-chat-window">
+                <div className="suggested-questions-div">
+                    <button onClick={() => onSuggestedClick("Where were you born")} className="suggested-question">Where were you born</button>
+                    <button onClick={() => onSuggestedClick("Who were your siblings")} className="suggested-question">Who were your siblings</button>
+                    <button onClick={() => onSuggestedClick("What was your best moment in life")} className="suggested-question">What was your best moment in life</button>
+                    <button onClick={() => onSuggestedClick("What are you famous for")} className="suggested-question">What are you famous for</button>
+                </div>
                 <div className="message-input-container" ref={messageInputContainerRef}>
                     <form ref={formRef} onSubmit={handleSendMessage}>
                         <textarea
@@ -205,7 +225,7 @@ function ChatWindow() {
             </button>
             {isSidebarVisible && (
                 <div className="sidebar-chatwin">
-                    <button onClick={toggleSidebar}className="close-sidebar-480-button">
+                    <button onClick={toggleSidebar} className="close-sidebar-480-button">
                         <span className="material-symbols-outlined" id="close-button-sidebar-chatwin">close</span>
                     </button>
                     <Sidebar />
@@ -214,6 +234,5 @@ function ChatWindow() {
         </div>
     );
 }
-
 
 export default ChatWindow;
