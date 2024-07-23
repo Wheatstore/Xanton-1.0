@@ -51,6 +51,8 @@ function NavbarAuthenticated({ username }) {
                         <span className="material-symbols-outlined" id="account-circle-image-google-fonts">account_circle</span>
                         {isSidebarVisible && <h1>Profile</h1>}
                     </button>
+                    <button onClick={() => navigate("/about")}  className="about-button-landing">About</button>
+                    <button onClick={() => navigate("/team")} className="meet-team-button-landing">Meet the Team</button>
                     {isDropdownVisible && (
                         <div className="dropdown-menu">
                             <img className="user-photoUrl-navbar-authenticated" src={user.photoURL} alt="user-profile" loading="lazy" />

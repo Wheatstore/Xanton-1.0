@@ -17,6 +17,10 @@
     border: 1px solid rgba(255, 255, 255, 0.197);
 }
 
+.about-button-landing:hover, .learn-more-button-landing:hover, .meet-team-button-landing:hover{
+    transform: scale(1.1);
+}
+
 .navbar-header svg {
     margin-top: 2px;
 }

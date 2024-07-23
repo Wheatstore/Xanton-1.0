@@ -1,0 +1,58 @@
+.about-page-container-div{
+    background-color: black;
+    width: 100%;
+    margin: 0;
+    height: fit-content;
+}
+
+.about-xanton-section{
+    text-align: left;
+    padding-left: 7%;
+    background-color: black;
+    padding-bottom: 5%;
+}
+
+.about-xanton-section h1{
+    margin-top: 14vh;
+    width: 55%;
+    height: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    font-weight: 700;
+    font-style: normal;
+    font-family: "Inter", "Inter Placeholder", sans-serif;
+    color: #ffffff;
+    font-size: 55px;
+    letter-spacing: -2.6px;
+    line-height: 1.2;
+    margin-bottom: 0;
+}
+
+.about-xanton-section p{
+    width: 70%;
+    height: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    transform-perspective: 1200;
+    font-weight: 500;
+    font-style: normal;
+    font-family: "Inter", "Inter Placeholder", sans-serif;
+    color: var(--token-1021654d-251a-4750-952b-de3f7005260e, #888888);
+    font-size: 24px;
+    letter-spacing: -0.7px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.creditor-wheatstore{
+    margin-bottom: 50px;
+}
+
+.about-xanton-section img{
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+}

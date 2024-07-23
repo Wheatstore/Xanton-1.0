@@ -16,10 +16,8 @@ function NavbarNotHome() {
                 </div>
                 <div className="buttons-container">
                     {location.pathname === "/signup" ? <button onClick={() => navigate("/login")} className="login-button-navbar">Login</button>: <button className="sign-up-button" onClick={() => navigate("/signup")}>Join</button>}
-                    <button type="button" className="learn-more-button-landing">Learn more</button>
-                    <button className="about-button-landing">About</button>
-                    <button className="learn-more-button-landing">Learn more</button>
-                    <button className="meet-team-button-landing">Meet the Team</button>
+                    <button onClick={() => navigate("/about")}  className="about-button-landing">About</button>
+                    <button onClick={() => navigate("/team")} className="meet-team-button-landing">Meet the Team</button>
                 </div>
             </div>
         </nav>

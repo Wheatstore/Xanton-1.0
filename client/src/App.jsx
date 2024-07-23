@@ -12,6 +12,7 @@ import FeedbackPage from './pages/feedbackPage/feedbackPage';
 import { Analytics } from '@vercel/analytics/react';
 import Submitted from './pages/submitted/submitted';
 import Test from './test';
+import About from './pages/about/about';
 
 function App() {
   const [user, loading] = useAuthState(auth)
@@ -38,6 +39,7 @@ function App() {
             <Route path="/admin" element={user && user.email === "yoonate25@gmail.com" ? <Admin /> : <Navigate to="/" />} />
             <Route path="/profile/:username" element={user ? <UserProfilePage />: <Navigate to="/chat" />} />
             <Route path="/feedback" element={user ? <FeedbackPage /> : <Navigate to="/" />} />
+            <Route path="/about" element={<About />} />
             <Route path="/test" element={<Test />} />
           </Routes>
           <Analytics />
