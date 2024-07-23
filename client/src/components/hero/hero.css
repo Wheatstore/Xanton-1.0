@@ -16,6 +16,48 @@
   margin-bottom: 0;
 }
 
+.inner-headings-hero{
+  height: 75px;
+  overflow: hidden;
+}
+
+.inner-headings-hero span{
+  position: relative;
+  background: linear-gradient(90deg, #ff29f1, #1149ff);
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: flip 10s ease infinite;
+}
+
+@keyframes flip {
+  0%,
+  100% {
+    top: 0;
+  }
+  20%{
+    top: 0;
+  }
+  25%{
+    top: -90px;
+  }
+  45%{
+    top: -90px;
+  }
+  50%{
+    top: -175px;
+  }
+  70%{
+    top: -175px;
+  }
+  75%{
+    top: -255px;
+  }
+  95%{
+    top: -255px;
+  }
+}
+
 .hero-section-container h1{
   margin-top: 14vh;
   width: 40%;

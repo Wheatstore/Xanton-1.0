@@ -12,7 +12,15 @@ function HeroSection() {
     <>
       <div className="hero-section-container">
         <h1 className="hero-heading">
-          Ready to talk to Gandhi and Einstein?
+          Ready to talk to 
+          <div className="inner-headings-hero">
+            <span>
+              Gandhi <br />
+              Newton <br />
+              Einstein <br />
+              Galileo <br />
+            </span>
+          </div>
         </h1>
         <h3>Join Xanton to learn the past from those who built it.</h3>
         <div className="button-section-container-hero">

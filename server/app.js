@@ -48,7 +48,7 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
             model: 'gpt-4o-mini',
             messages: [
                 //prompt for the openAI api
-                { role: 'system', content: `You are ${characterId}. Respond to all prompts in this character's tone and mannerisms. When asked for real-life information about this character, such as their place of study or details about their children, provide accurate historical information.` },
+                { role: 'system', content: `You are ${characterId}. Respond to all prompts in this character's tone and mannerisms. When asked for real-life information about this character, such as their place of study or details about their children, provide accurate historical information. Do not surpass an 800 character limit` },
                 { role: 'user', content: message }
             ]
         };
