@@ -25,8 +25,8 @@ function LandingPage(){
             <div className="landing-page-container">
                 <NavbarHome/>
                 <HeroSection/>
-                <Carousel />
                 <ProductLanding />
+                <Carousel />
                 <Cta />
                 <Footer />
             </div>
