@@ -11,10 +11,11 @@ function BotCard({ person, index, delay }) {
 
   const onClick = async (botid) => {
     if (!user) {
-      navigate(`/chat/${botid}`);
+      navigate(`/signup`);
     } else {
       try {
         const previousChatsRef = collection(db, 'users', user.uid, 'previousChats');
+        //check if this already exists else get the query
         const q = query(previousChatsRef, where('character', '==', botid));
         const querySnapshot = await getDocs(q);
 
@@ -25,9 +26,9 @@ function BotCard({ person, index, delay }) {
             character: botid,
             timestamp: serverTimestamp()
           });
-          navigate(`/chat/${botid}`);
+          navigate(`/chat/${botid}/${person.name}`);
         } else {
-          navigate(`/chat/${botid}`);
+          navigate(`/chat/${botid}/${person.name}`);
         }
       } catch (error) {
         console.error("Error checking or adding document: ", error);

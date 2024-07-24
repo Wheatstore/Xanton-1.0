@@ -64,7 +64,7 @@ function Sidebar() {
       <div className="previous-chats-container">
         <h3 className="previous-chats-heading">Chats</h3>
         {previousChats.map((chat) => (
-          <div onClick={() => navigate(`/chat/${chat.character}`)} key={chat.id} className="chat-item">
+          <div onClick={() => navigate(`/chat/${chat.character}/${chat.name}`)} key={chat.id} className="chat-item">
             <img className="chat-item-image" src={chat.img} alt="Chat item" loading="lazy" />
             <p>{chat.name}</p>
           </div>
