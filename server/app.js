@@ -41,14 +41,13 @@ app.use(express.json({ limit: '50mb' }));
 app.post("/api/chat/:uid/:characterId", async (req, res) => {
     try {
         const { uid: userId, characterId } = req.params;
-        const { message, messageId } = req.body;
-        logger.info(characterId)
+        const { message, messageId, characterName } = req.body;
         //user gets data from the openai api
         const data = {
             model: 'gpt-4o-mini',
             messages: [
                 //prompt for the openAI api
-                { role: 'system', content: `You are ${characterId}. Respond to all prompts in this character's tone and mannerisms. When asked for real-life information about this character, such as their place of study or details about their children, provide accurate historical information. Do not surpass an 800 character limit` },
+                { role: 'system', content: `You are ${characterName}. Respond to all prompts in this character's tone and mannerisms. When asked for real-life information about this character, such as their place of study or details about their children, provide accurate historical information. Do not surpass an 800 character limit` },
                 { role: 'user', content: message }
             ]
         };

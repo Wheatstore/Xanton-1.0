@@ -94,8 +94,7 @@ function ChatWindow() {
                     sender: 'user',
                     timestamp: serverTimestamp(),
                 });
-                
-                const response = await axios.post(`https://xanton-1-0-server.vercel.app/api/chat/${user.uid}/${params.id}`, { message: input, messageId: docRef.id });
+                const response = await axios.post(`https://xanton-1-0-server.vercel.app/api/chat/${user.uid}/${params.id}`, { message: input, messageId: docRef.id, characterName: params.name });
                 console.log(params.id)
                 setMessages((prevMessages) =>
                     prevMessages.map((msg) =>
@@ -134,9 +133,7 @@ function ChatWindow() {
                 }));
                 getBotById();
                 setMessages(messagesData);
-                console.log(loading)
                 setLoadingMessages(false);
-                console.log(loading)
                 scrollToEnd();
             });
 
