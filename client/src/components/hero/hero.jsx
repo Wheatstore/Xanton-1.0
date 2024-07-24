@@ -13,6 +13,7 @@ function HeroSection() {
       <div className="hero-section-container">
         <h1 className="hero-heading">
           Ready to talk to 
+          <h1 className="mobileview"> history</h1>
           <div className="inner-headings-hero">
             <span>
               Gandhi <br />
