@@ -115,6 +115,7 @@ app.get("/api/user-count", async (req, res)=> {
     }
 })
 
+
 app.get('/', (req, res) => {
     res.send("server is running");
 });
