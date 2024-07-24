@@ -42,7 +42,7 @@ app.post("/api/chat/:uid/:characterId", async (req, res) => {
     try {
         const { uid: userId, characterId } = req.params;
         const { message, messageId } = req.body;
-
+        logger.info(characterId)
         //user gets data from the openai api
         const data = {
             model: 'gpt-4o-mini',
@@ -76,6 +76,7 @@ app.post("/api/create-new-bot", async (req, res) => {
         const { name, creator, creatorId, greeting, description, additionalMessage } = req.body; //defining the variables that come from the user
         await setNewBot(name, creator, creatorId, greeting, description, additionalMessage); //set a new bot in firestore
         logger.info(req.body); //log that information in vercel
+        
         res.sendStatus(200);
     } catch (error) {
         logger.error("There was an error sending it to you", error);
