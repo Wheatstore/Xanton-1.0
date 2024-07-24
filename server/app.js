@@ -38,10 +38,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '50mb' }));
 
 // API Routes
-app.post("/api/chat/:uid/:characterId", async (req, res) => {
+app.post("/api/chat/:uid/:characterId/:characterName", async (req, res) => {
     try {
-        const { uid: userId, characterId } = req.params;
-        const { message, messageId, characterName } = req.body;
+        const { uid: userId, characterId, characterName } = req.params;
+        const { message, messageId } = req.body;
         //user gets data from the openai api
         logger.info(characterName)
         const data = {

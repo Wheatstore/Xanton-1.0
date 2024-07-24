@@ -94,7 +94,7 @@ function ChatWindow() {
                     sender: 'user',
                     timestamp: serverTimestamp(),
                 });
-                const response = await axios.post(`https://xanton-1-0-server.vercel.app/api/chat/${user.uid}/${params.id}`, { message: input, messageId: docRef.id, characterName: params.name });
+                const response = await axios.post(`https://xanton-1-0-server.vercel.app/api/chat/${user.uid}/${params.id}/${params.name}`, { message: input, messageId: docRef.id});
                 console.log(params.id)
                 setMessages((prevMessages) =>
                     prevMessages.map((msg) =>
