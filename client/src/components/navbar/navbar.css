@@ -25,6 +25,10 @@
     padding: 0px;
 }
 
+.navbar-header img{
+    width: 80px;
+}
+
 
 .buttons-container {
     display: flex;

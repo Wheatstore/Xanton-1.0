@@ -36,7 +36,8 @@ function Sidebar() {
     <div className="sidebar-container">
       <div className="logo-heading-container">
         <button onClick={() => navigate("/user")} type="button">
-          <h1 className="sidebar-logo-heading">Xanton</h1>
+          <img src="/images/logoTransparent.png" alt="logo-button-sidebar" />
+          <h1>Xanton</h1>
         </button>
       </div>
       <div className="explore-xanton-button-container">

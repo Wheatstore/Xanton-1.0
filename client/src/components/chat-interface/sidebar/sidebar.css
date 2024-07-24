@@ -18,6 +18,24 @@
   background-color: transparent;
   border: transparent;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: center;
+}
+
+.logo-heading-container img{
+  width: 70px;
+}
+
+.logo-heading-container h1{
+  color: white;
+  font-size: 25px;
+  font-family: "Inter";
+  background: linear-gradient(90deg, #006eff, #b700cf);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .sidebar-logo-heading {
