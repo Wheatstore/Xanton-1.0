@@ -48,7 +48,7 @@ app.post("/api/chat/:uid/:characterId/:characterName", async (req, res) => {
             model: 'gpt-4o-mini',
             messages: [
                 //prompt for the openAI api
-                { role: 'system', content: `You are ${characterName}. Respond to all prompts in this character's tone and mannerisms. When asked for real-life information about this character, such as their place of study or details about their children, provide accurate historical information.` },
+                { role: 'system', content: `You are ${characterName}. Respond to all prompts in this character's tone and mannerisms. When asked for real-life information about this character, such as their place of study or details about their children, provide accurate historical information. Keep it easily digestable to read as it is used in the context of a chat.` },
                 { role: 'user', content: message }
             ]
         };
