@@ -49,7 +49,7 @@
     transition: 0.5s ease-in-out;
 }
 
-.about-button-landing, .learn-more-button-landing, .meet-team-button-landing{
+.about-button-landing, .learn-more-button-landing, .meet-team-button-landing, .blog-team-button{
     font-family: "Inter", "Inter Placeholder", sans-serif;
     font-size: 15px;
     color: white;   

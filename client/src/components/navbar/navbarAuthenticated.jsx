@@ -53,6 +53,7 @@ function NavbarAuthenticated({ username }) {
                     </button>
                     <button onClick={() => navigate("/about")}  className="about-button-landing">About</button>
                     <button onClick={() => navigate("/team")} className="meet-team-button-landing">Meet the Team</button>
+                    <button onClick={() => navigate("/blog")} className="blog-team-button">Blog</button>
                     {isDropdownVisible && (
                         <div className="dropdown-menu">
                             <img className="user-photoUrl-navbar-authenticated" src={user.photoURL} alt="user-profile" loading="lazy" />

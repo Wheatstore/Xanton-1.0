@@ -15,6 +15,7 @@ function NavbarSpec() {
                 <div className="buttons-container">
                     <button onClick={() => navigate("/about")}  className="about-button-landing">About</button>
                     <button onClick={() => navigate("/team")} className="meet-team-button-landing">Meet the Team</button>
+                    <button onClick={() => navigate("/blog")} className="blog-team-button">Blog</button>
                 </div>  
             </div>
         </nav>
