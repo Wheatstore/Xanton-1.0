@@ -3,6 +3,7 @@ import "./blog.css"
 import { db } from "../../firebase";
 import { collection, getDocs, query, addDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import NavbarSpec from "../../components/navbar/navbarSpec";
 
 function Blog(){
@@ -30,6 +31,17 @@ function Blog(){
     }, []);
     return (
         <>
+            <Helmet>
+                <title>Xanton AI Blog - Articles and Insights</title>
+                <meta name="description" content="Welcome to the Xanton AI blog. Browse our collection of articles on history, education, and technology." />
+                <meta name="keywords" content="Xanton AI blog, history articles, education insights, technology blog, historical figures, interactive learning" />
+                <meta name="robots" content="index, follow" />
+                <meta property="og:title" content="Xanton AI Blog - Articles and Insights" />
+                <meta property="og:description" content="Welcome to the Xanton AI blog. Browse our collection of articles on history, education, and technology." />
+                <meta property="og:url" content="https://www.xantonai.com/blog" />
+                <meta property="og:type" content="website" />
+                <meta property="og:image" content="https://www.xantonai.com/og-blog-image.jpg" />
+            </Helmet>
             <div className="blog-page-container">
                 <NavbarSpec />
                 <div className="heading-blog-container">
