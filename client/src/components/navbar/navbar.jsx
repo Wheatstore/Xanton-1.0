@@ -17,7 +17,7 @@ function NavbarHome() {
             <div className="inner-navbar-container-div">
                 <div className="navbar-header">
                     <a href="/" className="to-home-button-navbar">
-                        <img src="/images/logo.png" alt="Xanton Logo" />
+                        <img src="/images/logo.png" alt="Xanton AI" />
                     </a>
                 </div>
                 <div className="buttons-container">

@@ -38,7 +38,7 @@ function NavbarAuthenticated({ username }) {
             <div className="inner-navbar-heading-auth">
                 <div className="navbar-header">
                     <a href="/" className="to-home-button-navbar">
-                        <img src="/images/logo.png" alt="Xanton Logo" />
+                        <img src="/images/logo.png" alt="Xanton AI" />
                     </a>
                 </div>
                 <div className={`buttons-authenticated-container ${isSidebarVisible ? 'active' : ''}`}>
