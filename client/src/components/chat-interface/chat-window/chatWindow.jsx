@@ -160,7 +160,7 @@ function ChatWindow() {
                 
                 // Send message to backend API
                 const response = await axios.post(
-                    `http://localhost:3000/api/chat/${user.uid}/${params.id}/${params.name}`, 
+                    `https://historia-backend-8bvz.onrender.com//${user.uid}/${params.id}/${params.name}`, 
                     { message: messageText, messageId: docRef.id }
                 );
                 
