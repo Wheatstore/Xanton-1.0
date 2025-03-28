@@ -14,6 +14,7 @@ import Submitted from './pages/submitted/submitted';
 import Test from './test';
 import About from './pages/about/about';
 import Team from './pages/team/team';
+import BlogPost from './pages/blog/blogContent/blogContent';
 import Blog from './pages/blog/blog';
 
 function App() {
@@ -42,9 +43,9 @@ function App() {
             <Route path="/profile/:username" element={user ? <UserProfilePage />: <Navigate to="/chat" />} />
             <Route path="/feedback" element={user ? <FeedbackPage /> : <Navigate to="/" />} />
             <Route path="/about" element={<About />} />
-            <Route path="/blog/:title" element={<About />} />
             <Route path="/team" element={<Team />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
             <Route path="/test" element={<Test />} />
           </Routes>
           <Analytics />

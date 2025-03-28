@@ -1,10 +1,9 @@
-import HeroSection from "../../components/hero/hero";
 import NavbarAuthenticated from "../../components/navbar/navbarAuthenticated";
 import Product from "../../components/product/product";
-import "./authenticated.css"
+import "./authenticated.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/landing/footer/footer";
 import HeadingUser from "../../components/headingUser/headingUser";
 
 function AuthenticatedPage (){
@@ -25,7 +24,7 @@ function AuthenticatedPage (){
             <div className="authenticated-page">
                 <NavbarAuthenticated username={username} />
                 <HeadingUser />
-                <Product />
+                <Product isLanding={false} />
                 <Footer />
             </div>
         </>

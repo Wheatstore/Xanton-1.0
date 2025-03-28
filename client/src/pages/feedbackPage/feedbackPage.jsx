@@ -1,7 +1,7 @@
 import Feedback from "../../components/feedback/feedback"
 import "./feedbackPage.css"
 import NavbarAuthenticated from "../../components/navbar/navbarAuthenticated"
-import Footer from "../../components/footer/footer"
+import Footer from "../../components/landing/footer/footer"
 
 function FeedbackPage(){
     return (

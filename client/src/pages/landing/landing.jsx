@@ -1,14 +1,12 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import HeroSection from "../../components/hero/hero";
+import HeroSection from '../../components/landing/hero/hero';
 import NavbarHome from "../../components/navbar/navbar";
-import ProductLanding from "../../components/product/productLanding";
-import Carousel from "../../components/carousel/carousel";
-import Cta from "../../components/CTA/cta";
-import Footer from "../../components/footer/footer";
+import Footer from '../../components/landing/footer/footer';
 import "./landing.css";
 import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Product from '../../components/product/product';
 
 function LandingPage() {
     const [user, loading] = useAuthState(auth);
@@ -37,9 +35,7 @@ function LandingPage() {
             <div className="landing-page-container">
                 <NavbarHome />
                 <HeroSection />
-                <ProductLanding />
-                <Carousel />
-                <Cta />
+                <Product isLanding={true} />
                 <Footer />
             </div>
         </>

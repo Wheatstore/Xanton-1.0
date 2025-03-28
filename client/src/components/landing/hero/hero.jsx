@@ -1,8 +1,6 @@
 import React from 'react';
-import Marquee from 'react-fast-marquee';
 import './hero.css'; // Import the hero CSS
 import { useLocation, useNavigate } from 'react-router-dom';
-import Featured from '../carousel/featured/featured';
 
 function HeroSection() {
   const location = useLocation();
@@ -28,9 +26,6 @@ function HeroSection() {
           <button onClick={() => navigate("/signup")} className="join-now-hero-section-button">Get Started</button>
           <button className='learn-more-button-hero'>Learn more</button>
         </div>
-        <Marquee direction="left" autoFill={true} speed={30}>
-            <Featured />
-        </Marquee>
       </div>
     </>
   );
