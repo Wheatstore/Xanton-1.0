@@ -5,7 +5,6 @@ import { collection, getDocs, query, addDoc, doc, getDoc, setDoc } from "firebas
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import NavbarSpec from "../../components/navbar/navbarSpec";
 
 function Blog(){
     const [blogList, setBlogList] = useState([])
@@ -46,7 +45,6 @@ function Blog(){
                 <meta property="og:image" content="https://www.xantonai.com/og-blog-image.jpg" />
             </Helmet>
             <div className="blog-page-container">
-                <NavbarSpec />
                 <div className="heading-blog-container">
                     <h1>Welcome to the Xanton blog</h1>
                     <h3>Browse our collection of articles</h3>

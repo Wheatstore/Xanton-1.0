@@ -1,105 +1,80 @@
-.navbar-container-home {
-    display: flex;
-    justify-content: center;
-    padding-top: 20px;
-}
+/* navbar.css */
 
-.inner-navbar-container-div{
-    width: fit-content;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    flex: row;
-    gap: 20px;
-    border-radius: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.197);
-}
-
-.navbar-header{
-    margin: 0px;
-    padding: 0px;
-}
-
-.navbar-header a{
-    margin: 0px;
-    padding: 0px;
-}
-
-.navbar-header img{
-    width: 80px;
-}
-
-
-.buttons-container {
-    display: flex;
-    margin: 0px;
-    gap: 0px;
-}
-
-.login-button-navbar-home, .sign-up-button{
-    background-color: rgb(10, 88, 255);
-    border-radius: 30px;
-    border: 0px;
-    width: 90px;
-    height: 50px;
-    font-family: "Inter", "Inter Placeholder", sans-serif;
-    font-size: 15px;
-    color: white;
-    font-weight: 500;
-    transition: 0.5s ease-in-out;
-}
-
-.about-button-landing, .learn-more-button-landing, .meet-team-button-landing, .blog-team-button{
-    font-family: "Inter", "Inter Placeholder", sans-serif;
-    font-size: 15px;
-    color: white;   
-    font-weight: 500;
-    transition: 0.5s ease-in-out;
-    background-color: transparent;
-    border: transparent;
-}
-
-
-.buttons-container button:hover {
-    transform: scale(1.1);
-}
-
-/* Extra Small Devices (Phones, < 576px) */
-@media (max-width: 575.98px) {
-    .login-button-navbar-home, .sign-up-button{
-        font-size: 15px;
+/* Base navbar styles */
+.navbar {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  /* Add smooth transition to profile dropdown */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Apply animation to dropdown */
+  .z-10 {
+    animation: fadeIn 0.2s ease-out forwards;
+  }
+  
+  /* Improve mobile menu transitions */
+  @media (max-width: 768px) {
+    .md\:hidden.block {
+      animation: fadeIn 0.2s ease-out forwards;
     }
-
-    .about-button-landing, .learn-more-button-landing, .meet-team-button-landing{
-        display: none;
+  }
+  
+  /* Custom styling for profile images */
+  .rounded-full {
+    object-fit: cover;
+  }
+  
+  /* Add subtle hover effect to logo */
+  .flex-shrink-0 a:hover img {
+    transform: scale(1.05);
+  }
+  
+  /* Fix issue with overflowing menus on mobile */
+  @media (max-width: 640px) {
+    .max-w-\[200px\] {
+      max-width: 200px;
     }
-}
-
-/* Small Devices (Landscape Phones, 576px and up) */
-@media (min-width: 576px) and (max-width: 767.98px) {
-    .container {
-        padding: 20px;
+  }
+  
+  /* Custom shadow effect for primary buttons */
+  .shadow-blue-600\/30 {
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
+  }
+  
+  /* Pulse animation for notification indicators */
+  @keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    70% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+  }
+  
+  .absolute.right-1\.5.top-1\.5 {
+    animation: pulse 2s infinite;
+  }
+  
+  /* Ensure buttons have consistent height */
+  button, a {
+    line-height: 1.5;
+  }
+  
+  /* Add tablet-specific optimizations */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .md\:flex.items-center.space-x-4 {
+      gap: 0.5rem;
     }
-}
-
-/* Medium Devices (Tablets, 768px and up) */
-@media (min-width: 768px) and (max-width: 991.98px) {
-    .container {
-        padding: 30px;
-    }
-}
-
-/* Large Devices (Laptops, 992px and up) */
-@media (min-width: 992px) and (max-width: 1199.98px) {
-    .container {
-        padding: 40px;
-    }
-}
-
-/* Extra Large Devices (Large Laptops and Desktops, 1200px and up) */
-@media (min-width: 1200px) {
-    .container {
-        padding: 50px;
-    }
-}
-
+  }
+  
+  /* Ensure proper text contrast on various backgrounds */
+  .text-white {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Improve backdrop blur performance */
+  .backdrop-blur-md {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }

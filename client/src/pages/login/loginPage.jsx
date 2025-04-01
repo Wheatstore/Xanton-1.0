@@ -1,11 +1,12 @@
 import Login from "../../authenticationComponents/loginForm"
-import NavbarNotHome from "../../components/navbar/navbarNotHome"
 import "./loginPage.css"
 import { Helmet } from "react-helmet"
+import Navbar from "../../components/navbar/navbar"
 
 function LoginPage(){
     return (
         <>
+            <Navbar />
             <Helmet>
                 <title>Login to Xanton AI - Continue Your Journey</title>
                 <meta name="description" content="Log in to Xanton AI and continue your immersive exploration of history. Engage with iconic figures and uncover new insights every time you visit." />
@@ -18,7 +19,6 @@ function LoginPage(){
                 <meta property="og:image" content="https://www.xantonai.com/og-login-image.jpg" />
             </Helmet>
             <div className="login-page-home-container-div">
-                <NavbarNotHome />
                 <Login />
             </div>
         </>

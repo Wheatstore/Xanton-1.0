@@ -1,13 +1,12 @@
 import Feedback from "../../components/feedback/feedback"
-import "./feedbackPage.css"
-import NavbarAuthenticated from "../../components/navbar/navbarAuthenticated"
 import Footer from "../../components/landing/footer/footer"
+import Navbar from "../../components/navbar/navbar"
 
 function FeedbackPage(){
     return (
         <>
             <div className="feedback-page-container">
-                <NavbarAuthenticated />
+                <Navbar />
                 <Feedback />
                 <Footer />
             </div>

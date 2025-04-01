@@ -4,7 +4,6 @@ import { db } from '../../../firebase';
 import { collection, getDocs, query, addDoc, doc, getDoc, setDoc, where } from "firebase/firestore";
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import NavbarSpec from '../../../components/navbar/navbarSpec';
 import Footer from '../../../components/landing/footer/footer';
 
 function BlogPost() {
@@ -51,7 +50,6 @@ function BlogPost() {
     return (
         <>
             <div>
-                <NavbarSpec />
                 {blog.map(blog => (
                     <div className="blog-card" key={blog.title}>
                         <div className="blog-image">

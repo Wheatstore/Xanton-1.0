@@ -1,11 +1,12 @@
 import Signup from "../../authenticationComponents/signupForm"
-import NavbarNotHome from "../../components/navbar/navbarNotHome"
 import "./signupPage.css"
 import { Helmet } from "react-helmet"
+import Navbar from "../../components/navbar/navbar"
 
 function SignupPage(){
     return (
         <>
+            <Navbar />
             <Helmet>
                 <title>Sign Up for Xanton AI - Join and Explore History</title>
                 <meta name="description" content="Create your account and embark on a captivating journey through time with Xanton AI. Chat with historical legends, learn from their experiences, and enjoy a personalized history learning experience." />
@@ -18,7 +19,6 @@ function SignupPage(){
                 <meta property="og:image" content="https://www.xantonai.com/og-signup-image.jpg" />
             </Helmet>
             <div className="signup-page-home-container">
-                <NavbarNotHome/>
                 <Signup />
             </div>
         </>
