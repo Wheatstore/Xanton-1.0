@@ -11,7 +11,6 @@ import UserProfilePage from './pages/userProfile/userProfilePage';
 import FeedbackPage from './pages/feedbackPage/feedbackPage';
 import { Analytics } from '@vercel/analytics/react';
 import Submitted from './pages/submitted/submitted';
-import Test from './test';
 import About from './pages/about/about';
 import Team from './pages/team/team';
 
@@ -40,7 +39,6 @@ function App() {
             <Route path="/admin" element={user && user.email === "yoonate25@gmail.com" ? <Admin /> : <Navigate to="/" />} />
             <Route path="/profile/:username" element={user ? <UserProfilePage />: <Navigate to="/chat" />} />
             <Route path="/feedback" element={user ? <FeedbackPage /> : <Navigate to="/" />} />
-            <Route path="/test" element={<Test />} />
           </Routes>
           <Analytics />
         </Router>
