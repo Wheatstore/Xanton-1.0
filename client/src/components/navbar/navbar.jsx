@@ -4,7 +4,6 @@ import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { userSignOut } from "../../authenticationFunctions/signout";
 import { Menu, X, User, HelpCircle, LogOut, FileText, Users, ChevronDown } from "lucide-react";
-import "./navbar.css"; // You'll need to create this CSS file
 
 function Navbar() {
   const navigate = useNavigate();
@@ -93,10 +92,10 @@ function Navbar() {
                   Features
                 </a>
                 <a 
-                  href="/pricing" 
+                  href="/about" 
                   className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
-                  Pricing
+                  About
                 </a>
                 <button 
                   onClick={() => navigateTo("/login")} 

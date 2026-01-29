@@ -1,7 +1,7 @@
 import Chat from "./chat/chat";
-import LoginPage from "./login/loginPage";
+import LoginPage from "./auth/loginPage";
 import LandingPage from "./landing/landing";
-import SignupPage from "./signup/signupPage";
+import SignupPage from "./auth/signupPage";
 
 
-export { Chat, LoginPage, LandingPage, SignupPage}
+export { Chat, LandingPage, SignupPage, LoginPage}

@@ -14,8 +14,6 @@ import Submitted from './pages/submitted/submitted';
 import Test from './test';
 import About from './pages/about/about';
 import Team from './pages/team/team';
-import BlogPost from './pages/blog/blogContent/blogContent';
-import Blog from './pages/blog/blog';
 
 function App() {
   const [user, loading] = useAuthState(auth)
@@ -42,8 +40,6 @@ function App() {
             <Route path="/admin" element={user && user.email === "yoonate25@gmail.com" ? <Admin /> : <Navigate to="/" />} />
             <Route path="/profile/:username" element={user ? <UserProfilePage />: <Navigate to="/chat" />} />
             <Route path="/feedback" element={user ? <FeedbackPage /> : <Navigate to="/" />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<BlogPost />} />
             <Route path="/test" element={<Test />} />
           </Routes>
           <Analytics />
