@@ -486,7 +486,7 @@ function ChatWindow() {
                                 {/* Send button */}
                                 <button 
                                     type="submit" 
-                                    className={`absolute right-3 bottom-3 p-3.5 rounded-2xl transition-all duration-300 group ${
+                                    className={`absolute right-3 bottom-3 p-3.5 z-20 rounded-2xl transition-all duration-300 group ${
                                         !input.trim() || sendingMessage
                                             ? 'bg-gray-800/60 text-gray-600 cursor-not-allowed'
                                             : 'bg-gradient-to-br from-purple-600 via-violet-600 to-blue-600 hover:from-purple-500 hover:via-violet-500 hover:to-blue-500 text-white shadow-xl shadow-purple-500/40 hover:scale-110 hover:rotate-12'
