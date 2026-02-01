@@ -9,7 +9,6 @@ import Admin from './pages/admin/admin';
 import UserProfile from './components/userProfile/userProfile';
 import UserProfilePage from './pages/userProfile/userProfilePage';
 import FeedbackPage from './pages/feedbackPage/feedbackPage';
-import { Analytics } from '@vercel/analytics/react';
 import Submitted from './pages/submitted/submitted';
 import BotsDirectory from './pages/BotsDirectory/BotsDirectory'
 import About from './pages/about/about';
