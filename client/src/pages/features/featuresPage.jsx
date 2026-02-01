@@ -35,30 +35,39 @@ function Features() {
     <>
     <Navbar />
       <Helmet>
-        <title>Features — Echoes of History</title>
+        <title>Features | Echoes of History AI</title>
         <meta
           name="description"
-          content="Explore Echoes of History features: conversations with historical figures, deep follow-ups, character discovery, and a modern learning experience built for curiosity."
-        />
-        <meta
-          name="keywords"
-          content="Echoes of History features, historical figures chatbot, learn history, interactive learning, conversation-based learning"
+          content="Explore Echoes of History AI features: conversations with historical figures, deep follow-ups, character discovery, and a modern learning experience built for curiosity."
         />
         <meta name="robots" content="index, follow" />
 
-        <meta property="og:title" content="Features — Echoes of History" />
+        {/* Canonical (recommended for non-home pages) */}
+        <link rel="canonical" href="https://echoesofhistoryai.org/features" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://echoesofhistoryai.org/features" />
+        <meta property="og:title" content="Features | Echoes of History AI" />
         <meta
           property="og:description"
           content="Conversations with historical figures, deep follow-ups, and modern tools built to make learning feel alive."
         />
-        <meta property="og:url" content="https://www.xantonai.com/features" />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://upload.wikimedia.org/wikipedia/commons/a/a3/Vehn%C3%A4pelto_6.jpg"
-        />
+        <meta property="og:image" content="https://echoesofhistoryai.org/images/og-image.jpg" />
+        <meta property="og:image:alt" content="Echoes of History AI - features" />
+
+        {/* Twitter (no handles) */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://echoesofhistoryai.org/features" />
+        <meta name="twitter:title" content="Features | Echoes of History AI" />
+        <meta
+          name="twitter:description"
+          content="Conversations with historical figures, deep follow-ups, and modern tools built to make learning feel alive."
+        />
+        <meta name="twitter:image" content="https://echoesofhistoryai.org/images/og-image.jpg" />
+        <meta name="twitter:image:alt" content="Echoes of History AI - features" />
       </Helmet>
+
 
       <div className="min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
         {/* Hero */}
