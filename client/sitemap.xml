@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://echoesofhistoryai.org/</loc>
+    <lastmod>2026-01-31</lastmod>
+  </url>
+
+  <!-- Bots Directory (IMPORTANT SEO page) -->
+  <url>
+    <loc>https://echoesofhistoryai.org/bots</loc>
+    <lastmod>2026-01-31</lastmod>
+  </url>
+
+  <!-- About -->
+  <url>
+    <loc>https://echoesofhistoryai.org/about</loc>
+    <lastmod>2026-01-31</lastmod>
+  </url>
+
+  <!-- Features -->
+  <url>
+    <loc>https://echoesofhistoryai.org/features</loc>
+    <lastmod>2026-01-31</lastmod>
+  </url>
+
+  <!-- DO NOT include login/signup -->
+  <!-- Auth pages are noindex and should not be in a sitemap -->
+
+  <!-- Example individual bot pages (add dynamically once public) -->
+  <!--
+  <url>
+    <loc>https://echoesofhistoryai.org/bots/albert-einstein</loc>
+    <lastmod>2026-01-31</lastmod>
+  </url>
+
+  <url>
+    <loc>https://echoesofhistoryai.org/bots/nikola-tesla</loc>
+    <lastmod>2026-01-31</lastmod>
+  </url>
+  -->
+
+</urlset>

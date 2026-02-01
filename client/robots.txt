@@ -1,0 +1,26 @@
+# robots.txt for Echoes of History AI
+User-agent: *
+
+# Block private / app-only areas
+Disallow: /user
+Disallow: /chat
+Disallow: /admin
+Disallow: /create-new-bot
+Disallow: /profile
+Disallow: /feedback
+Disallow: /submitted
+Disallow: /api/
+
+# Block non-content files
+Disallow: /*.json$
+
+# Allow images (explicit for safety)
+Allow: /images/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.webp$
+Allow: /*.svg$
+
+# Sitemap
+Sitemap: https://echoesofhistoryai.org/sitemap.xml
