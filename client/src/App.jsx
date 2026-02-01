@@ -11,6 +11,7 @@ import UserProfilePage from './pages/userProfile/userProfilePage';
 import FeedbackPage from './pages/feedbackPage/feedbackPage';
 import { Analytics } from '@vercel/analytics/react';
 import Submitted from './pages/submitted/submitted';
+import BotsDirectory from './pages/BotsDirectory/BotsDirectory'
 import About from './pages/about/about';
 import Team from './pages/team/team';
 import Features from './pages/features/featuresPage';
