@@ -69,3 +69,5 @@ function BotsDirectory() {
     </>
   );
 }
+
+export default BotsDirectory
