@@ -147,7 +147,7 @@ function ChatWindow() {
                 lastMessageIdRef.current = docRef.id;
                 
                 const response = await axios.post(
-                    `https://historia-backend-8bvz.onrender.com/api/chat/${user.uid}/${params.id}/${params.name}`, 
+                    `https://historia-backend-ycj7.onrender.com/api/chat/${user.uid}/${params.id}/${params.name}`, 
                     { message: messageText, messageId: docRef.id }
                 );
                 
