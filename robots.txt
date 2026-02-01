@@ -1,4 +1,51 @@
-User-agent: *
-Disallow: /admin/
+# Robots.txt for Echoes of History AI
 
-Sitemap: https://www.xantonai.com/sitemap.xml
+User-agent: *
+
+# Allow all public pages
+Allow: /
+Allow: /about
+Allow: /features
+Allow: /bots
+Allow: /login
+Allow: /signup
+
+# Disallow private/protected pages
+Disallow: /user/
+Disallow: /user
+Disallow: /chat/
+Disallow: /admin/
+Disallow: /admin
+Disallow: /create-new-bot
+Disallow: /profile/
+Disallow: /feedback
+Disallow: /submitted
+
+# Disallow utility pages
+Disallow: /api/
+Disallow: /*.json$
+
+# Allow image crawling
+Allow: /images/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.webp$
+Allow: /*.svg$
+
+# Sitemap location
+Sitemap: https://echoesofhistoryai.org/sitemap.xml
+
+# Crawl-delay (optional - use if you want to slow down aggressive bots)
+# Crawl-delay: 1
+
+# Specific bot rules (optional)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /images/
+
+# Block known bad bots (optional - add as needed)
+# User-agent: BadBot
+# Disallow: /

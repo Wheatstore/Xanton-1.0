@@ -8,39 +8,18 @@ function About() {
     <>
         <Navbar />
       <Helmet>
-        <title>About Echoes of History — Meet the Creator</title>
-        <meta
-          name="description"
-          content="Echoes of History is an interactive way to learn through conversation with historical figures. Built by a student creator to make history feel alive, accessible, and fun."
-        />
-        <meta
-          name="keywords"
-          content="Echoes of History, historical figures chatbot, learn history, interactive learning, education platform, conversations with history"
-        />
-        <meta name="robots" content="index, follow" />
-
-        <meta property="og:title" content="About Echoes of History — Meet the Creator" />
-        <meta
-          property="og:description"
-          content="An interactive way to learn through conversation with historical figures—built to make history feel alive, accessible, and fun."
-        />
-        <meta property="og:url" content="https://www.xantonai.com/about" />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://upload.wikimedia.org/wikipedia/commons/a/a3/Vehn%C3%A4pelto_6.jpg"
-        />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="About Echoes of History" />
-        <meta
-          name="twitter:description"
-          content="Learn through conversations with historical figures—built by a student creator."
-        />
-        <meta
-          name="twitter:image"
-          content="https://upload.wikimedia.org/wikipedia/commons/a/a3/Vehn%C3%A4pelto_6.jpg"
-        />
+        <title>About Echoes of History AI | Learn from Historical Figures</title>
+        <meta name="description" content="Discover how Echoes of History AI brings history to life through AI-powered conversations with Einstein, Tesla, Da Vinci and more." />
+        <link rel="canonical" href="https://echoesofhistoryai.org/about" />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content="About Echoes of History AI" />
+        <meta property="og:description" content="Learn about our mission to make history accessible through AI conversations." />
+        <meta property="og:url" content="https://echoesofhistoryai.org/about" />
+        
+        {/* Twitter */}
+        <meta name="twitter:title" content="About Echoes of History AI" />
+        <meta name="twitter:description" content="Learn about our mission to make history accessible through AI conversations." />
       </Helmet>
 
       <div className="min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
