@@ -44,7 +44,6 @@ function App() {
             <Route path="/bots" element={<BotsDirectory />} />
             <Route path="/features" element={<Features />} />
           </Routes>
-          <Analytics />
         </Router>
     </>
   )
