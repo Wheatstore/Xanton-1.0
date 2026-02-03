@@ -67,8 +67,8 @@ function Sidebar() {
               className="w-11 h-11 relative transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" 
             />
           </div>
-          <h1 className="text-2xl font-light tracking-wide bg-gradient-to-r from-purple-400 via-white to-blue-400 bg-clip-text text-transparent">
-            Historia
+          <h1 className="text-3xl font-normal tracking-wide bg-gradient-to-r from-purple-400 via-white to-blue-400 bg-clip-text text-transparent">
+            Echoes
           </h1>
         </button>
       </div>
