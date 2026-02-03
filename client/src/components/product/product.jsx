@@ -201,12 +201,11 @@ function Product({ isLanding }) {
 
                         {/* Stats Bar for Full Access */}
                         {!isLanding && (
-                            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div className="mt-16 grid grid-cols-2 md:grid-cols-3 gap-6">
                                 {[
                                     { label: 'Total Figures', value: bots.length, icon: '👥' },
                                     { label: 'Categories', value: '12+', icon: '📚' },
-                                    { label: 'Conversations', value: '50K+', icon: '💬' },
-                                    { label: 'Avg Rating', value: '4.9/5', icon: '⭐' }
+                                    { label: 'Conversations', value: '20K+', icon: '💬' },
                                 ].map((stat, index) => (
                                     <div
                                         key={stat.label}
@@ -215,7 +214,7 @@ function Product({ isLanding }) {
                                             animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
                                         }}
                                     >
-                                        <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="text-3xl mb-2 transition-transform duration-300">
                                             {stat.icon}
                                         </div>
                                         <div className="text-2xl font-bold text-white mb-1">
