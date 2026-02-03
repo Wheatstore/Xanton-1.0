@@ -41,6 +41,7 @@ function BotCard({ person, index }) {
       className="group relative h-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={() => onClick(person.id)}
     >
       {/* Simplified glow - only on hover, no blur animation */}
       <div className="absolute -inset-0.5 bg-gradient-to-br from-purple-600/0 via-pink-600/0 to-blue-600/0 group-hover:from-purple-600/20 group-hover:via-pink-600/20 group-hover:to-blue-600/20 rounded-2xl transition-all duration-300 -z-10" />
