@@ -119,7 +119,6 @@ function App() {
         <Route path="/feedback" element={<FeedbackPage />} />
 
         <Route path="*" element={<NotFound404 />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
