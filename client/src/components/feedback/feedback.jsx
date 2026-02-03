@@ -7,7 +7,7 @@ import { auth } from "../../firebase";
 // Backend URL (can stay for now even if named xanton)
 const SERVER_URL =
   process.env.REACT_APP_SERVER_URL ||
-  "https://xanton-1-0-server.vercel.app";
+  "https://historia-backend-ycj7.onrender.com";
 
 function Feedback() {
   const [user] = useAuthState(auth);

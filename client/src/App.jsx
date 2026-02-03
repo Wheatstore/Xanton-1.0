@@ -41,7 +41,7 @@ function App() {
             <Route path="submitted" element={user ? <Submitted /> : <Navigate to="/" />} />
             <Route path="/admin" element={user && user.email === "yoonate25@gmail.com" ? <Admin /> : <Navigate to="/" />} />
             <Route path="/profile/:username" element={user ? <UserProfilePage />: <Navigate to="/chat" />} />
-            <Route path="/feedback" element={user ? <FeedbackPage /> : <Navigate to="/" />} />
+            <Route path="/feedback" element={<FeedbackPage /> } />
             <Route path="/about" element={<About />} />
             <Route path="/bots" element={<BotsDirectory />} />
             <Route path="/features" element={<Features />} />

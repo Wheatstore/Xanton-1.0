@@ -156,9 +156,10 @@ const HeroSection = () => {
         }`}
       >
         {/* Decorative top element */}
-        <div className="mb-8 text-purple-500 text-sm uppercase tracking-[0.3em] font-semibold animate-pulse">
+        <div className="mb-8 text-purple-300 text-sm uppercase tracking-[0.3em] font-semibold animate-softPulse">
           ✦ Time Travel Awaits ✦
         </div>
+
 
         {/* Main heading with animated gradient */}
         <h1

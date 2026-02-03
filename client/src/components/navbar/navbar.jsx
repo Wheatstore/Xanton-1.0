@@ -63,10 +63,14 @@ function Navbar() {
   };
 
   return (
-    <nav className={` w-full z-50 transition-all duration-300 ${
-      scrolled ? "bg-black/80 backdrop-blur-md py-2" : "bg-transparent py-4"
+    <nav className={`relative isolate w-full z-50 transition-all duration-300  ${
+      scrolled ? "bg-[#0b0b0f]/80 backdrop-blur-md py-2" : "bg-transparent py-4"
     }`}>
-      <div className="max-w-[60%] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px
+                      bg-gradient-to-r via-purple-400/100 
+                      blur-[0.1px]" />
+      
+      <div className="relative z-10 max-w-[60%] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex-shrink-0">

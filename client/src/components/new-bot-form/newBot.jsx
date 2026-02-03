@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 
 // Get server URL from environment variable
-const SERVER_URL = process.env.REACT_APP_SERVER_URL || "https://xanton-1-0-server.vercel.app";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "https://historia-backend-ycj7.onrender.com";
 
 function NewBot() {
   const navigate = useNavigate();

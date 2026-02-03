@@ -16,7 +16,7 @@ const signUpEmailPassword = async (email, password) => {
     }
     await updateProfile(user, {displayName: username})
     // Additional user logic here if needed
-    axios.post("https://xanton-1-0-server.vercel.app/api/create/user", user)
+    axios.post("https://historia-backend-ycj7.onrender.com/api/create/user", user)
   } catch (error) {
     console.error("There was an error creating a new user: ", error.code, error.message);
     throw error
@@ -30,7 +30,7 @@ const signupLoginGoogle = async () => {
     const result = await signInWithPopup(auth, provider);;
     const user = result.user;
     // Additional user logic here if needed
-    axios.post("https://xanton-1-0-server.vercel.app/api/create/user", user)
+    axios.post("https://historia-backend-ycj7.onrender.com/api/create/user", user)
   } catch (error) {
     console.error("There was an error signing in with Google: ", error.code, error.message);
     throw (error)
