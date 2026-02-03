@@ -46,7 +46,7 @@ function App() {
             <Route path="/bots" element={<BotsDirectory />} />
             <Route path="/features" element={<Features />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/terms" element={<TermsOfService />} />
           </Routes>
         </Router>
     </>
