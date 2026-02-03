@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase";
 
-// Backend URL (can stay for now even if named xanton)
 const SERVER_URL =
   process.env.REACT_APP_SERVER_URL ||
   "https://historia-backend-ycj7.onrender.com";
