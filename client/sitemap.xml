@@ -3,43 +3,82 @@
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
-  <!-- Homepage -->
+  <!-- Homepage (PRIMARY BRAND PAGE) -->
   <url>
     <loc>https://echoesofhistoryai.org/</loc>
     <lastmod>2026-01-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
   </url>
 
-  <!-- Bots Directory (IMPORTANT SEO page) -->
+  <!-- Bots Directory (IMPORTANT SEO PAGE) -->
   <url>
     <loc>https://echoesofhistoryai.org/bots</loc>
     <lastmod>2026-01-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
 
   <!-- About -->
   <url>
     <loc>https://echoesofhistoryai.org/about</loc>
     <lastmod>2026-01-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <!-- Features -->
   <url>
     <loc>https://echoesofhistoryai.org/features</loc>
     <lastmod>2026-01-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
-  <!-- DO NOT include login/signup -->
-  <!-- Auth pages are noindex and should not be in a sitemap -->
+  <!-- Legal / Trust Pages -->
+  <url>
+    <loc>https://echoesofhistoryai.org/privacy</loc>
+    <lastmod>2026-01-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
 
-  <!-- Example individual bot pages (add dynamically once public) -->
+  <url>
+    <loc>https://echoesofhistoryai.org/terms</loc>
+    <lastmod>2026-01-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- ===========================
+       DO NOT INCLUDE AUTH PAGES
+       ===========================
+       /login
+       /signup
+       /user
+       /chat/*
+       /create-new-bot
+       /admin
+       These should be noindex
+  -->
+
+  <!-- ===========================
+       Individual Bot Pages
+       Add ONLY when public + static
+       =========================== -->
   <!--
   <url>
     <loc>https://echoesofhistoryai.org/bots/albert-einstein</loc>
     <lastmod>2026-01-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://echoesofhistoryai.org/bots/nikola-tesla</loc>
     <lastmod>2026-01-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   -->
 

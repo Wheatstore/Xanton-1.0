@@ -242,7 +242,7 @@ const HeroSection = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           </button>
           <button
-            onClick={() => handleNavigation('learn')}
+            onClick={() => handleNavigation('features')}
             className="group flex-1 px-8 py-5 bg-white/5 backdrop-blur-xl border-2 border-white/20 rounded-2xl text-white font-semibold text-base text-center transition-all duration-300 hover:bg-white/10 hover:border-white/40 hover:scale-105"
           >
             <span className="flex items-center justify-center gap-2">

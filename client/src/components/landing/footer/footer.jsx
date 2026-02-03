@@ -84,9 +84,25 @@ const Footer = () => {
                   </li>
                 ))}
               </ul>
+              <ul className="space-y-4">
+                {[
+                  { text: "Sitemap", href: "/sitemaps" }
+                ].map((link) => (
+                  <li key={link.text}>
+                    <a
+                      href={link.href}
+                      className="group inline-flex items-center text-base md:text-lg text-gray-300 hover:text-white transition-colors duration-300"
+                    >
+                      <span className="w-0 group-hover:w-6 h-px bg-white transition-all duration-300 mr-0 group-hover:mr-3"></span>
+                      {link.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
+        
 
         {/* Bottom bar */}
         <div className="border-t border-white border-opacity-10 py-8">
