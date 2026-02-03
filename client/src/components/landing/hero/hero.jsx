@@ -218,7 +218,7 @@ const HeroSection = () => {
             fontFamily: '"SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif',
           }}
         >
-          Join <span className="text-white font-semibold">Xanton</span> to learn
+          Join <span className="text-white font-semibold">Echoes of History</span> to learn
           the past from those who built it.
         </h3>
 

@@ -59,7 +59,7 @@ const GoogleAuthButton = ({ text = "Continue with Google", onSuccess, onError })
   return (
     <button
       onClick={handleGoogleAuth}
-      className="flex items-center justify-center w-full py-3 px-4 bg-white hover:bg-gray-100 rounded-lg text-gray-800 font-medium transition-all duration-200 border border-gray-300 shadow-sm"
+      className="flex items-center z-30 justify-center w-full py-3 px-4 bg-white hover:bg-gray-400 rounded-lg text-gray-800 font-medium transition-all duration-200 border border-gray-300 shadow-sm"
       type="button"
     >
       <svg 

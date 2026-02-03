@@ -27,7 +27,7 @@ const Footer = () => {
           <div className="md:col-span-5 space-y-6">
             <div className="group">
               <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-3 transition-all duration-300 hover:tracking-wide">
-                Xanton
+                Echoes of History
               </h1>
               <div className="h-1 w-24 bg-white transform origin-left transition-all duration-500 group-hover:w-40"></div>
             </div>
@@ -92,7 +92,7 @@ const Footer = () => {
         <div className="border-t border-white border-opacity-10 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
             <p className="font-light">
-              © {new Date().getFullYear()} Xanton. All rights reserved.
+              © {new Date().getFullYear()} Echoes of History. All rights reserved.
             </p>
             <div className="flex gap-8">
               <a href="/privacy" className="hover:text-white transition-colors duration-300">

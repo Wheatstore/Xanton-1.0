@@ -45,7 +45,7 @@ function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        <div className="min-h-screen flex items-center pt-10 justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
             {/* Background decorative elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
@@ -168,7 +168,7 @@ function Login() {
                         {/* Sign up link */}
                         <div className="text-center pt-4 border-t border-slate-800/50">
                             <p className="text-slate-400 text-sm">
-                                New to Xanton?{" "}
+                                New to Echoes of History?{" "}
                                 <a href="/signup" className="text-blue-400 font-semibold hover:text-blue-300 transition-colors">
                                     Create an account
                                 </a>
