@@ -2,43 +2,58 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, auth } from '../../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 function BotCard({ person, index }) {
   const [user] = useAuthState(auth);
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const navigate = useNavigate();
 
   const onClick = async (botid) => {
+    // Prevent double-clicks
+    if (isNavigating) return;
+    
     if (!user) {
       navigate(`/signup`);
     } else {
+      setIsNavigating(true);
+      
       try {
-        const previousChatsRef = collection(db, 'users', user.uid, 'previousChats');
-        const q = query(previousChatsRef, where('character', '==', botid));
-        const querySnapshot = await getDocs(q);
-
-        if (querySnapshot.empty) {
-          await addDoc(previousChatsRef, {
+        // Use a consistent document ID instead of auto-generated IDs
+        const chatId = `${botid}_${person.name.replace(/\s+/g, '_')}`;
+        const chatDocRef = doc(db, 'users', user.uid, 'previousChats', chatId);
+        
+        // Check if this specific chat document exists
+        const chatDoc = await getDoc(chatDocRef);
+        
+        if (!chatDoc.exists()) {
+          // Create the chat with the specific ID
+          await setDoc(chatDocRef, {
             img: person.img,
             name: person.name,
             character: botid,
             timestamp: serverTimestamp()
           });
-          navigate(`/chat/${botid}/${person.name}`);
         } else {
-          navigate(`/chat/${botid}/${person.name}`);
+          // Update the timestamp to move it to the top of the list
+          await setDoc(chatDocRef, {
+            timestamp: serverTimestamp()
+          }, { merge: true });
         }
+        
+        navigate(`/chat/${botid}/${person.name}`);
       } catch (error) {
         console.error("Error checking or adding document: ", error);
+        setIsNavigating(false);
       }
     }
   };
 
   return (
     <div
-      className="group relative h-full"
+      className="group relative h-full cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onClick(person.id)}
@@ -112,26 +127,37 @@ function BotCard({ person, index }) {
 
           {/* Action buttons */}
           <div className="flex items-center gap-3">
-            {/* Primary chat button */}
-            <button
-              className="flex-1 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-white font-semibold text-sm transition-all duration-200 hover:shadow-lg hover:shadow-purple-500/30 active:scale-95 flex items-center justify-center gap-2"
-              onClick={() => onClick(person.id)}
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                />
-              </svg>
-              Start Chat
-            </button>
+            {/* Primary chat button - REMOVED onClick since card handles it */}
+            <div className={`flex-1 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-white font-semibold text-sm transition-all duration-200 hover:shadow-lg hover:shadow-purple-500/30 active:scale-95 flex items-center justify-center gap-2 ${
+              isNavigating ? 'opacity-50' : ''
+            }`}>
+              {isNavigating ? (
+                <>
+                  <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Starting...
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    />
+                  </svg>
+                  Start Chat
+                </>
+              )}
+            </div>
 
             {/* Info button */}
             <button
