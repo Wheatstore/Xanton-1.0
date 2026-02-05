@@ -1,30 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Primary SEO (global default) -->
+  <!-- Primary SEO -->
   <title>Echoes of History AI: Chat with Historical Figures</title>
   <meta
     name="description"
     content="Interactive AI conversations with history’s greatest minds. Chat with Einstein, Tesla, Leonardo da Vinci, and more."
   />
   <meta name="robots" content="index, follow" />
-  <meta name="application-name" content="Echoes of History AI" />
-  <meta name="theme-color" content="#4a56e2" />
 
-  <!-- Canonical (global default; per-route canonicals should be set via SSR/SSG or Helmet) -->
+  <!-- Canonical -->
   <link rel="canonical" href="https://echoesofhistoryai.org/" />
 
-  <!-- Favicons -->
-  <link rel="icon" href="/images/favicon.ico" sizes="any" type="image/x-icon" />
-  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
+  <!-- Primary favicon -->
+  <link rel="icon" href="/images/favicon.ico" sizes="any">
 
-  <!-- Open Graph (global default) -->
+  <!-- SVG favicon (modern browsers) -->
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+
+  <!-- PNG fallback -->
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+  <!-- PWA -->
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Echoes of History AI" />
   <meta property="og:url" content="https://echoesofhistoryai.org/" />
   <meta property="og:title" content="Echoes of History AI: Chat with Historical Figures" />
   <meta
@@ -35,9 +43,10 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Echoes of History AI – chat with historical figures" />
+  <meta property="og:site_name" content="Echoes of History AI" />
   <meta property="og:locale" content="en_US" />
 
-  <!-- Twitter (global default) -->
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Echoes of History AI: Chat with Historical Figures" />
   <meta
@@ -47,7 +56,8 @@
   <meta name="twitter:image" content="https://echoesofhistoryai.org/images/og-image.jpg" />
   <meta name="twitter:image:alt" content="Echoes of History AI interface" />
 
-  <!-- iOS PWA -->
+  <!-- Mobile -->
+  <meta name="theme-color" content="#4a56e2" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Echoes of History AI" />
@@ -77,18 +87,62 @@
     "name": "Echoes of History AI",
     "url": "https://echoesofhistoryai.org",
     "logo": "https://echoesofhistoryai.org/images/logo.png",
-    "sameAs": ["https://www.tiktok.com/@echoesofhistoryai"]
+    "sameAs": [
+      "https://www.tiktok.com/@echoesofhistoryai"
+    ]
   }
   </script>
 
-  <!-- Structured Data: WebSite (key for Google site name) -->
+  <!-- Structured Data: WebSite -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Echoes of History AI",
-    "alternateName": ["Echoes of History", "Echoes"],
+    "alternateName": [
+      "Echoes of History",
+      "Echoes"
+    ],
     "url": "https://echoesofhistoryai.org/"
   }
   </script>
+
+  <!-- FAQ schema: keep ONLY if these FAQs appear visibly on the homepage -->
+  <!--
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can I chat with Einstein on Echoes of History AI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Echoes of History AI lets you have educational conversations with AI characters inspired by historical figures such as Albert Einstein."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Echoes of History AI free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Echoes of History AI offers free access for educational exploration."
+        }
+      }
+    ]
+  }
+  </script>
+  -->
 </head>
+
+<body>
+  <a href="#main-content" class="skip-to-main-content">Skip to main content</a>
+
+  <main id="main-content">
+    <div id="root"></div>
+  </main>
+
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
