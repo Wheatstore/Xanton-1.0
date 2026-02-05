@@ -12,7 +12,7 @@ function Team() {
                 <meta name="robots" content="index, follow" />
                 <meta property="og:title" content="Meet the Team - Echoes of History AI" />
                 <meta property="og:description" content="Learn about the team behind Echoes AI. If you're interested in joining, submit the feedback form." />
-                <meta property="og:url" content="https://www.echoesofhistoryai.org/team" />
+                <meta property="og:url" content="https://echoesofhistoryai.org/team" />
                 <meta property="og:type" content="website" />
                 <meta property="og:image" content="https://echoesofhistoryai.org/og-team-image.jpg" />
             </Helmet>
