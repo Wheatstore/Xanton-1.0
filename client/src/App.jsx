@@ -69,7 +69,7 @@ function App() {
         />
 
         <Route path="/about" element={<About />} />
-        <Route path="/team" element={<Team />} />
+        {/* <Route path="/team" element={<Team />} /> */}
         <Route path="/features" element={<Features />} />
         <Route path="/bots" element={<BotsDirectory />} />
 
