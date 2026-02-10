@@ -76,7 +76,7 @@ function Navbar() {
           <div className="flex-shrink-0">
             <a href="/" className="flex items-center">
               <img 
-                src="/images/logo.png" 
+                src="/logo.png" 
                 alt="Echoes of History AI" 
                 className="h-[60px] w-auto transition-all duration-300 hover:opacity-80" 
               />
