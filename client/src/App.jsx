@@ -12,7 +12,9 @@ import UserProfilePage from "./pages/userProfile/userProfilePage";
 import FeedbackPage from "./pages/feedbackPage/feedbackPage";
 import Submitted from "./pages/submitted/submitted";
 
-import BotsDirectory from "./pages/BotsDirectory/BotsDirectory";
+import ArticleListPage from "./pages/articles/ArticlesListPage";
+import ArticlePage from "./pages/articles/ArticlePage";
+import BotsDirectoryPage from "./pages/BotsDirectory/BotsDirectoryPage";
 import About from "./pages/about/about";
 import Team from "./pages/team/team";
 import Features from "./pages/features/featuresPage";
@@ -71,7 +73,9 @@ function App() {
         <Route path="/about" element={<About />} />
         {/* <Route path="/team" element={<Team />} /> */}
         <Route path="/features" element={<Features />} />
-        <Route path="/bots" element={<BotsDirectory />} />
+        <Route path="/bots" element={<BotsDirectoryPage />} />
+        <Route path='/articles' element={<ArticleListPage />} />
+        <Route path='/articles/:slug' element={<ArticlePage />} />
 
         {/* Trust pages (important for indexing/credibility) */}
         <Route path="/privacy" element={<PrivacyPolicy />} />

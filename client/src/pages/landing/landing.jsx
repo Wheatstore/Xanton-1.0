@@ -36,7 +36,7 @@ function LandingPage() {
           <meta property="og:title" content="Echoes of History AI: Chat with Historical Figures" />
           <meta
             property="og:description"
-            content="Chat with AI-powered historical figures and learn history through interactive conversation."
+            content="Chat with historical figures from the past and learn history through interactive conversation."
           />
           <meta property="og:image" content="https://echoesofhistoryai.org/images/og-image.jpg" />
 

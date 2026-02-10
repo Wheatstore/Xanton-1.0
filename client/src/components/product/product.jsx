@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import BotCard from "./bot-card/botCard";
 import { db } from "../../firebase";
 import { collection, getDocs, query } from "firebase/firestore";
 
 function Product({ isLanding }) {
+    const [search, setSearch] = useState("");
     const [bots, setBots] = useState([]);
     const [loadingBots, setLoadingBots] = useState(true);
     const [filter, setFilter] = useState('all');
@@ -25,6 +26,7 @@ function Product({ isLanding }) {
                 setLoadingBots(false);
             } catch (error) {
                 console.error("Error fetching bots: ", error);
+                setLoadingBots(false);
             }
         };
 
@@ -32,6 +34,24 @@ function Product({ isLanding }) {
     }, []);
 
     const displayedBots = isLanding ? bots.slice(0, 8) : bots;
+
+    const filteredBots = useMemo(() => {
+        const s = search.trim().toLowerCase();
+        if(!s) return displayedBots;
+
+        return displayedBots.filter((bot) => {
+            const name = (bot.name ?? "").toLowerCase()
+            const desc = (bot.description ?? "").toLowerCase()
+
+            return (
+                name.includes(s) ||
+                desc.includes(s)
+            );
+
+            //TODO Add categories later when logic is implemented into firestore
+            // const category = (bot.category ?? bot.type)
+        })
+    }, [displayedBots, search])
 
     return (
         <div className="relative min-h-screen bg-gradient-to-b from-black via-gray-950 to-black">
@@ -118,7 +138,22 @@ function Product({ isLanding }) {
                         )}
                     </div>
                 </div>
-
+                {/* Search */}
+                {!isLanding && (
+                    <div className="max-w-7xl mx-auto mb-10 px-0">
+                        <div className="relative w-full sm:w-[900px]">
+                            <input
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Search figures…"
+                            className="w-full pr-12 px-5 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl text-white placeholder:text-gray-500 font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 hover:bg-white/10"
+                            />
+                            <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-xs text-gray-400">
+                                {filteredBots.length}
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {/* Loading State */}
                 {loadingBots ? (
                     <div className="max-w-7xl mx-auto">
@@ -165,7 +200,7 @@ function Product({ isLanding }) {
                                 : 'flex flex-col gap-4'
                             }
                         `}>
-                            {displayedBots.map((bot, index) => (
+                            {filteredBots.map((bot, index) => (
                                 <div
                                     key={bot.id}
                                     className="transform transition-all duration-500 hover:scale-[1.02]"
@@ -204,7 +239,7 @@ function Product({ isLanding }) {
                             <div className="mt-16 grid grid-cols-2 md:grid-cols-3 gap-6">
                                 {[
                                     { label: 'Total Figures', value: bots.length, icon: '👥' },
-                                    { label: 'Categories', value: '12+', icon: '📚' },
+                                    { label: 'Categories', value: '3+', icon: '📚' },
                                     { label: 'Conversations', value: '20K+', icon: '💬' },
                                 ].map((stat, index) => (
                                     <div
@@ -231,7 +266,7 @@ function Product({ isLanding }) {
                 )}
             </div>
 
-            <style jsx>{`
+            <style jsx='true'>{`
                 @keyframes shimmer {
                     0%, 100% {
                         opacity: 0.5;

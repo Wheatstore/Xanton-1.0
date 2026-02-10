@@ -322,7 +322,7 @@ const NotFound404 = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style jsx='true'>{`
         @keyframes gradient {
           0%, 100% {
             background-position: 0% 50%;

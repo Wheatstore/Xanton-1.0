@@ -259,7 +259,7 @@ const HeroSection = () => {
           <div className="flex items-center gap-6 text-gray-500 text-sm">
             <span className="font-medium">
               Trusted by{' '}
-              <span className="text-white font-bold">10,000+</span> history
+              <span className="text-white font-bold">3,000+</span> history
               enthusiasts
             </span>
           </div>
@@ -294,7 +294,7 @@ const HeroSection = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style jsx='true'>{`
         @keyframes gradient {
           0%, 100% {
             background-position: 0% 50%;
