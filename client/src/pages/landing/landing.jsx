@@ -14,8 +14,8 @@ function LandingPage() {
 
   const SITE_NAME = "Echoes of History AI";
   const BASE_URL = "https://echoesofhistoryai.org";
-  const OG_IMAGE = `${BASE_URL}/images/og-image.jpg`;
-  const LOGO_URL = `${BASE_URL}/images/logo.png`;
+  const OG_IMAGE = `${BASE_URL}/og-image.jpg`;
+  const LOGO_URL = `${BASE_URL}/logo.png`;
 
   return (
     <>

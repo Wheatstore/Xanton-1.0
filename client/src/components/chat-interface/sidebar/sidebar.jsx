@@ -62,7 +62,7 @@ function Sidebar() {
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-blue-500/30 rounded-full blur-lg group-hover:blur-xl transition-all duration-300" />
             <img 
-              src="/images/logoTransparent.png" 
+              src="/logoTransparent.png" 
               alt="Echoes of History Logo" 
               className="w-11 h-11 relative transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" 
             />
