@@ -20,6 +20,9 @@ client/node_modules/
 server/node_modules/
 node_modules/
 
+user.jsx
+emails.txt
+
 # Environment variables
 .env
 *.local

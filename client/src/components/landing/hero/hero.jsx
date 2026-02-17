@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
+import FloatingLines from './FloatingLines';
 import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
@@ -111,43 +112,23 @@ const HeroSection = () => {
 
   return (
     <div className="relative w-full min-h-screen bg-black overflow-hidden">
-      {/* Animated particle canvas */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 pointer-events-none opacity-40"
-      />
+      <div className="absolute inset-0 -z-0 pointer-events-none">
+        <FloatingLines
+          enabledWaves={["top", "middle", "bottom"]}
+          lineCount={5}
+          lineDistance={5}
+          bendRadius={5}
+          bendStrength={-0.5}
+          interactive={true}
+          parallax={true}
+        />
 
-      {/* Dynamic background gradients with parallax */}
-      <div className="absolute inset-0">
-        <div
-          className="absolute top-1/4 -left-20 w-96 h-96 bg-purple-600 rounded-full opacity-20 blur-3xl transition-transform duration-700 ease-out"
-          style={{
-            transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`,
-          }}
-        />
-        <div
-          className="absolute bottom-1/4 -right-20 w-[500px] h-[500px] bg-blue-600 rounded-full opacity-20 blur-3xl transition-transform duration-700 ease-out"
-          style={{
-            transform: `translate(${-mousePosition.x}px, ${-mousePosition.y}px)`,
-          }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-600 rounded-full opacity-10 blur-3xl transition-transform duration-1000 ease-out"
-          style={{
-            transform: `translate(calc(-50% + ${mousePosition.x * 0.5}px), calc(-50% + ${mousePosition.y * 0.5}px))`,
-          }}
-        />
+        {/* Subtle dark veil so lines sit “inside” black, not on top of it */}
+        <div className="absolute inset-0 bg-black/40" />
+
+        {/* Bottom fade-to-black for seamless transition into next black section */}
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-black" />
       </div>
-
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                           linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-        }}
-      />
 
       {/* Content container */}
       <div
@@ -163,16 +144,16 @@ const HeroSection = () => {
 
         {/* Main heading with animated gradient */}
         <h1
-          className="w-full max-w-5xl font-black text-white leading-[0.95] tracking-tight text-center mb-8 transition-all duration-700"
+          className="w-full max-w-6xl font-black text-white leading-[1] tracking-tight text-center mb-8 transition-all duration-700"
           style={{
-            fontSize: 'clamp(48px, 8vw, 85px)',
+            fontSize: 'clamp(64px, 10vw, 120px)',
             fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif',
-            textShadow: '0 0 80px rgba(147, 51, 234, 0.3)',
+            textShadow: '0 0 px rgba(147, 51, 234, 0.35)',
           }}
         >
           Ready to talk to{' '}
           <span
-            className="inline-block bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent animate-gradient-x relative"
+            className="inline-block bg-linear-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent animate-gradient-x relative"
             style={{
               backgroundSize: '200% auto',
               animation: 'gradient 3s ease infinite',
@@ -273,57 +254,8 @@ const HeroSection = () => {
               <span>Verified Platform</span>
             </div>
           </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-600 animate-bounce"
-          style={{ animation: 'fadeInUp 1.5s ease-out 1s both, bounce 2s ease-in-out 2s infinite' }}
-        >
-          <span className="text-xs uppercase tracking-wider">Scroll</span>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="M12 5v14M19 12l-7 7-7-7" />
-          </svg>
-        </div>
+        </div>    
       </div>
-
-      <style jsx='true'>{`
-        @keyframes gradient {
-          0%, 100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes bounce {
-          0%, 100% {
-            transform: translateY(0) translateX(-50%);
-          }
-          50% {
-            transform: translateY(-10px) translateX(-50%);
-          }
-        }
-      `}</style>
     </div>
   );
 };
