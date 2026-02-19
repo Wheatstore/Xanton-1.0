@@ -156,8 +156,8 @@ const HeroSection = () => {
             alt="George Washington"
             className="
               pointer-events-none select-none
-              absolute -left-20 sm:-left-24 md:-left-40 lg:-left-52 xl:-left-100
-              top-1/2 -translate-y-1/2
+              absolute -left-20 sm:-left-24 md:-left-40 lg:-left-52 xl:-left-70
+              top-80 -translate-y-1/2
               w-20 sm:w-24 md:w-32 lg:w-40 xl:w-44
               opacity-100
               drop-shadow-[0_22px_70px_rgba(37,99,235,0.22)]
@@ -178,7 +178,7 @@ const HeroSection = () => {
               absolute -right-16 sm:-right-24 md:-right-40 lg:-right-52 xl:-right-64
               top-[6%]
               w-20 sm:w-24 md:w-32 lg:w-36 xl:w-40
-              opacity-60
+              opacity-100
               drop-shadow-[0_20px_60px_rgba(37,99,235,0.18)]
               animate-floatAroundRight
             "
@@ -194,11 +194,11 @@ const HeroSection = () => {
             aria-hidden="true"
             className="
               pointer-events-none select-none
-              absolute left-[2%] md:left-[4%] lg:left-[1%]
-              -top-20 md:-top-24 lg:-top-28
+              absolute left-[2%] md:left-[4%] lg:left-1 xl:left-0.5
+              -top-20 md:-top-24 lg:-top-50
               hidden md:block
               w-15 md:w-24 lg:w-28 xl:w-32
-              opacity-80
+              opacity-100
               drop-shadow-[0_18px_55px_rgba(37,99,235,0.14)]
               animate-floatAroundTop
             "
@@ -218,7 +218,7 @@ const HeroSection = () => {
               -bottom-20 md:-bottom-24 lg:-bottom-28
               hidden md:block
               w-20 md:w-24 lg:w-28 xl:w-32
-              opacity-60
+              opacity-100
               drop-shadow-[0_18px_55px_rgba(37,99,235,0.12)]
               animate-floatAroundBottom
             "
