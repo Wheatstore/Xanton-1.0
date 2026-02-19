@@ -7,6 +7,7 @@ import "./landing.css";
 import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Product from "../../components/product/product";
+import LandingChat from "../../components/landing/Chatbox/LandingChat";
 
 function LandingPage() {
   const [user, loading] = useAuthState(auth);
@@ -47,6 +48,7 @@ function LandingPage() {
       <div className="landing-page-container">
         <NavbarHome />
         <HeroSection />
+        <LandingChat />
         <Product isLanding={true} />
         <Footer />
       </div>
