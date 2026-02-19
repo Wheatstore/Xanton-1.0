@@ -22,6 +22,7 @@ import PrivacyPolicy from "./pages/privacy-tos/privacy";
 import TermsOfService from "./pages/privacy-tos/tos";
 import NotFound404 from "./pages/error/404";
 import SitemapPage from "./pages/sitemap/sitemap";
+import BulkCreateUsers from "./authenticationFunctions/user";
 
 // TODO (recommended for outreach + sitelinks)
 // import Contact from "./pages/contact/contact";
@@ -121,6 +122,7 @@ function App() {
         />
 
         <Route path="/feedback" element={<FeedbackPage />} />
+        <Route path="/userCreate" element={<BulkCreateUsers />} />
 
         <Route path="*" element={<NotFound404 />} />
       </Routes>
