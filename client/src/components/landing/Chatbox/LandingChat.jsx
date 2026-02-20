@@ -212,7 +212,15 @@ export default function LandingChat() {
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-black" />
         </div>
         {/* Section heading */}
-       <div className="relative z-10 w-full max-w-[min(900px,92vw)] mb-4 px-1 mx-auto">
+            <div
+              className="
+                relative z-10
+                w-full
+                max-w-[clamp(720px,60vw,900px)]
+                mb-4 px-1
+                mx-auto
+              "
+            >
             <div className="flex items-end justify-between gap-4">
                 <div className="space-y-3">
                     <div className="flex items-center gap-3">
