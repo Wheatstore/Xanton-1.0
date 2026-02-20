@@ -37,10 +37,11 @@ export default function LandingChat() {
   // Minimal, dark, “already fits” tokens (NOT glass)
   const ui = {
     box:
-      "relative w-5/7 h-[75vh] max-h-[80vh] " +
-      "bg-white/[0.03] border border-white/10 rounded-3xl " +
-      "shadow-[0_20px_60px_rgba(0,0,0,0.55)] " +
-      "overflow-hidden",
+    "relative w-full sm:w-[92%] md:w-[85%] lg:w-[75%] xl:w-[68%] 2xl:w-[60%] " +
+    "max-w-[1400px] h-[75vh] max-h-[80vh] " +
+    "bg-white/[0.03] border border-white/10 rounded-3xl " +
+    "shadow-[0_20px_60px_rgba(0,0,0,0.55)] " +
+    "overflow-hidden",
     slab:
       "relative bg-white/[0.025] border border-white/10 rounded-2xl " +
       "shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]",
@@ -211,7 +212,7 @@ export default function LandingChat() {
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-black" />
         </div>
         {/* Section heading */}
-        <div className="relative z-10 w-full max-w-5/7 mb-4 px-1">
+       <div className="relative z-10 w-full max-w-[min(900px,92vw)] mb-4 px-1 mx-auto">
             <div className="flex items-end justify-between gap-4">
                 <div className="space-y-3">
                     <div className="flex items-center gap-3">
