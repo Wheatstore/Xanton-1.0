@@ -22,6 +22,7 @@ import PrivacyPolicy from "./pages/privacy-tos/privacy";
 import TermsOfService from "./pages/privacy-tos/tos";
 import NotFound404 from "./pages/error/404";
 import SitemapPage from "./pages/sitemap/sitemap";
+import Partners from "./pages/partner/Partner";
 
 // TODO (recommended for outreach + sitelinks)
 // import Contact from "./pages/contact/contact";
@@ -84,7 +85,7 @@ function App() {
         {/* Outreach pages (add when ready) */}
         {/* <Route path="/contact" element={<Contact />} /> */}
         {/* <Route path="/press" element={<Press />} /> */}
-        {/* <Route path="/partners" element={<Partners />} /> */}
+        <Route path="/partners" element={<Partners />} />
 
         <Route path="/sitemap" element={<SitemapPage />} />
 
