@@ -1,8 +1,5 @@
 import { useRef, useEffect } from "react";
-import Galaxy from "./Grid";
-import { useNavigate } from "react-router-dom";
 
-const navigate = useNavigate()
 
 /* ── Stub data — replace with real props / state ── */
 const BOT_NAME = "Nikola Tesla";
@@ -163,7 +160,10 @@ export default function LandingChat() {
         }
         `}</style>
 
-      <div className="relative w-full min-h-screen bg-black overflow-hidden flex flex-col items-center justify-center px-4 py-8">
+        <div className="relative w-full min-h-screen bg-black overflow-hidden
+                flex flex-col items-center justify-center
+                px-6 sm:px-10 lg:px-16
+                py-16 sm:py-24 lg:py-32">
         {/* Background (richer blue/purple) */}
         {/* Top transition fade */}
         <div className="absolute inset-x-0 top-0 h-40 z-10 bg-gradient-to-b from-black to-transparent" />
@@ -415,8 +415,7 @@ export default function LandingChat() {
                   style={{ overflow: "auto", maxHeight: "100px" }}
                 />
                 <button
-                  className={`${ui.btn} z-30 flex-shrink-0 w-10 h-10 flex items-center justify-center mb-0.5 mr-0.5 active:scale-95 transition-transform duration-150`}
-                  onClick={() => navigate("/signup")}
+                  className={`${ui.btn} flex-shrink-0 w-10 h-10 flex items-center justify-center mb-0.5 mr-0.5 active:scale-95 transition-transform duration-150`}
                   aria-label="Send"
                 >
                   <svg className="w-4 h-4 text-white/85" viewBox="0 0 20 20" fill="currentColor">
