@@ -70,7 +70,7 @@ function Navbar() {
                       bg-gradient-to-r via-purple-400/100 
                       blur-[0.1px]" />
       
-      <div className="relative z-10 max-w-[60%] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-[70%] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -89,42 +89,35 @@ function Navbar() {
             {/* Conditional navigation based on authentication */}
             {!user && !loading ? (
               <>
-                <a 
-                  href="/features" 
-                  className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  Features
-                </a>
-                <a 
-                  href="/about" 
-                  className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  About
-                </a>
-                <a href='/bots' className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200">
-                  Our Figures
-                </a>
-                 <a 
-                  href="/partners" 
-                  className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  Partner
-                </a>
-                <a href='/articles' className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200">
-                  Articles
-                </a>
-                <button 
-                  onClick={() => navigateTo("/login")} 
-                  className="ml-2 px-5 py-2 bg-transparent border border-white/30 rounded-full text-sm font-medium text-white hover:bg-white/10 transition-all duration-300"
-                >
-                  Login
-                </button>
-                <button 
-                  onClick={() => navigateTo("/signup")} 
-                  className="px-5 py-2 bg-blue-600 rounded-full text-sm font-medium text-white hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition-all duration-300"
-                >
-                  Get Started
-                </button>
+                <div className="hidden md:flex items-center space-x-3">
+                <a href="/features" className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium">Features</a>
+                <a href="/bots" className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium">Our Figures</a>
+
+                <div className="relative group">
+                  <button className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium">
+                    More <span className="opacity-70">▾</span>
+                  </button>
+                  <div className="absolute right-0 mt-2 w-44 rounded-xl border border-white/10 bg-black/80 backdrop-blur-md shadow-xl
+                                  opacity-0 translate-y-1 pointer-events-none
+                                  group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
+                                  transition-all duration-150">
+                    <a href="/about" className="block px-4 py-2 text-sm text-white/90 hover:bg-white/10">About</a>
+                    <a href="/partners" className="block px-4 py-2 text-sm text-white/90 hover:bg-white/10">Partners</a>
+                    <a href="/articles" className="block px-4 py-2 text-sm text-white/90 hover:bg-white/10">Articles</a>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-2 pl-2">
+                  <button onClick={() => navigateTo("/login")}
+                    className="px-4 py-2 bg-transparent border border-white/30 rounded-full text-sm font-medium text-white hover:bg-white/10 transition-all">
+                    Login
+                  </button>
+                  <button onClick={() => navigateTo("/signup")}
+                    className="px-4 py-2 bg-blue-600 rounded-full text-sm font-medium text-white hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition-all">
+                    Get Started
+                  </button>
+                </div>
+              </div>
               </>
             ) : user ? (
               <>
