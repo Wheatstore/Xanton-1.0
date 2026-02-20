@@ -105,7 +105,7 @@ function Navbar() {
                   Our Figures
                 </a>
                  <a 
-                  href="/partner" 
+                  href="/partners" 
                   className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
                   Partner
