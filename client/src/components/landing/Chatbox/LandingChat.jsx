@@ -1,5 +1,8 @@
 import { useRef, useEffect } from "react";
 import Galaxy from "./Grid";
+import { useNavigate } from "react-router-dom";
+
+const navigate = useNavigate()
 
 /* ── Stub data — replace with real props / state ── */
 const BOT_NAME = "Nikola Tesla";
@@ -162,6 +165,8 @@ export default function LandingChat() {
 
       <div className="relative w-full min-h-screen bg-black overflow-hidden flex flex-col items-center justify-center px-4 py-8">
         {/* Background (richer blue/purple) */}
+        {/* Top transition fade */}
+        <div className="absolute inset-x-0 top-0 h-40 z-10 bg-gradient-to-b from-black to-transparent" />
         <div className="absolute inset-0 -z-0 pointer-events-none">
           {/* Base vignette + gentle color pools */}
           <div
@@ -208,20 +213,21 @@ export default function LandingChat() {
         {/* Section heading */}
         <div className="relative z-10 w-full max-w-3/7 mb-4 px-1">
             <div className="flex items-end justify-between gap-4">
-                <div className="min-w-0">
-                <h1 className="text-white/90 text-5xl sm:text-5xl font-semibold sf-display tracking-tight">
-                    Try it out yourself
-                </h1>
-                <p className="text-white/45 text-xs sm:text-sm mt-1 max-w-[70ch]">
-                    Preview a conversation with a historical character Nikola Tesla! Ask him anything you want!
-                </p>
-                </div>
-
-                <div className="hidden sm:flex items-center gap-2">
-                <span className="text-[11px] text-white/40">Try:</span>
-                <span className="px-2 py-1 rounded-full border border-white/10 bg-white/[0.04] text-[11px] text-white/70">
-                    Ask about inventions
-                </span>
+                <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                        <div className="h-px w-12 bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+                        <span className="text-blue-500 text-sm font-semibold uppercase tracking-[0.2em]">
+                            Preview
+                        </span>
+                    </div>
+                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight">
+                        Try it <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-300">Now</span>
+                    </h2>
+                    <p className="text-gray-400 text-lg max-w-2xl">
+                        
+                    Preview a conversation with Nikola Tesla!
+                           
+                    </p>
                 </div>
             </div>
 
@@ -409,7 +415,8 @@ export default function LandingChat() {
                   style={{ overflow: "auto", maxHeight: "100px" }}
                 />
                 <button
-                  className={`${ui.btn} flex-shrink-0 w-10 h-10 flex items-center justify-center mb-0.5 mr-0.5 active:scale-95 transition-transform duration-150`}
+                  className={`${ui.btn} z-30 flex-shrink-0 w-10 h-10 flex items-center justify-center mb-0.5 mr-0.5 active:scale-95 transition-transform duration-150`}
+                  onClick={() => navigate("/signup")}
                   aria-label="Send"
                 >
                   <svg className="w-4 h-4 text-white/85" viewBox="0 0 20 20" fill="currentColor">
