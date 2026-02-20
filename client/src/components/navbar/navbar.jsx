@@ -104,6 +104,12 @@ function Navbar() {
                 <a href='/bots' className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200">
                   Our Figures
                 </a>
+                 <a 
+                  href="/partner" 
+                  className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                >
+                  Partner
+                </a>
                 <a href='/articles' className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200">
                   Articles
                 </a>
