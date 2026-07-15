@@ -1,8 +1,49 @@
 @import "tailwindcss";
 
-body {
+html,
+body,
+#root,
+#main-content {
+    min-height: 100%;
+    background: #f5f2ec;
+}
+
+main#main-content {
     margin: 0;
     padding: 0;
+}
+
+/* Keep the accessibility link available to keyboard users without reserving
+   visible space above the application. */
+.skip-to-main-content {
+    position: absolute;
+    top: 0;
+    left: -10000px;
+    z-index: 1000;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.skip-to-main-content:focus {
+    left: 1rem;
+    top: 1rem;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    padding: 0.65rem 0.9rem;
+    border-radius: 0.5rem;
+    background: #1c1917;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(28, 25, 23, 0.2);
+}
+
+.chat-page-shell {
+    min-height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+    background: #f5f2ec;
 }
 
 * {

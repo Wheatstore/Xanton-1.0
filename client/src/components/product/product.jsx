@@ -1,316 +1,401 @@
-import { useState, useEffect, useMemo } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Grid2x2,
+  LayoutList,
+  Search,
+  SlidersHorizontal,
+  Sparkles,
+} from "lucide-react";
 import BotCard from "./bot-card/botCard";
 import { db } from "../../firebase";
 import { collection, getDocs, query } from "firebase/firestore";
 
+const filterOptions = [
+  { value: "all", label: "All figures" },
+  { value: "science", label: "Scientists" },
+  { value: "philosophy", label: "Philosophers" },
+  { value: "leaders", label: "Leaders" },
+];
+
+const categoryKeywords = {
+  science: [
+    "scientist",
+    "inventor",
+    "mathematician",
+    "physicist",
+    "chemist",
+    "biologist",
+    "astronomer",
+  ],
+  philosophy: [
+    "philosopher",
+    "thinker",
+    "writer",
+    "theologian",
+    "scholar",
+  ],
+  leaders: [
+    "leader",
+    "president",
+    "king",
+    "queen",
+    "emperor",
+    "general",
+    "statesman",
+    "prime minister",
+    "activist",
+  ],
+};
+
 function Product({ isLanding }) {
-    const [search, setSearch] = useState("");
-    const [bots, setBots] = useState([]);
-    const [loadingBots, setLoadingBots] = useState(true);
-    const [filter, setFilter] = useState('all');
-    const [isGridView, setIsGridView] = useState(true);
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const [bots, setBots] = useState([]);
+  const [loadingBots, setLoadingBots] = useState(true);
+  const [filter, setFilter] = useState("all");
+  const [isGridView, setIsGridView] = useState(true);
 
-    useEffect(() => {
-        const getBots = async () => {
-            try {
-                const botsRef = collection(db, 'bots');
-                const q = query(botsRef);
-                const snapshot = await getDocs(q);
+  useEffect(() => {
+    const getBots = async () => {
+      try {
+        const botsRef = collection(db, "bots");
+        const q = query(botsRef);
+        const snapshot = await getDocs(q);
 
-                const botsList = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
+        const botsList = snapshot.docs.map((docItem) => ({
+          id: docItem.id,
+          ...docItem.data(),
+        }));
 
-                setBots(botsList);
-                setLoadingBots(false);
-            } catch (error) {
-                console.error("Error fetching bots: ", error);
-                setLoadingBots(false);
-            }
-        };
+        setBots(botsList);
+      } catch (error) {
+        console.error("Error fetching bots: ", error);
+      } finally {
+        setLoadingBots(false);
+      }
+    };
 
-        getBots();
-    }, []);
+    getBots();
+  }, []);
 
-    const displayedBots = isLanding ? bots.slice(0, 8) : bots;
+  const displayedBots = isLanding ? bots.slice(0, 8) : bots;
 
-    const filteredBots = useMemo(() => {
-        const s = search.trim().toLowerCase();
-        if(!s) return displayedBots;
+  const filteredBots = useMemo(() => {
+    const normalizedSearch = search.trim().toLowerCase();
 
-        return displayedBots.filter((bot) => {
-            const name = (bot.name ?? "").toLowerCase()
-            const desc = (bot.description ?? "").toLowerCase()
+    return displayedBots.filter((bot) => {
+      const searchableFields = [
+        bot.name,
+        bot.description,
+        bot.category,
+        bot.type,
+        bot.role,
+        bot.occupation,
+        bot.knownFor,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
 
-            return (
-                name.includes(s) ||
-                desc.includes(s)
-            );
+      const matchesSearch =
+        !normalizedSearch || searchableFields.includes(normalizedSearch);
 
-            //TODO Add categories later when logic is implemented into firestore
-            // const category = (bot.category ?? bot.type)
-        })
-    }, [displayedBots, search])
+      const matchesFilter =
+        filter === "all" ||
+        categoryKeywords[filter]?.some((keyword) =>
+          searchableFields.includes(keyword)
+        );
 
-    return (
-        <div className="relative min-h-screen bg-gradient-to-b from-black via-gray-950 to-black">
-            {/* Ambient background effects */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      return matchesSearch && matchesFilter;
+    });
+  }, [displayedBots, filter, search]);
+
+  const sectionStats = [
+    { label: "Figures archived", value: `${bots.length || 0}` },
+    { label: "Live conversations", value: "20K+" },
+    { label: "Curated themes", value: "Archive-led" },
+  ];
+
+  return (
+    <section className="product-archive relative overflow-hidden bg-[#f6f0e4] text-stone-900">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(221,196,153,0.35),transparent_38%),radial-gradient(circle_at_bottom_right,rgba(210,214,203,0.55),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.65),rgba(246,240,228,0.92))]" />
+        <div className="absolute left-[8%] top-16 h-48 w-48 rounded-full bg-[#e6d3b6]/35 blur-3xl" />
+        <div className="absolute bottom-10 right-[10%] h-56 w-56 rounded-full bg-[#d9ddd3]/55 blur-3xl" />
+        <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(88,74,57,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(88,74,57,0.04)_1px,transparent_1px)] [background-size:64px_64px]" />
+      </div>
+
+      <div className="relative mx-auto max-w-[1500px] px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_360px] lg:items-start">
+          <div className="rounded-[32px] border border-stone-200/80 bg-[rgba(255,252,247,0.82)] p-7 shadow-[0_30px_80px_rgba(58,44,29,0.08)] backdrop-blur-xl sm:p-9">
+            <div className="flex flex-wrap items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-stone-500">
+              <span className="inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white/80 px-3 py-1.5">
+                <Sparkles className="h-3.5 w-3.5" />
+                {isLanding ? "Featured collection" : "Historical catalog"}
+              </span>
+              <span className="h-px w-16 bg-stone-300" />
+              <span>Curated conversations</span>
             </div>
 
-            <div className="relative px-4 sm:px-6 lg:px-8 py-12">
-                {/* Header Section */}
-                <div className="max-w-7xl mx-auto mb-12">
-                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-                        {/* Title Section */}
-                        <div className="space-y-3">
-                            <div className="flex items-center gap-3">
-                                <div className="h-px w-12 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
-                                <span className="text-purple-400 text-sm font-semibold uppercase tracking-[0.2em]">
-                                    {isLanding ? 'Featured Collection' : 'Full Catalog'}
-                                </span>
-                            </div>
-                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight">
-                                {isLanding ? (
-                                    <>
-                                        Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">Legends</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-600">History</span>
-                                    </>
-                                )}
-                            </h2>
-                            <p className="text-gray-400 text-lg max-w-2xl">
-                                {isLanding 
-                                    ? 'Discover the minds that shaped our world. Start your journey through time.'
-                                    : `Browse ${bots.length} historical figures and engage in conversations that transcend time.`
-                                }
-                            </p>
-                        </div>
+            <div className="mt-6 space-y-5">
+              <h2 className="max-w-4xl font-serif text-4xl leading-[0.94] text-stone-950 sm:text-5xl lg:text-[4.25rem]">
+                {isLanding
+                  ? "Enter the archive through the people who shaped it."
+                  : "Browse the archive like a reading room, not a directory."}
+              </h2>
+              <p className="max-w-3xl text-base leading-8 text-stone-600 sm:text-lg">
+                {isLanding
+                  ? "Each figure is presented as a living dossier: portrait, context, and a direct path into conversation. The experience should feel thoughtful before the first question is even asked."
+                  : `Explore ${bots.length} historical figures through a calmer, more editorial catalog. Search by name, scan by theme, and open a conversation from a card that feels more like a collected document than a generic tile.`}
+              </p>
+            </div>
 
-                        {/* Controls - Only show in full access mode */}
-                        {!isLanding && (
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                {/* View Toggle */}
-                                <div className="flex items-center gap-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-1">
-                                    <button
-                                        onClick={() => setIsGridView(true)}
-                                        className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                                            isGridView
-                                                ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/50'
-                                                : 'text-gray-400 hover:text-white'
-                                        }`}
-                                    >
-                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" />
-                                        </svg>
-                                    </button>
-                                    <button
-                                        onClick={() => setIsGridView(false)}
-                                        className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                                            !isGridView
-                                                ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/50'
-                                                : 'text-gray-400 hover:text-white'
-                                        }`}
-                                    >
-                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M3 4h18v3H3V4zm0 7h18v3H3v-3zm0 7h18v3H3v-3z" />
-                                        </svg>
-                                    </button>
-                                </div>
+            {!isLanding && (
+              <div className="mt-8 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto]">
+                <label className="group flex items-center gap-3 rounded-[24px] border border-stone-200 bg-white/90 px-4 py-3 shadow-[0_16px_30px_rgba(58,44,29,0.05)] transition focus-within:border-stone-400">
+                  <Search className="h-4 w-4 text-stone-400 transition group-focus-within:text-stone-700" />
+                  <input
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                    placeholder="Search the archive by name, role, or theme"
+                    className="w-full bg-transparent text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none"
+                  />
+                  <span className="rounded-full border border-stone-200 bg-[#f6f0e4] px-2.5 py-1 text-[11px] font-semibold text-stone-500">
+                    {filteredBots.length}
+                  </span>
+                </label>
 
-                                {/* Filter Dropdown */}
-                                <select
-                                    value={filter}
-                                    onChange={(e) => setFilter(e.target.value)}
-                                    className="px-6 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl text-white font-medium cursor-pointer hover:bg-white/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                >
-                                    <option value="all" className="bg-gray-900">All Figures</option>
-                                    <option value="science" className="bg-gray-900">Scientists</option>
-                                    <option value="philosophy" className="bg-gray-900">Philosophers</option>
-                                    <option value="leaders" className="bg-gray-900">Leaders</option>
-                                </select>
-                            </div>
-                        )}
-                    </div>
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <div className="inline-flex items-center rounded-[22px] border border-stone-200 bg-white/85 p-1 shadow-[0_12px_24px_rgba(58,44,29,0.05)]">
+                    <button
+                      type="button"
+                      onClick={() => setIsGridView(true)}
+                      className={`inline-flex items-center gap-2 rounded-[18px] px-4 py-2.5 text-sm font-medium transition ${
+                        isGridView
+                          ? "bg-stone-950 text-white shadow-[0_10px_24px_rgba(28,25,23,0.16)]"
+                          : "text-stone-500 hover:text-stone-900"
+                      }`}
+                    >
+                      <Grid2x2 className="h-4 w-4" />
+                      Grid
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsGridView(false)}
+                      className={`inline-flex items-center gap-2 rounded-[18px] px-4 py-2.5 text-sm font-medium transition ${
+                        !isGridView
+                          ? "bg-stone-950 text-white shadow-[0_10px_24px_rgba(28,25,23,0.16)]"
+                          : "text-stone-500 hover:text-stone-900"
+                      }`}
+                    >
+                      <LayoutList className="h-4 w-4" />
+                      List
+                    </button>
+                  </div>
+
+                  <div className="relative">
+                    <SlidersHorizontal className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                    <select
+                      value={filter}
+                      onChange={(event) => setFilter(event.target.value)}
+                      className="min-w-[190px] appearance-none rounded-[22px] border border-stone-200 bg-white/90 py-3 pl-11 pr-10 text-sm font-medium text-stone-700 shadow-[0_12px_24px_rgba(58,44,29,0.05)] outline-none transition hover:border-stone-300 focus:border-stone-500"
+                    >
+                      {filterOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-                {/* Search */}
-                {!isLanding && (
-                    <div className="max-w-7xl mx-auto mb-10 px-0">
-                        <div className="relative w-full sm:w-[900px]">
-                            <input
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Search figures…"
-                            className="w-full pr-12 px-5 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl text-white placeholder:text-gray-500 font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 hover:bg-white/10"
-                            />
-                            <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-xs text-gray-400">
-                                {filteredBots.length}
-                            </div>
-                        </div>
-                    </div>
-                )}
-                {/* Loading State */}
-                {loadingBots ? (
-                    <div className="max-w-7xl mx-auto">
-                        <div className={`grid gap-6 ${
-                            isLanding 
-                                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                        }`}>
-                            {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
-                                <div
-                                    key={index}
-                                    className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-xl"
-                                    style={{
-                                        animation: `shimmer 2s ease-in-out ${index * 0.1}s infinite`
-                                    }}
-                                >
-                                    {/* Card skeleton */}
-                                    <div className="aspect-[3/4] p-6 flex flex-col justify-between">
-                                        {/* Image placeholder */}
-                                        <div className="flex-1 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl mb-4 relative overflow-hidden">
-                                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent shimmer-effect" />
-                                        </div>
-                                        
-                                        {/* Text placeholders */}
-                                        <div className="space-y-3">
-                                            <div className="h-6 bg-white/10 rounded-lg w-3/4" />
-                                            <div className="h-4 bg-white/5 rounded w-1/2" />
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ) : (
-                    <div className="max-w-7xl mx-auto">
-                        {/* Grid/List View */}
-                        <div className={`
-                            ${isGridView 
-                                ? `grid gap-6 ${
-                                    isLanding 
-                                        ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                                        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                                }`
-                                : 'flex flex-col gap-4'
-                            }
-                        `}>
-                            {filteredBots.map((bot, index) => (
-                                <div
-                                    key={bot.id}
-                                    className="transform transition-all duration-500 hover:scale-[1.02]"
-                                    style={{
-                                        animation: `fadeInUp 0.5s ease-out ${index * 0.05}s both`
-                                    }}
-                                >
-                                    <BotCard person={bot} index={index} />
-                                </div>
-                            ))}
-                        </div>
+              </div>
+            )}
+          </div>
 
-                        {/* Show More CTA for Landing Page */}
-                        {isLanding && bots.length > 8 && (
-                            <div className="mt-16 flex flex-col items-center gap-6">
-                                <div className="h-px w-32 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
-                                <div className="text-center space-y-4">
-                                    <p className="text-gray-400 text-lg">
-                                        Discover <span className="text-white font-bold">dozens of more</span> historical figures
-                                    </p>
-                                    <button className="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-white font-bold text-lg shadow-2xl shadow-purple-500/50 transition-all duration-300 hover:shadow-purple-500/70 hover:scale-105 overflow-hidden">
-                                        <span className="relative z-10 flex items-center gap-2">
-                                            Explore Full Collection
-                                            <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-                                                →
-                                            </span>
-                                        </span>
-                                        <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                    </button>
-                                </div>
-                            </div>
-                        )}
+          <aside className="rounded-[32px] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(244,238,228,0.92))] p-6 shadow-[0_25px_60px_rgba(58,44,29,0.08)]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-stone-400">
+              Archive index
+            </p>
+            <h3 className="mt-3 font-serif text-2xl text-stone-950">
+              A catalog that feels collected, not crowded.
+            </h3>
+            <p className="mt-4 text-sm leading-7 text-stone-600">
+              The new layout leans into paper textures, calmer surfaces, and
+              richer type so discovery feels more like browsing a special
+              collection.
+            </p>
 
-                        {/* Stats Bar for Full Access */}
-                        {!isLanding && (
-                            <div className="mt-16 grid grid-cols-2 md:grid-cols-3 gap-6">
-                                {[
-                                    { label: 'Total Figures', value: bots.length, icon: '👥' },
-                                    { label: 'Categories', value: '3+', icon: '📚' },
-                                    { label: 'Conversations', value: '20K+', icon: '💬' },
-                                ].map((stat, index) => (
-                                    <div
-                                        key={stat.label}
-                                        className="group p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300"
-                                        style={{
-                                            animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
-                                        }}
-                                    >
-                                        <div className="text-3xl mb-2 transition-transform duration-300">
-                                            {stat.icon}
-                                        </div>
-                                        <div className="text-2xl font-bold text-white mb-1">
-                                            {stat.value}
-                                        </div>
-                                        <div className="text-sm text-gray-400">
-                                            {stat.label}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
+            <div className="mt-6 space-y-3 border-t border-stone-200 pt-6">
+              {sectionStats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-[22px] border border-stone-200/80 bg-white/80 px-4 py-4"
+                >
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-stone-400">
+                    {stat.label}
+                  </p>
+                  <p className="mt-2 font-serif text-2xl text-stone-950">
+                    {stat.value}
+                  </p>
+                </div>
+              ))}
             </div>
-
-            <style jsx='true'>{`
-                @keyframes shimmer {
-                    0%, 100% {
-                        opacity: 0.5;
-                    }
-                    50% {
-                        opacity: 1;
-                    }
-                }
-
-                @keyframes fadeInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                .shimmer-effect {
-                    animation: shimmerSlide 2s ease-in-out infinite;
-                }
-
-                @keyframes shimmerSlide {
-                    0% {
-                        transform: translateX(-100%);
-                    }
-                    100% {
-                        transform: translateX(100%);
-                    }
-                }
-
-                @keyframes pulse {
-                    0%, 100% {
-                        opacity: 0.1;
-                    }
-                    50% {
-                        opacity: 0.2;
-                    }
-                }
-            `}</style>
+          </aside>
         </div>
-    );
+
+        <div className="mt-10">
+          {loadingBots ? (
+            <div
+              className={`grid gap-6 ${
+                isGridView
+                  ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4"
+                  : "grid-cols-1"
+              }`}
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+                <div
+                  key={item}
+                  className="overflow-hidden rounded-[30px] border border-stone-200 bg-white/80 p-4 shadow-[0_18px_40px_rgba(58,44,29,0.06)]"
+                >
+                  <div className="animate-pulse rounded-[24px] bg-[linear-gradient(180deg,#ebe1d0,#f6f0e4)]">
+                    <div className="aspect-[3/4] rounded-[24px]" />
+                  </div>
+                  <div className="mt-4 space-y-3">
+                    <div className="h-6 w-2/3 rounded-full bg-stone-200" />
+                    <div className="h-4 w-5/6 rounded-full bg-stone-100" />
+                    <div className="h-4 w-1/2 rounded-full bg-stone-100" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredBots.length > 0 ? (
+            <div
+              className={
+                isGridView
+                  ? "grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
+                  : "flex flex-col gap-5"
+              }
+            >
+              {filteredBots.map((bot, index) => (
+                <div
+                  key={bot.id}
+                  className="archive-figure-appear"
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <BotCard
+                    person={bot}
+                    index={index}
+                    isGridView={isLanding ? true : isGridView}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[32px] border border-stone-200 bg-white/85 p-10 text-center shadow-[0_20px_50px_rgba(58,44,29,0.06)]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400">
+                No match found
+              </p>
+              <h3 className="mt-3 font-serif text-3xl text-stone-950">
+                Nothing in the archive matches that search yet.
+              </h3>
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-stone-600">
+                Try a broader name, switch the theme filter, or clear the search
+                to browse the full collection again.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {isLanding && bots.length > 8 && (
+          <div className="mt-16 rounded-[32px] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(244,238,228,0.95))] p-8 text-center shadow-[0_22px_50px_rgba(58,44,29,0.08)]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-stone-400">
+              Continue reading
+            </p>
+            <h3 className="mt-3 font-serif text-3xl text-stone-950">
+              Explore the full archive of historical voices.
+            </h3>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-stone-600">
+              Move beyond the featured figures and browse the broader catalog of
+              people, eras, and conversations.
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate("/bots")}
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-stone-950 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-black"
+            >
+              Explore full collection
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        )}
+
+        {!isLanding && (
+          <div className="mt-14 grid gap-5 md:grid-cols-3">
+            {[
+              {
+                label: "Total figures",
+                value: bots.length || 0,
+                description: "A growing set of voices from across eras.",
+              },
+              {
+                label: "Conversation tone",
+                value: "Editorial",
+                description: "Calmer, more immersive surfaces for discovery.",
+              },
+              {
+                label: "Best use",
+                value: "Ask deeply",
+                description: "Open with biography, decisions, or defining moments.",
+              },
+            ].map((stat, index) => (
+              <div
+                key={stat.label}
+                className="archive-figure-appear rounded-[28px] border border-stone-200/80 bg-white/80 p-6 shadow-[0_18px_40px_rgba(58,44,29,0.06)]"
+                style={{ animationDelay: `${index * 0.08}s` }}
+              >
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-stone-400">
+                  {stat.label}
+                </p>
+                <p className="mt-3 font-serif text-3xl text-stone-950">
+                  {stat.value}
+                </p>
+                <p className="mt-3 text-sm leading-7 text-stone-600">
+                  {stat.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <style>{`
+        .product-archive {
+          font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        }
+
+        .product-archive .font-serif {
+          font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+        }
+
+        .archive-figure-appear {
+          animation: archiveFigureAppear 0.55s ease-out both;
+        }
+
+        @keyframes archiveFigureAppear {
+          from {
+            opacity: 0;
+            transform: translateY(18px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </section>
+  );
 }
 
 export default Product;

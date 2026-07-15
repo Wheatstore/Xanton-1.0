@@ -1,30 +1,21 @@
-import React from "react";
 import { Helmet } from "react-helmet";
-import HeroSection from "../../components/landing/hero/hero";
 import NavbarHome from "../../components/navbar/navbar";
-import Footer from "../../components/landing/footer/footer";
+import MuseumLanding from "../../components/landing/museum/MuseumLanding";
 import "./landing.css";
 import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Product from "../../components/product/product";
-import LandingChat from "../../components/landing/Chatbox/LandingChat";
 
 function LandingPage() {
-  const [user, loading] = useAuthState(auth);
+  const [, loading] = useAuthState(auth);
   if (loading) return null;
-
-  const SITE_NAME = "Echoes of History AI";
-  const BASE_URL = "https://echoesofhistoryai.org";
-  const OG_IMAGE = `${BASE_URL}/og-image.jpg`;
-  const LOGO_URL = `${BASE_URL}/logo.png`;
 
   return (
     <>
         <Helmet>
-          <title>Echoes of History AI: Chat with Historical Figures</title>
+          <title>Echoes of History — Conversations with the Past</title>
           <meta
             name="description"
-            content="Experience history through conversation. Chat with AI-powered historical figures and learn through interactive dialogue."
+            content="Enter a living digital museum of historical figures, ideas, and conversations. Discover the people behind the dates and ask the past a deeper question."
           />
           <meta name="robots" content="index, follow" />
 
@@ -34,10 +25,10 @@ function LandingPage() {
           {/* OG should match canonical exactly */}
           <meta property="og:type" content="website" />
           <meta property="og:url" content="https://echoesofhistoryai.org/" />
-          <meta property="og:title" content="Echoes of History AI: Chat with Historical Figures" />
+          <meta property="og:title" content="Echoes of History — Conversations with the Past" />
           <meta
             property="og:description"
-            content="Chat with historical figures from the past and learn history through interactive conversation."
+            content="Enter a living digital museum and discover history through immersive conversation."
           />
           <meta property="og:image" content="https://echoesofhistoryai.org/images/og-image.jpg" />
 
@@ -47,10 +38,7 @@ function LandingPage() {
 
       <div className="landing-page-container">
         <NavbarHome />
-        <HeroSection />
-        <LandingChat />
-        <Product isLanding={true} />
-        <Footer />
+        <MuseumLanding />
       </div>
     </>
   );

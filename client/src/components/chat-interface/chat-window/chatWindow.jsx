@@ -1,237 +1,194 @@
-import { useState, useEffect, useRef } from "react";
-import { auth, db } from "../../../firebase";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import {
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
   addDoc,
-  updateDoc,
+  collection,
   doc,
-  serverTimestamp,
-  where,
   getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  updateDoc,
+  where,
 } from "firebase/firestore";
+import { auth, db } from "../../../firebase";
 import Sidebar from "../sidebar/sidebar";
-import CharacterAvatar from "../../avatar/CharacterAvatar";
+
+const starterPrompts = [
+  "Describe the world you grew up in",
+  "What decision changed your life?",
+  "What do history books misunderstand?",
+  "Who influenced you the most?",
+];
+
+const followUpPrompts = [
+  "Tell me more",
+  "How did that feel?",
+  "What happened next?",
+];
+
+const firstDetail = (details, keys) =>
+  keys.map((key) => details?.[key]).find((value) => value !== undefined && value !== null && value !== "") || "";
+
+const normalizeNotes = (value) => {
+  if (!value) return [];
+  const entries = Array.isArray(value) ? value : [value];
+
+  return entries
+    .map((entry) => {
+      if (typeof entry === "string") return { text: entry };
+      if (!entry || typeof entry !== "object") return null;
+      return {
+        label: entry.label || entry.title || entry.year || entry.date || "",
+        text: entry.text || entry.description || entry.fact || entry.event || entry.value || "",
+      };
+    })
+    .filter((entry) => entry?.text);
+};
+
+function MenuIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5" aria-hidden="true">
+      <path strokeLinecap="round" strokeWidth="1.8" d="M4 7h16M4 12h16M4 17h10" />
+    </svg>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m6 12 6-6 6 6M12 18V6" />
+    </svg>
+  );
+}
+
+function LogoMark() {
+  return <img src="/images/logoTransparent.png" alt="Echoes of History" className="h-full w-full object-contain brightness-0" />;
+}
 
 function ChatWindow() {
   const params = useParams();
+  const [user, authLoading] = useAuthState(auth);
   const [input, setInput] = useState("");
-  const [user, loading] = useAuthState(auth);
   const [messages, setMessages] = useState([]);
-  const [display, setDisplay] = useState("");
-  const [welcomeMessage, setWelcomeMessage] = useState("");
-  const [botProfilePicture, setBotProfilePicture] = useState("");
   const [botName, setBotName] = useState("");
-  const [loadingMessages, setLoadingMessages] = useState(true);
-  const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [botDetails, setBotDetails] = useState({});
+  const [botProfilePicture, setBotProfilePicture] = useState("");
+  const [welcomeMessage, setWelcomeMessage] = useState("");
   const [currentBotMessage, setCurrentBotMessage] = useState("");
+  const [loadingMessages, setLoadingMessages] = useState(true);
   const [sendingMessage, setSendingMessage] = useState(false);
-
-  // Avatar animation states
+  const [sendError, setSendError] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [mouthOpenness, setMouthOpenness] = useState(0);
-  const [blinking, setBlinking] = useState(false);
-  const animationRef = useRef(null);
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
 
-  const messageWrapperRef = useRef(null);
-  const messageInputContainerRef = useRef(null);
   const textareaRef = useRef(null);
-  const formRef = useRef(null);
   const endOfMessagesRef = useRef(null);
-  const lastMessageIdRef = useRef(null);
+  const speakingTimerRef = useRef(null);
 
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
-
-  // Handle blinking animation
   useEffect(() => {
-    const blinkInterval = setInterval(() => {
-      setBlinking(true);
-      setTimeout(() => setBlinking(false), 200);
-    }, 4000 + Math.random() * 3000);
+    if (authLoading) return undefined;
 
-    return () => clearInterval(blinkInterval);
-  }, []);
+    let active = true;
 
-  // Animate mouth when bot is speaking
-  useEffect(() => {
-    let animationId;
+    const loadBot = async () => {
+      try {
+        const botQuery = query(collection(db, "bots"), where("id", "==", params.id));
+        const snapshot = await getDocs(botQuery);
+        if (!active || snapshot.empty) return;
 
-    if (isSpeaking) {
-      const animateMouth = () => {
-        const time = Date.now() / 100;
-        const primaryWave = Math.sin(time) * 0.5 + 0.5;
-        const secondaryWave = Math.sin(time * 1.5) * 0.3;
-        let openness = primaryWave + secondaryWave;
-        openness = Math.max(0, Math.min(1, openness));
-
-        if (Math.random() < 0.03) {
-          openness = 0.9 + Math.random() * 0.1;
-        }
-
-        if (Math.random() < 0.05) {
-          openness = 0.1 * Math.random();
-        }
-
-        setMouthOpenness(openness);
-        animationId = requestAnimationFrame(animateMouth);
-      };
-
-      animationId = requestAnimationFrame(animateMouth);
-    } else {
-      setMouthOpenness(0);
-    }
-
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
+        const bot = snapshot.docs[0].data();
+        setBotDetails(bot);
+        setBotName(bot.name || "Historical figure");
+        setBotProfilePicture(bot.img || "");
+        setWelcomeMessage(bot.welcomeMessage || "");
+        setCurrentBotMessage((current) => current || bot.welcomeMessage || "");
+      } catch (error) {
+        console.error("Error fetching bot data:", error);
       }
     };
-  }, [isSpeaking]);
 
-  const onSuggestedClick = (message) => {
-    setDisplay(message);
-    setInput(message);
-    if (textareaRef.current) {
-      adjustTextareaHeight(textareaRef.current);
-    }
-  };
-
-  const getBotById = async () => {
-    try {
-      const q = query(collection(db, "bots"), where("id", "==", params.id));
-      const querySnapshot = await getDocs(q);
-
-      if (!loading && querySnapshot.docs.length > 0) {
-        const docSnap = querySnapshot.docs[0];
-        const data = docSnap.data();
-        setWelcomeMessage(data.welcomeMessage);
-        setBotName(data.name);
-        setBotProfilePicture(data.img);
-
-        if (!currentBotMessage) {
-          setCurrentBotMessage(data.welcomeMessage);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching bot data: ", error);
-    }
-  };
-
-  const animateBotResponse = (text) => {
-    if (!text) return;
-
-    setIsSpeaking(true);
-    const speakingDuration = Math.min(text.length * 50, 10000);
-
-    clearTimeout(animationRef.current);
-    animationRef.current = setTimeout(() => {
-      setIsSpeaking(false);
-    }, speakingDuration);
-  };
-
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (input.trim() !== "" && !sendingMessage) {
-      setSendingMessage(true);
-      const messageText = input.trim();
-
-      setDisplay("");
-      setInput("");
-      adjustTextareaHeight(textareaRef.current);
-
-      // Mobile: collapse keyboard after send
-      textareaRef.current?.blur();
-
-      try {
-        const messagesRef = collection(
-          db,
-          "users",
-          user.uid,
-          "characters",
-          params.id,
-          "messages"
-        );
-
-        const docRef = await addDoc(messagesRef, {
-          message: messageText,
-          reply: null,
-          sender: "user",
-          timestamp: serverTimestamp(),
-          pendingReply: true,
-        });
-
-        lastMessageIdRef.current = docRef.id;
-
-        const response = await axios.post(
-          `https://historia-backend-ycj7.onrender.com/api/chat/${user.uid}/${params.id}/${params.name}`,
-          { message: messageText, messageId: docRef.id }
-        );
-
-        if (response && response.data && response.data.reply) {
-          await updateDoc(
-            doc(
-              db,
-              "users",
-              user.uid,
-              "characters",
-              params.id,
-              "messages",
-              docRef.id
-            ),
-            {
-              reply: response.data.reply,
-              pendingReply: false,
-            }
-          );
-
-          setCurrentBotMessage(response.data.reply);
-          animateBotResponse(response.data.reply);
-        }
-      } catch (error) {
-        console.error("Error sending message:", error);
-      } finally {
-        setSendingMessage(false);
-      }
-    }
-  };
-
-  const handleInputChange = (e) => {
-    setDisplay(e.target.value);
-    setInput(e.target.value);
-    adjustTextareaHeight(e.target);
-  };
-
-  const adjustTextareaHeight = (textarea) => {
-    if (!textarea) return;
-
-    textarea.style.height = "auto";
-    const scrollHeight = textarea.scrollHeight;
-    const maxHeight = 90;
-
-    const newTextareaHeight = Math.min(scrollHeight, maxHeight);
-    textarea.style.height = `${newTextareaHeight}px`;
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      formRef.current.dispatchEvent(
-        new Event("submit", { cancelable: true, bubbles: true })
-      );
-    }
-  };
+    loadBot();
+    return () => {
+      active = false;
+    };
+  }, [authLoading, params.id]);
 
   useEffect(() => {
-    if (!loading && user) {
-      getBotById();
+    if (authLoading || !user) return undefined;
 
+    const messagesRef = collection(
+      db,
+      "users",
+      user.uid,
+      "characters",
+      params.id,
+      "messages"
+    );
+    const messagesQuery = query(messagesRef, orderBy("timestamp", "asc"));
+
+    return onSnapshot(messagesQuery, (snapshot) => {
+      const nextMessages = snapshot.docs.map((messageDoc) => ({
+        id: messageDoc.id,
+        ...messageDoc.data(),
+      }));
+
+      setMessages(nextMessages);
+      setLoadingMessages(false);
+
+      const latestReply = [...nextMessages].reverse().find((message) => message.reply)?.reply;
+      if (latestReply) setCurrentBotMessage(latestReply);
+    });
+  }, [authLoading, params.id, user]);
+
+  useEffect(() => {
+    endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, sendingMessage]);
+
+  useEffect(
+    () => () => {
+      clearTimeout(speakingTimerRef.current);
+    },
+    []
+  );
+
+  const resizeTextarea = (textarea) => {
+    if (!textarea) return;
+    textarea.style.height = "auto";
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
+  };
+
+  const fillPrompt = (prompt) => {
+    setInput(prompt);
+    requestAnimationFrame(() => {
+      textareaRef.current?.focus();
+      resizeTextarea(textareaRef.current);
+    });
+  };
+
+  const animateResponse = (reply) => {
+    setIsSpeaking(true);
+    clearTimeout(speakingTimerRef.current);
+    speakingTimerRef.current = setTimeout(
+      () => setIsSpeaking(false),
+      Math.min(reply.length * 45, 9000)
+    );
+  };
+
+  const handleSendMessage = async (event) => {
+    event.preventDefault();
+    const messageText = input.trim();
+    if (!messageText || sendingMessage || !user) return;
+
+    setSendingMessage(true);
+    setSendError("");
+    setInput("");
+    resizeTextarea(textareaRef.current);
+
+    try {
       const messagesRef = collection(
         db,
         "users",
@@ -240,771 +197,380 @@ function ChatWindow() {
         params.id,
         "messages"
       );
-      const q = query(messagesRef, orderBy("timestamp", "asc"));
-
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const messagesData = snapshot.docs.map((d) => ({
-          id: d.id,
-          ...d.data(),
-        }));
-
-        setMessages(messagesData);
-        setLoadingMessages(false);
-
-        if (messagesData.length > 0) {
-          const messagesWithReplies = messagesData
-            .filter((msg) => msg.reply)
-            .sort((a, b) => {
-              const getTime = (timestamp) => {
-                if (timestamp && timestamp.seconds) {
-                  return timestamp.seconds * 1000;
-                }
-                if (timestamp instanceof Date) {
-                  return timestamp.getTime();
-                }
-                return 0;
-              };
-
-              return getTime(b.timestamp) - getTime(a.timestamp);
-            });
-
-          if (messagesWithReplies.length > 0) {
-            const latestReply = messagesWithReplies[0].reply;
-            setCurrentBotMessage(latestReply);
-          }
-        }
-
-        scrollToEnd();
+      const messageDoc = await addDoc(messagesRef, {
+        message: messageText,
+        reply: null,
+        sender: "user",
+        timestamp: serverTimestamp(),
+        pendingReply: true,
       });
 
-      return () => unsubscribe();
-    }
-  }, [loading, user, params.id]);
+      const response = await axios.post(
+        `https://historia-backend-ycj7.onrender.com/api/chat/${user.uid}/${params.id}/${params.name}`,
+        { message: messageText, messageId: messageDoc.id }
+      );
 
-  const scrollToEnd = () => {
-    setTimeout(() => {
-      endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+      if (response?.data?.reply) {
+        await updateDoc(
+          doc(db, "users", user.uid, "characters", params.id, "messages", messageDoc.id),
+          { reply: response.data.reply, pendingReply: false }
+        );
+        setCurrentBotMessage(response.data.reply);
+        animateResponse(response.data.reply);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setSendError("The archive could not reach this character. Please try again.");
+    } finally {
+      setSendingMessage(false);
+    }
   };
 
-  useEffect(() => {
-    scrollToEnd();
-  }, [messages]);
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      event.currentTarget.form?.requestSubmit();
+    }
+  };
 
-  if (loading) {
+  if (authLoading) {
     return (
-      <div className="flex items-center justify-center h-[100dvh] bg-black">
-        <div className="relative">
-          <div className="w-16 h-16 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin"></div>
-          <div className="absolute inset-0 w-16 h-16 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin-reverse"></div>
-        </div>
+      <div className="grid h-[100dvh] place-items-center bg-[#f5f2ec]">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-stone-200 border-t-stone-900" />
       </div>
     );
   }
 
-  return (
-    <div className="flex flex-col h-[100dvh] bg-black text-gray-200 relative overflow-hidden overscroll-none">
-      {/* Enhanced animated background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Gradient orbs */}
-        <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-to-br from-purple-600/15 via-purple-500/10 to-transparent rounded-full blur-[120px] animate-float-slow" />
-        <div className="absolute bottom-0 right-1/4 w-[900px] h-[900px] bg-gradient-to-tl from-blue-600/15 via-blue-500/10 to-transparent rounded-full blur-[140px] animate-float-slower" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-violet-600/10 via-fuchsia-600/10 to-blue-600/10 rounded-full blur-[100px] animate-pulse-gentle" />
+  const hasConversation = messages.length > 0;
+  const biography = firstDetail(botDetails, ["description", "biography", "bio", "about"]);
+  const detailRows = [
+    { label: "Born", value: firstDetail(botDetails, ["born", "birthDate", "dateOfBirth"]) },
+    { label: "Died", value: firstDetail(botDetails, ["died", "deathDate", "dateOfDeath"]) },
+    { label: "Known for", value: firstDetail(botDetails, ["role", "occupation", "knownFor", "title"]) },
+    { label: "Place", value: firstDetail(botDetails, ["location", "birthPlace", "country"]) },
+    { label: "Era", value: firstDetail(botDetails, ["era", "period", "century"]) },
+  ].filter((detail) => detail.value);
+  const archiveFacts = normalizeNotes(firstDetail(botDetails, ["facts", "keyFacts", "funFacts", "extraFacts"]));
+  const keyMoments = normalizeNotes(firstDetail(botDetails, ["timeline", "keyMoments", "milestones"]));
 
-        {/* Animated grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
+  const factsPanel = (
+    <div className="space-y-4">
+      <section className="rounded-[22px] border border-stone-200 bg-white p-5 shadow-sm">
+        <p className="mb-4 font-serif text-lg font-semibold text-stone-900">About {botName || "this figure"}</p>
+        {biography ? (
+          <p className="text-sm leading-6 text-stone-600">{biography}</p>
+        ) : (
+          <p className="text-sm leading-6 text-stone-500">{welcomeMessage || "Background information is being prepared for this archive."}</p>
+        )}
 
-        {/* Floating particles */}
-        <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-purple-400/40 rounded-full animate-float-particle-1" />
-        <div className="absolute top-3/4 left-2/3 w-1.5 h-1.5 bg-blue-400/40 rounded-full animate-float-particle-2" />
-        <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-violet-400/40 rounded-full animate-float-particle-3" />
-        <div className="absolute bottom-1/4 left-1/2 w-1 h-1 bg-fuchsia-400/40 rounded-full animate-float-particle-4" />
-      </div>
-
-      {/* Mobile sidebar open button */}
-        <button
-        onClick={toggleSidebar}
-        className="
-            fixed top-4 left-4 z-30 lg:hidden
-            p-3 rounded-2xl
-            bg-gray-900/70 backdrop-blur-xl
-            border border-purple-500/30
-            text-gray-200 hover:text-white
-            shadow-lg shadow-purple-500/20
-            active:scale-95 transition
-        "
-        style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top))" }}
-        aria-label="Open sidebar"
-        >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M3 5h14a1 1 0 010 2H3a1 1 0 010-2zm0 6h14a1 1 0 010 2H3a1 1 0 010-2zm0 6h14a1 1 0 010 2H3a1 1 0 010-2z" clipRule="evenodd" />
-        </svg>
-        </button>
-
-
-      {/* Main content area (mobile-first) */}
-      <div className="relative z-10 flex-none px-4 pt-4 lg:px-8 lg:pt-8">
-        <div className="mx-auto flex max-w-5xl flex-col lg:flex-row lg:items-center lg:justify-center gap-4 lg:gap-8">
-          {/* Avatar section */}
-          <div className="relative w-40 h-40 sm:w-48 sm:h-48 lg:w-80 lg:h-80 flex-shrink-0 mx-auto lg:mx-0">
-            {/* Outer glow rings */}
-            <div className="absolute inset-0 -m-8">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-blue-600/20 to-violet-600/20 rounded-full blur-3xl animate-pulse-gentle" />
-            </div>
-
-            {/* Rotating ring */}
-            <div className="absolute inset-0 -m-3">
-              <div
-                className="w-full h-full border-2 border-transparent bg-gradient-to-r from-purple-500/30 via-blue-500/30 to-violet-500/30 rounded-full animate-spin-very-slow bg-clip-padding"
-                style={{
-                  WebkitMaskImage:
-                    "linear-gradient(transparent 0%, black 25%, black 75%, transparent 100%)",
-                  maskImage:
-                    "linear-gradient(transparent 0%, black 25%, black 75%, transparent 100%)",
-                }}
-              />
-            </div>
-
-            {/* Counter-rotating ring */}
-            <div className="absolute inset-0 -m-4">
-              <div className="w-full h-full border border-purple-500/20 rounded-full animate-spin-reverse-slow" />
-            </div>
-
-            {/* Avatar container */}
-            <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-purple-500/20 shadow-2xl shadow-purple-500/30 group">
-              <img
-                src={botProfilePicture}
-                alt={botName}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-purple-900/30" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-purple-600/10 via-transparent to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              {isSpeaking && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
-                  <div className="w-1.5 h-8 bg-gradient-to-t from-purple-500 to-blue-500 rounded-full animate-sound-wave" />
-                  <div
-                    className="w-1.5 h-10 bg-gradient-to-t from-purple-500 to-blue-500 rounded-full animate-sound-wave"
-                    style={{ animationDelay: "0.1s" }}
-                  />
-                  <div
-                    className="w-1.5 h-6 bg-gradient-to-t from-purple-500 to-blue-500 rounded-full animate-sound-wave"
-                    style={{ animationDelay: "0.2s" }}
-                  />
-                  <div
-                    className="w-1.5 h-9 bg-gradient-to-t from-purple-500 to-blue-500 rounded-full animate-sound-wave"
-                    style={{ animationDelay: "0.3s" }}
-                  />
-                  <div
-                    className="w-1.5 h-7 bg-gradient-to-t from-purple-500 to-blue-500 rounded-full animate-sound-wave"
-                    style={{ animationDelay: "0.4s" }}
-                  />
-                </div>
-              )}
-            </div>
-
-            <div className="absolute -top-2 -right-2 w-4 h-4 bg-purple-500 rounded-full animate-bounce-slow shadow-lg shadow-purple-500/50" />
-            <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-blue-500 rounded-full animate-bounce-slower shadow-lg shadow-blue-500/50" />
-          </div>
-
-          {/* Message display */}
-          <div className="w-full lg:flex-1 max-w-3xl mx-auto lg:mx-0">
-            <div className="relative bg-gradient-to-br from-gray-900/40 via-gray-800/30 to-gray-900/40 backdrop-blur-2xl rounded-3xl p-5 sm:p-6 lg:p-8 shadow-2xl border border-purple-500/20 overflow-hidden group hover:border-purple-500/30 transition-all duration-500">
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-              <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-purple-500/10 to-transparent rounded-br-full" />
-              <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-blue-500/10 to-transparent rounded-tl-full" />
-
-              <div className="flex items-center gap-3 mb-4 sm:mb-6">
-                <div className="relative">
-                  <div className="w-3 h-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full animate-pulse-gentle" />
-                  <div className="absolute inset-0 w-3 h-3 bg-purple-500 rounded-full animate-ping" />
-                </div>
-                <h2 className="font-semibold text-lg sm:text-xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-violet-400 to-blue-400">
-                  {botName || "Historical Figure"}
-                </h2>
-                <div className="ml-auto flex gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500/40" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500/40" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-violet-500/40" />
-                </div>
+        {detailRows.length > 0 && (
+          <dl className="mt-5 divide-y divide-stone-100 border-t border-stone-100">
+            {detailRows.map((detail) => (
+              <div key={detail.label} className="grid grid-cols-[74px_1fr] gap-3 py-3 text-xs leading-5">
+                <dt className="font-semibold text-stone-400">{detail.label}</dt>
+                <dd className="text-stone-700">{String(detail.value)}</dd>
               </div>
+            ))}
+          </dl>
+        )}
+      </section>
 
-              <div className="relative bg-black/30 backdrop-blur-sm rounded-2xl p-4 sm:p-5 lg:p-6 max-h-[28vh] sm:max-h-[24vh] lg:max-h-64 overflow-y-auto custom-scrollbar border border-purple-500/10">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 rounded-2xl pointer-events-none" />
-
-                {currentBotMessage ? (
-                  <p className="text-gray-200 leading-relaxed text-base sm:text-lg relative z-10">
-                    {currentBotMessage}
-                  </p>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-8 text-gray-500">
-                    <svg
-                      className="w-12 h-12 mb-3 opacity-40"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                      />
-                    </svg>
-                    <p className="italic">Awaiting your first message...</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
-            </div>
-          </div>
+      <section className="rounded-[22px] border border-stone-200 bg-[#f2eee6] p-5">
+        <div className="mb-4 flex items-center justify-between">
+          <p className="font-serif text-base font-semibold text-stone-900">Archive notes</p>
+          <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-stone-400">Context</span>
         </div>
-      </div>
-
-      {/* Message history (main scroll region) */}
-      <div className="relative z-10 flex-1 overflow-y-auto px-4 lg:px-8 pb-4 pt-3">
-        <div className="max-w-5xl mx-auto space-y-4" ref={messageWrapperRef}>
-          {messages.map((message, index) => (
-            <div
-              key={message.id}
-              className={`flex ${
-                message.sender === "user" ? "justify-end" : "justify-start"
-              } animate-slide-up`}
-              style={{ animationDelay: `${index * 0.05}s` }}
-            >
-              <div
-                className={`max-w-[88%] sm:max-w-[78%] lg:max-w-[75%] rounded-2xl p-4 backdrop-blur-xl relative group ${
-                  message.sender === "user"
-                    ? "bg-gradient-to-br from-purple-600/90 via-purple-500/80 to-blue-600/90 text-white shadow-xl shadow-purple-500/30 border border-purple-400/20"
-                    : "bg-gray-900/60 text-gray-200 border border-gray-700/40 shadow-lg"
-                }`}
-              >
-                <div
-                  className={`absolute top-0 left-0 w-1 h-full rounded-l-2xl ${
-                    message.sender === "user"
-                      ? "bg-gradient-to-b from-white/40 to-transparent"
-                      : "bg-gradient-to-b from-purple-500/40 to-transparent"
-                  }`}
-                />
-
-                <p className="leading-relaxed relative z-10">
-                  {message.sender === "user" ? message.message : message.reply}
-                </p>
-
-                {message.pendingReply && (
-                  <div className="flex gap-2 mt-4 justify-center">
-                    <div className="w-2.5 h-2.5 bg-purple-400 rounded-full animate-bounce-delay-0" />
-                    <div className="w-2.5 h-2.5 bg-purple-400 rounded-full animate-bounce-delay-1" />
-                    <div className="w-2.5 h-2.5 bg-purple-400 rounded-full animate-bounce-delay-2" />
-                  </div>
-                )}
-
-                <div
-                  className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
-                    message.sender === "user"
-                      ? "bg-gradient-to-br from-white/10 to-transparent"
-                      : "bg-gradient-to-br from-purple-500/10 to-transparent"
-                  }`}
-                />
+        <div className="space-y-4">
+          {(archiveFacts.length > 0 ? archiveFacts : [{ text: welcomeMessage || currentBotMessage || "Ask a question to begin building context around this conversation." }]).slice(0, 4).map((fact, index) => (
+            <div key={`${fact.label || "fact"}-${index}`} className="flex gap-3">
+              <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-stone-900" />
+              <div>
+                {fact.label && <p className="mb-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-stone-400">{fact.label}</p>}
+                <p className="text-xs leading-5 text-stone-600">{fact.text}</p>
               </div>
             </div>
           ))}
-          <div ref={endOfMessagesRef} />
         </div>
-      </div>
+      </section>
 
-      {/* Input section (safe-area + mobile friendly) */}
-      <div
-        className="relative z-20 border-t border-purple-500/20 bg-black/70 backdrop-blur-2xl px-4 lg:px-8 pt-4 pb-4"
-        style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom))" }}
-      >
-        <div className="max-w-5xl mx-auto">
-          {/* Suggested prompts: horizontal scroll on mobile */}
-          <div className="mb-4 flex gap-3 overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch] sm:flex-wrap sm:overflow-visible">
-            {[
-              { text: "Where were you born", icon: "📍" },
-              { text: "Who were your siblings", icon: "👥" },
-              { text: "What was your best moment in life", icon: "✨" },
-              { text: "What are you famous for", icon: "🏆" },
-            ].map((prompt, i) => (
-              <button
-                key={i}
-                onClick={() => onSuggestedClick(prompt.text)}
-                className="group flex-shrink-0 px-5 py-2.5 text-sm bg-gradient-to-br from-gray-900/60 to-gray-800/60 hover:from-purple-900/50 hover:to-blue-900/50 rounded-full text-gray-400 hover:text-white transition-all duration-300 border border-purple-500/20 hover:border-purple-500/50 backdrop-blur-sm hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20 flex items-center gap-2"
-              >
-                <span className="group-hover:scale-110 transition-transform duration-300">
-                  {prompt.icon}
-                </span>
-                <span>{prompt.text}</span>
-              </button>
+      {keyMoments.length > 0 && (
+        <section className="rounded-[22px] border border-stone-200 bg-white p-5 shadow-sm">
+          <p className="mb-4 font-serif text-base font-semibold text-stone-900">Key moments</p>
+          <div className="relative space-y-4 before:absolute before:bottom-2 before:left-[3px] before:top-2 before:w-px before:bg-stone-200">
+            {keyMoments.slice(0, 5).map((moment, index) => (
+              <div key={`${moment.label || "moment"}-${index}`} className="relative grid grid-cols-[10px_48px_1fr] gap-2 text-xs leading-5">
+                <span className="relative z-10 mt-1.5 h-2 w-2 rounded-full bg-stone-900 ring-4 ring-white" />
+                <span className="font-semibold text-stone-400">{moment.label}</span>
+                <span className="text-stone-700">{moment.text}</span>
+              </div>
             ))}
           </div>
+        </section>
+      )}
+    </div>
+  );
 
-          {/* Input form */}
-          <div className="relative" ref={messageInputContainerRef}>
-            <form ref={formRef} onSubmit={handleSendMessage} className="relative">
-              <div className="relative rounded-3xl bg-gradient-to-br from-gray-900/80 via-gray-800/70 to-gray-900/80 backdrop-blur-2xl border-2 border-purple-500/20 focus-within:border-purple-500/50 focus-within:shadow-lg focus-within:shadow-purple-500/20 transition-all duration-300 overflow-hidden group">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/60 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/5 via-blue-600/5 to-violet-600/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
+  return (
+    <div className="archive-interface relative flex h-[100dvh] flex-col overflow-hidden bg-[#f5f2ec] text-[#282522]">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-50"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 12% 18%, rgba(226,217,202,.55), transparent 28%), radial-gradient(circle at 88% 78%, rgba(28,25,23,.055), transparent 30%)",
+        }}
+      />
 
+      <div className="relative z-10 flex min-h-0 flex-1">
+        <aside className="hidden w-[260px] flex-none border-r border-stone-200 bg-[#f1ede5] lg:block">
+          <Sidebar
+            activeCharacter={{ name: botName, image: botProfilePicture, description: biography }}
+          />
+        </aside>
+
+        <div className="flex min-w-0 flex-1 flex-col">
+
+      <header className="relative z-20 flex h-16 flex-none items-center border-b border-stone-200/80 bg-white/80 px-4 backdrop-blur-xl sm:px-6 lg:h-[72px] lg:px-8">
+        <div className="absolute bottom-0 left-0 h-px bg-stone-900 transition-all duration-700" style={{ width: `${Math.min(16 + messages.length * 8, 72)}%` }} />
+        <button
+          type="button"
+          onClick={() => setSidebarVisible(true)}
+          className="grid h-10 w-10 place-items-center rounded-full border border-stone-200 bg-white text-stone-600 shadow-sm transition hover:border-stone-900 hover:text-stone-950 lg:hidden"
+          aria-label="Open navigation"
+        >
+          <MenuIcon />
+        </button>
+
+        <div className="ml-4 flex min-w-0 items-center gap-3 lg:ml-0">
+          <div className="hidden h-8 w-px bg-stone-200 sm:block" />
+          <div className="min-w-0">
+            <p className="text-[9px] font-bold uppercase tracking-[0.24em] text-stone-950">Historia archive</p>
+            <p className="truncate font-serif text-base font-semibold text-stone-800 sm:text-lg">Conversation with {botName || "history"}</p>
+          </div>
+        </div>
+
+        <div className="ml-auto flex items-center gap-2 rounded-full border border-stone-200 bg-[#faf8f4] px-3 py-1.5 text-[11px] font-medium text-stone-500">
+          <span className={`h-1.5 w-1.5 rounded-full ${sendingMessage ? "animate-pulse bg-stone-400" : "bg-stone-950"}`} />
+          <span className="hidden sm:inline">{sendingMessage ? "Composing" : "Present"}</span>
+        </div>
+      </header>
+
+      <main className="relative z-10 mx-auto flex min-h-0 w-full max-w-[1600px] flex-1 gap-4 p-3 sm:p-4 lg:p-5">
+        <aside className="hidden w-[270px] flex-none flex-col overflow-hidden rounded-[28px] border border-stone-200 bg-white shadow-[0_20px_60px_rgba(70,55,40,0.08)] lg:flex 2xl:w-[310px]">
+          <div className="relative min-h-0 flex-1 overflow-hidden bg-stone-200">
+            {botProfilePicture ? (
+              <img src={botProfilePicture} alt={botName} className={`h-full w-full object-cover transition duration-700 ${isSpeaking ? "scale-[1.025]" : "scale-100"}`} />
+            ) : (
+              <div className="grid h-full place-items-center bg-[#eee8df] p-24"><LogoMark /></div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent" />
+            <div className="absolute right-5 top-5 h-12 w-12 rounded-full bg-white/80 p-2 opacity-80 shadow-sm backdrop-blur-md">
+              <LogoMark />
+            </div>
+            <div className="absolute left-5 top-5 rounded-full border border-white/40 bg-white/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 backdrop-blur-md">
+              Historical dossier
+            </div>
+            <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+              <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.24em] text-white/60">Now speaking with</p>
+              <h1 className="font-serif text-4xl font-medium leading-none">{botName || "Historical figure"}</h1>
+            </div>
+          </div>
+
+          <div className="flex-none p-6">
+            <div className="mb-5 flex items-center justify-between">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400">Latest dispatch</span>
+              <span className="rounded-full bg-stone-100 px-2.5 py-1 text-[10px] font-semibold text-stone-700">Archive open</span>
+            </div>
+            <p className="line-clamp-5 font-serif text-lg leading-relaxed text-stone-700">
+              {currentBotMessage || welcomeMessage || "Begin the conversation to hear this figure's perspective."}
+            </p>
+          </div>
+        </aside>
+
+        <section className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-[24px] border border-stone-200/90 bg-white/90 shadow-[0_20px_70px_rgba(70,55,40,0.08)] sm:rounded-[30px]">
+          <div className="flex flex-none items-center gap-4 border-b border-stone-100 px-4 py-4 sm:px-6">
+            <div className="relative h-12 w-12 flex-none overflow-hidden rounded-2xl bg-stone-100 lg:hidden">
+              {botProfilePicture && <img src={botProfilePicture} alt="" className="h-full w-full object-cover" />}
+            </div>
+            <div>
+              <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] text-stone-400">Folio 01 · oral history</p>
+              <p className="font-serif text-lg font-semibold text-stone-800">The conversation</p>
+              <p className="text-xs text-stone-400">Ask naturally. Follow a memory, decision, or moment in time.</p>
+            </div>
+            <div className="ml-auto hidden items-center gap-1.5 sm:flex" aria-hidden="true">
+              <span className="h-1.5 w-1.5 rounded-full bg-stone-900" />
+              <span className="h-1.5 w-1.5 rounded-full bg-stone-300" />
+              <span className="h-1.5 w-1.5 rounded-full bg-stone-200" />
+            </div>
+            <span className="ml-2 hidden rounded-lg bg-[#f2eee6] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-stone-500 sm:block">
+              Live transcript
+            </span>
+          </div>
+
+          <details className="group flex-none border-b border-stone-100 bg-white 2xl:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-3 text-xs font-semibold text-stone-700">
+              <span>Facts &amp; information about {botName || "this figure"}</span>
+              <span className="text-lg font-light transition group-open:rotate-45">+</span>
+            </summary>
+            <div className="custom-scrollbar max-h-[42vh] overflow-y-auto bg-[#f8f5ef] p-4">
+              {factsPanel}
+            </div>
+          </details>
+
+          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto bg-[#fcfbf8] px-4 py-6 sm:px-8">
+            {!hasConversation && !loadingMessages ? (
+              <div className="mx-auto flex h-full max-w-2xl flex-col items-center justify-center py-8 text-center">
+                <div className="mb-6 grid h-16 w-16 place-items-center rounded-[22px] border border-stone-300 bg-white p-3 shadow-sm"><LogoMark /></div>
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.25em] text-stone-950">An audience across time</p>
+                <h2 className="mb-3 font-serif text-3xl font-medium tracking-tight text-stone-800 sm:text-4xl">Where would you like to begin?</h2>
+                <p className="mb-8 max-w-lg text-sm leading-relaxed text-stone-500">Choose an opening question or write your own. The best conversations begin with curiosity, not trivia.</p>
+                <div className="grid w-full gap-2 sm:grid-cols-2">
+                  {starterPrompts.map((prompt, index) => (
+                    <button
+                      type="button"
+                      key={prompt}
+                      onClick={() => fillPrompt(prompt)}
+                      className="group flex items-center gap-3 rounded-2xl border border-stone-200 bg-white p-4 text-left text-sm text-stone-600 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-900 hover:shadow-md"
+                    >
+                      <span className="grid h-7 w-7 flex-none place-items-center rounded-full bg-[#f1ede5] text-[10px] font-bold text-stone-950">0{index + 1}</span>
+                      <span>{prompt}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="mx-auto max-w-3xl space-y-7">
+                <div className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-300">
+                  <span className="h-px flex-1 bg-stone-200" />
+                  Conversation opened
+                  <span className="h-px flex-1 bg-stone-200" />
+                </div>
+
+                {messages.map((message) => (
+                  <div key={message.id} className="space-y-5">
+                    {message.message && (
+                      <div className="flex justify-end">
+                        <div className="max-w-[88%] rounded-[22px] rounded-br-md bg-[#2e2b28] px-5 py-4 text-[15px] leading-relaxed text-white shadow-sm sm:max-w-[75%]">
+                          {message.message}
+                        </div>
+                      </div>
+                    )}
+
+                    {message.reply && (
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1 h-9 w-9 flex-none overflow-hidden rounded-xl bg-stone-200 shadow-sm">
+                          {botProfilePicture ? <img src={botProfilePicture} alt="" className="h-full w-full object-cover" /> : <LogoMark />}
+                        </div>
+                        <div className="max-w-[88%] sm:max-w-[78%]">
+                          <p className="mb-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-950">{botName || "Historical figure"}</p>
+                          <div className="rounded-[22px] rounded-tl-md border border-stone-200 bg-white px-5 py-4 text-[15px] leading-relaxed text-stone-700 shadow-sm">
+                            {message.reply}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {message.pendingReply && (
+                      <div className="flex items-center gap-3 pl-1">
+                        <div className="h-9 w-9 overflow-hidden rounded-xl bg-stone-200">
+                          {botProfilePicture && <img src={botProfilePicture} alt="" className="h-full w-full object-cover opacity-70" />}
+                        </div>
+                        <div className="flex items-center gap-1.5 rounded-2xl border border-stone-200 bg-white px-4 py-3 shadow-sm">
+                          {[0, 1, 2].map((dot) => (
+                            <span key={dot} className="h-1.5 w-1.5 animate-bounce rounded-full bg-stone-900" style={{ animationDelay: `${dot * 140}ms` }} />
+                          ))}
+                        </div>
+                        <span className="text-xs italic text-stone-400">recollecting...</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+                <div ref={endOfMessagesRef} />
+              </div>
+            )}
+          </div>
+
+          <div className="flex-none border-t border-stone-100 bg-white p-3 sm:p-5">
+            {hasConversation && !sendingMessage && (
+              <div className="custom-scrollbar mb-3 flex gap-2 overflow-x-auto pb-1">
+                {followUpPrompts.map((prompt) => (
+                  <button type="button" key={prompt} onClick={() => fillPrompt(prompt)} className="flex-none rounded-full border border-stone-200 bg-[#f8f5ef] px-3.5 py-1.5 text-xs text-stone-600 transition hover:border-stone-900 hover:text-stone-950">
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <form onSubmit={handleSendMessage} className="relative">
+              <div className="flex items-end gap-2 rounded-[22px] border border-stone-200 bg-[#f8f5ef] p-2 transition focus-within:border-stone-900 focus-within:bg-white focus-within:shadow-[0_0_0_4px_rgba(28,25,23,0.06)]">
                 <textarea
-                  inputMode="text"
                   ref={textareaRef}
-                  onChange={handleInputChange}
+                  value={input}
+                  onChange={(event) => {
+                    setInput(event.target.value);
+                    resizeTextarea(event.target);
+                  }}
                   onKeyDown={handleKeyDown}
-                  placeholder="Share your thoughts..."
-                  value={display}
-                  disabled={sendingMessage}
-                  className="w-full bg-transparent px-6 py-5 pr-20 resize-none focus:outline-none text-gray-200 placeholder-gray-500 disabled:opacity-70 relative z-10"
+                  placeholder={`Ask ${botName || "this figure"} something...`}
                   rows="1"
-                  style={{ overflow: "auto" }}
+                  disabled={sendingMessage}
+                  className="max-h-[120px] min-h-[44px] flex-1 resize-none bg-transparent px-3 py-3 text-sm text-stone-800 outline-none placeholder:text-stone-400 disabled:opacity-60 sm:text-[15px]"
                 />
-
                 <button
                   type="submit"
-                  className={`absolute right-3 bottom-3 p-3.5 z-20 rounded-2xl transition-all duration-300 group ${
-                    !input.trim() || sendingMessage
-                      ? "bg-gray-800/60 text-gray-600 cursor-not-allowed"
-                      : "bg-gradient-to-br from-purple-600 via-violet-600 to-blue-600 hover:from-purple-500 hover:via-violet-500 hover:to-blue-500 text-white shadow-xl shadow-purple-500/40 hover:scale-110 hover:rotate-12"
-                  }`}
                   disabled={!input.trim() || sendingMessage}
+                  className="grid h-11 w-11 flex-none place-items-center rounded-2xl bg-stone-950 text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-black disabled:translate-y-0 disabled:bg-stone-200 disabled:text-stone-400"
+                  aria-label="Send message"
                 >
-                  {sendingMessage ? (
-                    <div className="relative">
-                      <svg
-                        className="animate-spin h-5 w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                    </div>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 transition-transform duration-300 group-hover:translate-y-[-2px]"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                    </svg>
-                  )}
+                  {sendingMessage ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> : <ArrowIcon />}
                 </button>
               </div>
             </form>
-
-            <p className="text-xs text-gray-600 mt-3 text-center flex items-center justify-center gap-2">
-              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              This character may provide historically inaccurate information
-            </p>
+            <div className="mt-2 flex items-center justify-between px-1 text-[10px] text-stone-400">
+              <span>{sendError || "Historical portrayals may contain inaccuracies."}</span>
+              <span className="hidden sm:inline">Enter to send · Shift + Enter for a new line</span>
+            </div>
           </div>
+        </section>
+
+        <aside className="custom-scrollbar hidden w-[290px] flex-none overflow-y-auto 2xl:block">
+          {factsPanel}
+        </aside>
+      </main>
         </div>
       </div>
 
       {isSidebarVisible && (
-        <>
-            {/* Backdrop */}
-            <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 animate-fade-in"
-            onClick={toggleSidebar}
-            />
+        <div className="fixed inset-0 z-50">
+          <button type="button" className="absolute inset-0 h-full w-full bg-stone-900/25 backdrop-blur-sm" onClick={() => setSidebarVisible(false)} aria-label="Close navigation" />
+          <div className="absolute inset-y-0 left-0 w-[min(88vw,360px)] border-r border-stone-200 bg-[#f1ede5] shadow-2xl animate-[drawer-in_.25s_ease-out]">
+            <button type="button" onClick={() => setSidebarVisible(false)} className="absolute right-4 top-5 z-20 grid h-9 w-9 place-items-center rounded-full border border-stone-200 bg-white text-xl text-stone-500 shadow-sm hover:text-stone-950" aria-label="Close navigation">×</button>
+            <Sidebar activeCharacter={{ name: botName, image: botProfilePicture, description: biography }} />
+          </div>
+        </div>
+      )}
 
-            {/* Desktop / tablet: left drawer */}
-            <div className="hidden sm:block fixed inset-y-0 left-0 w-80 bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 backdrop-blur-2xl shadow-2xl z-40 border-r border-purple-500/20 animate-slide-in-left">
-            <button
-                onClick={toggleSidebar}
-                className="absolute top-6 right-6 p-2.5 rounded-xl hover:bg-purple-900/40 focus:outline-none text-gray-400 hover:text-white transition-all duration-300 hover:rotate-90 group"
-                aria-label="Close sidebar"
-                style={{ top: "calc(1.5rem + env(safe-area-inset-top))" }}
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            <Sidebar />
-            </div>
-
-            {/* Mobile: bottom sheet */}
-            <div
-            className="
-                sm:hidden fixed left-0 right-0 bottom-0 z-40
-                bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95
-                backdrop-blur-2xl shadow-2xl
-                border-t border-purple-500/20
-                rounded-t-3xl
-                animate-slide-up-sheet
-            "
-            style={{
-                paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
-                maxHeight: "min(75vh, 520px)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-            >
-            {/* drag handle */}
-            <div className="flex justify-center pt-3 pb-2">
-                <div className="w-12 h-1.5 rounded-full bg-gray-600/60" />
-            </div>
-
-            {/* header */}
-            <div className="flex items-center justify-between px-4 pb-3">
-                <div className="text-sm text-gray-400">Menu</div>
-                <button
-                onClick={toggleSidebar}
-                className="p-2 rounded-xl hover:bg-purple-900/40 text-gray-300 hover:text-white transition"
-                aria-label="Close sidebar"
-                >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                </button>
-            </div>
-
-            {/* content */}
-            <div className="px-4 pb-4 overflow-y-auto custom-scrollbar" style={{ maxHeight: "calc(min(75vh, 520px) - 72px)" }}>
-                <Sidebar />
-            </div>
-            </div>
-        </>
-        )}
-
-
-      {/* Enhanced CSS animations + mobile helpers */}
-      <style jsx="true">{`
-        @keyframes float-slow {
-          0%,
-          100% {
-            transform: translate(0, 0) rotate(0deg);
-          }
-          25% {
-            transform: translate(30px, -30px) rotate(5deg);
-          }
-          50% {
-            transform: translate(-20px, 30px) rotate(-5deg);
-          }
-          75% {
-            transform: translate(20px, 20px) rotate(3deg);
-          }
+      <style>{`
+        @keyframes drawer-in {
+          from { transform: translateX(-100%); }
+          to { transform: translateX(0); }
         }
 
-        @keyframes float-slower {
-          0%,
-          100% {
-            transform: translate(0, 0) rotate(0deg) scale(1);
-          }
-          33% {
-            transform: translate(-40px, 40px) rotate(-7deg) scale(1.05);
-          }
-          66% {
-            transform: translate(40px, -20px) rotate(7deg) scale(0.95);
-          }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(120, 113, 108, 0.2); border-radius: 999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(120, 113, 108, 0.35); }
+
+        .archive-interface {
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 
-        @keyframes pulse-gentle {
-          0%,
-          100% {
-            opacity: 0.4;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.8;
-            transform: scale(1.05);
-          }
+        .archive-interface .font-serif {
+          font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+          letter-spacing: -0.018em;
         }
 
-        @keyframes spin-very-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        @keyframes spin-reverse-slow {
-          from {
-            transform: rotate(360deg);
-          }
-          to {
-            transform: rotate(0deg);
-          }
-        }
-
-        @keyframes slide-up {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slide-up-sheet {
-        from {
-            transform: translateY(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        }
-        .animate-slide-up-sheet {
-        animation: slide-up-sheet 0.28s ease-out;
-        }
-
-
-        @keyframes sound-wave {
-          0%,
-          100% {
-            height: 1.5rem;
-            opacity: 0.6;
-          }
-          50% {
-            height: 2.5rem;
-            opacity: 1;
-          }
-        }
-
-        @keyframes bounce-slow {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
-
-        @keyframes bounce-slower {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-15px);
-          }
-        }
-
-        @keyframes float-particle-1 {
-          0%,
-          100% {
-            transform: translate(0, 0);
-            opacity: 0.3;
-          }
-          50% {
-            transform: translate(-30px, -40px);
-            opacity: 0.7;
-          }
-        }
-
-        @keyframes float-particle-2 {
-          0%,
-          100% {
-            transform: translate(0, 0);
-            opacity: 0.4;
-          }
-          50% {
-            transform: translate(40px, -30px);
-            opacity: 0.8;
-          }
-        }
-
-        @keyframes float-particle-3 {
-          0%,
-          100% {
-            transform: translate(0, 0);
-            opacity: 0.3;
-          }
-          50% {
-            transform: translate(-25px, 35px);
-            opacity: 0.6;
-          }
-        }
-
-        @keyframes float-particle-4 {
-          0%,
-          100% {
-            transform: translate(0, 0);
-            opacity: 0.5;
-          }
-          50% {
-            transform: translate(35px, -25px);
-            opacity: 0.9;
-          }
-        }
-
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @keyframes slide-in-left {
-          from {
-            transform: translateX(-100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-
-        @keyframes spin-reverse {
-          from {
-            transform: rotate(360deg);
-          }
-          to {
-            transform: rotate(0deg);
-          }
-        }
-
-        .animate-float-slow {
-          animation: float-slow 25s ease-in-out infinite;
-        }
-
-        .animate-float-slower {
-          animation: float-slower 30s ease-in-out infinite;
-        }
-
-        .animate-pulse-gentle {
-          animation: pulse-gentle 6s ease-in-out infinite;
-        }
-
-        .animate-spin-very-slow {
-          animation: spin-very-slow 30s linear infinite;
-        }
-
-        .animate-spin-reverse-slow {
-          animation: spin-reverse-slow 25s linear infinite;
-        }
-
-        .animate-slide-up {
-          animation: slide-up 0.4s ease-out forwards;
-        }
-
-        .animate-sound-wave {
-          animation: sound-wave 0.8s ease-in-out infinite;
-        }
-
-        .animate-bounce-slow {
-          animation: bounce-slow 3s ease-in-out infinite;
-        }
-
-        .animate-bounce-slower {
-          animation: bounce-slower 4s ease-in-out infinite;
-        }
-
-        .animate-float-particle-1 {
-          animation: float-particle-1 20s ease-in-out infinite;
-        }
-
-        .animate-float-particle-2 {
-          animation: float-particle-2 18s ease-in-out infinite;
-        }
-
-        .animate-float-particle-3 {
-          animation: float-particle-3 22s ease-in-out infinite;
-        }
-
-        .animate-float-particle-4 {
-          animation: float-particle-4 19s ease-in-out infinite;
-        }
-
-        .animate-fade-in {
-          animation: fade-in 0.3s ease-out;
-        }
-
-        .animate-slide-in-left {
-          animation: slide-in-left 0.3s ease-out;
-        }
-
-        .animate-spin-reverse {
-          animation: spin-reverse 1s linear infinite;
-        }
-
-        .animate-bounce-delay-0 {
-          animation: bounce 1s infinite;
-        }
-
-        .animate-bounce-delay-1 {
-          animation: bounce 1s infinite 0.2s;
-        }
-
-        .animate-bounce-delay-2 {
-          animation: bounce 1s infinite 0.4s;
-        }
-
-        /* Custom scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.2);
-          border-radius: 10px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(
-            to bottom,
-            rgba(168, 85, 247, 0.5),
-            rgba(59, 130, 246, 0.5)
-          );
-          border-radius: 10px;
-          border: 2px solid transparent;
-          background-clip: padding-box;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(
-            to bottom,
-            rgba(168, 85, 247, 0.8),
-            rgba(59, 130, 246, 0.8)
-          );
-          background-clip: padding-box;
-        }
-
-        /* Mobile viewport + keyboard friendliness */
-        html,
-        body {
-          height: 100%;
-        }
-
-        /* Prevent rubber-band + weird scroll chaining on iOS */
-        .overscroll-none {
-          overscroll-behavior: none;
-        }
-
-        /* Make horizontal prompt scroller look clean */
-        ::-webkit-scrollbar {
-          height: 8px;
+        .archive-interface .font-serif::first-letter {
+          letter-spacing: 0;
         }
       `}</style>
     </div>
