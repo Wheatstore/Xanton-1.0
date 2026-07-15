@@ -55,50 +55,83 @@ function Navbar() {
     }`;
 
   return (
-    <nav className="archive-navbar sticky top-0 z-50 w-full border-b border-stone-200 bg-[#fbfaf7]/95 text-stone-800 backdrop-blur-xl">
-      <div className="mx-auto flex h-[72px] max-w-[1500px] items-center px-4 sm:px-6 lg:px-8">
-        <button type="button" onClick={() => navigateTo("/")} aria-label="Echoes of History home">
-          <Brand />
-        </button>
-
-        <div className="ml-auto hidden items-center gap-7 lg:flex">
-          {!user && !loading ? (
-            <>
-              <div className="flex items-center gap-6 border-r border-stone-200 pr-7">
-                {publicLinks.map((link) => (
-                  <button type="button" key={link.path} onClick={() => navigateTo(link.path)} className={linkClasses(link.path)}>
-                    {link.label}
-                  </button>
-                ))}
-              </div>
-              <button type="button" onClick={() => navigateTo("/login")} className="rounded-full px-3 py-2 text-xs font-semibold text-stone-700 transition hover:text-black">
-                Log in
-              </button>
-              <button type="button" onClick={() => navigateTo("/signup")} className="rounded-full bg-stone-950 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-black">
-                Enter the archive
-              </button>
-            </>
-          ) : user ? (
-            <>
-              <button type="button" onClick={() => navigateTo("/feedback")} className="flex items-center gap-2 text-xs font-semibold text-stone-500 transition hover:text-stone-950">
-                <HelpCircle className="h-4 w-4" /> Feedback
-              </button>
-              <button type="button" onClick={() => navigateTo("/create-new-bot")} className="flex items-center gap-2 rounded-full border border-stone-300 bg-white px-4 py-2.5 text-xs font-semibold text-stone-700 transition hover:border-stone-900">
-                <FileText className="h-4 w-4" /> Request a figure
-              </button>
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setProfileDropdownOpen((open) => !open)}
-                  className="flex items-center gap-2 rounded-full border border-stone-800 bg-stone-950 py-1.5 pl-1.5 pr-3 text-xs font-semibold text-white shadow-[0_16px_40px_rgba(28,25,23,0.18)] transition hover:-translate-y-0.5 hover:bg-black"
+    <nav className={`relative isolate w-full z-50 transition-all duration-300  ${
+      scrolled ? "bg-[#0b0b0f]/80 backdrop-blur-md py-2" : "bg-transparent py-4"
+    }`}>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px
+                      bg-gradient-to-r via-purple-400/100 
+                      blur-[0.1px]" />
+      
+      <div className="relative z-10 max-w-[60%] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <a href="/" className="flex items-center">
+              <img 
+                src="/logo.png" 
+                alt="Echoes of History AI" 
+                className="h-[60px] w-auto transition-all duration-300 hover:opacity-80" 
+              />
+            </a>
+          </div>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4">
+            
+            {/* Conditional navigation based on authentication */}
+            {!user && !loading ? (
+              <>
+                <a 
+                  href="/features" 
+                  className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
-                  {user.photoURL ? (
-                    <img src={user.photoURL} alt="" className="h-7 w-7 rounded-full border border-white/20 object-cover grayscale" />
-                  ) : (
-                    <span className="grid h-7 w-7 place-items-center rounded-full border border-white/10 bg-stone-700"><User className="h-4 w-4" /></span>
-                  )}
-                  {user.displayName || "Account"}
-                  <ChevronDown className={`h-3.5 w-3.5 transition ${profileDropdownOpen ? "rotate-180" : ""}`} />
+                  Features
+                </a>
+                <a 
+                  href="/about" 
+                  className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                >
+                  About
+                </a>
+                <a href='/bots' className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200">
+                  Our Figures
+                </a>
+                 <a 
+                  href="/partners" 
+                  className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                >
+                  Partner
+                </a>
+                <a href='/articles' className="text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200">
+                  Articles
+                </a>
+                <button 
+                  onClick={() => navigateTo("/login")} 
+                  className="ml-2 px-5 py-2 bg-transparent border border-white/30 rounded-full text-sm font-medium text-white hover:bg-white/10 transition-all duration-300"
+                >
+                  Login
+                </button>
+                <button 
+                  onClick={() => navigateTo("/signup")} 
+                  className="px-5 py-2 bg-blue-600 rounded-full text-sm font-medium text-white hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition-all duration-300"
+                >
+                  Get Started
+                </button>
+              </>
+            ) : user ? (
+              <>
+                <button 
+                  onClick={() => navigateTo("/feedback")} 
+                  className="flex items-center text-white hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                >
+                  <HelpCircle className="w-4 h-4 mr-1" />
+                  Feedback
+                </button>
+                <button 
+                  onClick={() => navigateTo("/create-new-bot")} 
+                  className="px-5 py-2 bg-blue-600 rounded-full text-sm font-medium text-white hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition-all duration-300"
+                >
+                  Request a new bot
                 </button>
                 {profileDropdownOpen && (
                   <div className="absolute right-0 mt-4 w-64 overflow-hidden rounded-[24px] border border-stone-200/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(245,240,232,0.98))] p-2 shadow-[0_30px_80px_rgba(28,25,23,0.14)] backdrop-blur-xl">
