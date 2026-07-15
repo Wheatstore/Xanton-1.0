@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useParams } from "react-router-dom";
@@ -6,6 +6,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -16,6 +17,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 import Sidebar from "../sidebar/sidebar";
+import CharacterInfoPanel, { buildCharacterSections } from "../character-info/CharacterInfoPanel";
 
 const starterPrompts = [
   "Describe the world you grew up in",
@@ -29,25 +31,6 @@ const followUpPrompts = [
   "How did that feel?",
   "What happened next?",
 ];
-
-const firstDetail = (details, keys) =>
-  keys.map((key) => details?.[key]).find((value) => value !== undefined && value !== null && value !== "") || "";
-
-const normalizeNotes = (value) => {
-  if (!value) return [];
-  const entries = Array.isArray(value) ? value : [value];
-
-  return entries
-    .map((entry) => {
-      if (typeof entry === "string") return { text: entry };
-      if (!entry || typeof entry !== "object") return null;
-      return {
-        label: entry.label || entry.title || entry.year || entry.date || "",
-        text: entry.text || entry.description || entry.fact || entry.event || entry.value || "",
-      };
-    })
-    .filter((entry) => entry?.text);
-};
 
 function MenuIcon() {
   return (
@@ -84,6 +67,7 @@ function ChatWindow() {
   const [sendError, setSendError] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [activeInformationSection, setActiveInformationSection] = useState("overview");
 
   const textareaRef = useRef(null);
   const endOfMessagesRef = useRef(null);
@@ -96,16 +80,23 @@ function ChatWindow() {
 
     const loadBot = async () => {
       try {
-        const botQuery = query(collection(db, "bots"), where("id", "==", params.id));
-        const snapshot = await getDocs(botQuery);
-        if (!active || snapshot.empty) return;
+        const directSnapshot = await getDoc(doc(db, "bots", params.id));
+        let bot = directSnapshot.exists() ? { id: directSnapshot.id, ...directSnapshot.data() } : null;
 
-        const bot = snapshot.docs[0].data();
+        if (!bot) {
+          const botQuery = query(collection(db, "bots"), where("id", "==", params.id));
+          const snapshot = await getDocs(botQuery);
+          if (!snapshot.empty) bot = { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+        }
+
+        if (!active || !bot) return;
+        const resolvedName = bot.name || bot.profile?.fullName || params.name || "Historical figure";
+        const resolvedWelcome = bot.welcomeMessage || bot.conversation?.welcomeMessage || "";
         setBotDetails(bot);
-        setBotName(bot.name || "Historical figure");
-        setBotProfilePicture(bot.img || "");
-        setWelcomeMessage(bot.welcomeMessage || "");
-        setCurrentBotMessage((current) => current || bot.welcomeMessage || "");
+        setBotName(resolvedName);
+        setBotProfilePicture(bot.img || bot.image || bot.profileImage || "");
+        setWelcomeMessage(resolvedWelcome);
+        setCurrentBotMessage((current) => current || resolvedWelcome);
       } catch (error) {
         console.error("Error fetching bot data:", error);
       }
@@ -115,7 +106,7 @@ function ChatWindow() {
     return () => {
       active = false;
     };
-  }, [authLoading, params.id]);
+  }, [authLoading, params.id, params.name]);
 
   useEffect(() => {
     if (authLoading || !user) return undefined;
@@ -233,6 +224,16 @@ function ChatWindow() {
     }
   };
 
+  const informationSections = useMemo(() => buildCharacterSections(botDetails), [botDetails]);
+  const informationSectionKey = informationSections.map((section) => section.id).join("|");
+
+  useEffect(() => {
+    if (!informationSections.length) return;
+    if (!informationSections.some((section) => section.id === activeInformationSection)) {
+      setActiveInformationSection(informationSections[0].id);
+    }
+  }, [activeInformationSection, informationSectionKey, informationSections]);
+
   if (authLoading) {
     return (
       <div className="grid h-[100dvh] place-items-center bg-[#f5f2ec]">
@@ -242,72 +243,19 @@ function ChatWindow() {
   }
 
   const hasConversation = messages.length > 0;
-  const biography = firstDetail(botDetails, ["description", "biography", "bio", "about"]);
-  const detailRows = [
-    { label: "Born", value: firstDetail(botDetails, ["born", "birthDate", "dateOfBirth"]) },
-    { label: "Died", value: firstDetail(botDetails, ["died", "deathDate", "dateOfDeath"]) },
-    { label: "Known for", value: firstDetail(botDetails, ["role", "occupation", "knownFor", "title"]) },
-    { label: "Place", value: firstDetail(botDetails, ["location", "birthPlace", "country"]) },
-    { label: "Era", value: firstDetail(botDetails, ["era", "period", "century"]) },
-  ].filter((detail) => detail.value);
-  const archiveFacts = normalizeNotes(firstDetail(botDetails, ["facts", "keyFacts", "funFacts", "extraFacts"]));
-  const keyMoments = normalizeNotes(firstDetail(botDetails, ["timeline", "keyMoments", "milestones"]));
+  const biography = botDetails.biography?.short || botDetails.description || botDetails.bio || botDetails.about || "";
+  const schemaPrompts = Array.isArray(botDetails.conversation?.suggestedQuestions) ? botDetails.conversation.suggestedQuestions : [];
+  const openingPrompts = schemaPrompts.length ? schemaPrompts.slice(0, 4) : starterPrompts;
+  const conversationFollowUps = schemaPrompts.length > 4 ? schemaPrompts.slice(4, 7) : followUpPrompts;
 
   const factsPanel = (
-    <div className="space-y-4">
-      <section className="rounded-[22px] border border-stone-200 bg-white p-5 shadow-sm">
-        <p className="mb-4 font-serif text-lg font-semibold text-stone-900">About {botName || "this figure"}</p>
-        {biography ? (
-          <p className="text-sm leading-6 text-stone-600">{biography}</p>
-        ) : (
-          <p className="text-sm leading-6 text-stone-500">{welcomeMessage || "Background information is being prepared for this archive."}</p>
-        )}
-
-        {detailRows.length > 0 && (
-          <dl className="mt-5 divide-y divide-stone-100 border-t border-stone-100">
-            {detailRows.map((detail) => (
-              <div key={detail.label} className="grid grid-cols-[74px_1fr] gap-3 py-3 text-xs leading-5">
-                <dt className="font-semibold text-stone-400">{detail.label}</dt>
-                <dd className="text-stone-700">{String(detail.value)}</dd>
-              </div>
-            ))}
-          </dl>
-        )}
-      </section>
-
-      <section className="rounded-[22px] border border-stone-200 bg-[#f2eee6] p-5">
-        <div className="mb-4 flex items-center justify-between">
-          <p className="font-serif text-base font-semibold text-stone-900">Archive notes</p>
-          <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-stone-400">Context</span>
-        </div>
-        <div className="space-y-4">
-          {(archiveFacts.length > 0 ? archiveFacts : [{ text: welcomeMessage || currentBotMessage || "Ask a question to begin building context around this conversation." }]).slice(0, 4).map((fact, index) => (
-            <div key={`${fact.label || "fact"}-${index}`} className="flex gap-3">
-              <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-stone-900" />
-              <div>
-                {fact.label && <p className="mb-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-stone-400">{fact.label}</p>}
-                <p className="text-xs leading-5 text-stone-600">{fact.text}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {keyMoments.length > 0 && (
-        <section className="rounded-[22px] border border-stone-200 bg-white p-5 shadow-sm">
-          <p className="mb-4 font-serif text-base font-semibold text-stone-900">Key moments</p>
-          <div className="relative space-y-4 before:absolute before:bottom-2 before:left-[3px] before:top-2 before:w-px before:bg-stone-200">
-            {keyMoments.slice(0, 5).map((moment, index) => (
-              <div key={`${moment.label || "moment"}-${index}`} className="relative grid grid-cols-[10px_48px_1fr] gap-2 text-xs leading-5">
-                <span className="relative z-10 mt-1.5 h-2 w-2 rounded-full bg-stone-900 ring-4 ring-white" />
-                <span className="font-semibold text-stone-400">{moment.label}</span>
-                <span className="text-stone-700">{moment.text}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-    </div>
+    <CharacterInfoPanel
+      details={botDetails}
+      name={botName || "this figure"}
+      sections={informationSections}
+      activeTab={activeInformationSection}
+      onTabChange={setActiveInformationSection}
+    />
   );
 
   return (
@@ -324,6 +272,9 @@ function ChatWindow() {
         <aside className="hidden w-[260px] flex-none border-r border-stone-200 bg-[#f1ede5] lg:block">
           <Sidebar
             activeCharacter={{ name: botName, image: botProfilePicture, description: biography }}
+            informationSections={informationSections}
+            activeInformationSection={activeInformationSection}
+            onInformationSectionChange={setActiveInformationSection}
           />
         </aside>
 
@@ -370,8 +321,9 @@ function ChatWindow() {
               Historical dossier
             </div>
             <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-              <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.24em] text-white/60">Now speaking with</p>
-              <h1 className="font-serif text-4xl font-medium leading-none">{botName || "Historical figure"}</h1>
+               <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.24em] text-white/60">Now speaking with</p>
+               <h1 className="font-serif text-4xl font-medium leading-none">{botName || "Historical figure"}</h1>
+               {botDetails.profile?.subtitle && <p className="mt-2 text-xs leading-5 text-white/70">{botDetails.profile.subtitle}</p>}
             </div>
           </div>
 
@@ -406,7 +358,7 @@ function ChatWindow() {
             </span>
           </div>
 
-          <details className="group flex-none border-b border-stone-100 bg-white 2xl:hidden">
+          {informationSections.length > 0 && <details className="group flex-none border-b border-stone-100 bg-white 2xl:hidden">
             <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-3 text-xs font-semibold text-stone-700">
               <span>Facts &amp; information about {botName || "this figure"}</span>
               <span className="text-lg font-light transition group-open:rotate-45">+</span>
@@ -414,7 +366,7 @@ function ChatWindow() {
             <div className="custom-scrollbar max-h-[42vh] overflow-y-auto bg-[#f8f5ef] p-4">
               {factsPanel}
             </div>
-          </details>
+          </details>}
 
           <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto bg-[#fcfbf8] px-4 py-6 sm:px-8">
             {!hasConversation && !loadingMessages ? (
@@ -424,7 +376,7 @@ function ChatWindow() {
                 <h2 className="mb-3 font-serif text-3xl font-medium tracking-tight text-stone-800 sm:text-4xl">Where would you like to begin?</h2>
                 <p className="mb-8 max-w-lg text-sm leading-relaxed text-stone-500">Choose an opening question or write your own. The best conversations begin with curiosity, not trivia.</p>
                 <div className="grid w-full gap-2 sm:grid-cols-2">
-                  {starterPrompts.map((prompt, index) => (
+                  {openingPrompts.map((prompt, index) => (
                     <button
                       type="button"
                       key={prompt}
@@ -492,7 +444,7 @@ function ChatWindow() {
           <div className="flex-none border-t border-stone-100 bg-white p-3 sm:p-5">
             {hasConversation && !sendingMessage && (
               <div className="custom-scrollbar mb-3 flex gap-2 overflow-x-auto pb-1">
-                {followUpPrompts.map((prompt) => (
+                {conversationFollowUps.map((prompt) => (
                   <button type="button" key={prompt} onClick={() => fillPrompt(prompt)} className="flex-none rounded-full border border-stone-200 bg-[#f8f5ef] px-3.5 py-1.5 text-xs text-stone-600 transition hover:border-stone-900 hover:text-stone-950">
                     {prompt}
                   </button>
@@ -532,9 +484,11 @@ function ChatWindow() {
           </div>
         </section>
 
-        <aside className="custom-scrollbar hidden w-[290px] flex-none overflow-y-auto 2xl:block">
-          {factsPanel}
-        </aside>
+        {informationSections.length > 0 && (
+          <aside className="custom-scrollbar hidden w-[330px] flex-none overflow-y-auto 2xl:block">
+            {factsPanel}
+          </aside>
+        )}
       </main>
         </div>
       </div>
@@ -544,7 +498,15 @@ function ChatWindow() {
           <button type="button" className="absolute inset-0 h-full w-full bg-stone-900/25 backdrop-blur-sm" onClick={() => setSidebarVisible(false)} aria-label="Close navigation" />
           <div className="absolute inset-y-0 left-0 w-[min(88vw,360px)] border-r border-stone-200 bg-[#f1ede5] shadow-2xl animate-[drawer-in_.25s_ease-out]">
             <button type="button" onClick={() => setSidebarVisible(false)} className="absolute right-4 top-5 z-20 grid h-9 w-9 place-items-center rounded-full border border-stone-200 bg-white text-xl text-stone-500 shadow-sm hover:text-stone-950" aria-label="Close navigation">×</button>
-            <Sidebar activeCharacter={{ name: botName, image: botProfilePicture, description: biography }} />
+            <Sidebar
+              activeCharacter={{ name: botName, image: botProfilePicture, description: biography }}
+              informationSections={informationSections}
+              activeInformationSection={activeInformationSection}
+              onInformationSectionChange={(sectionId) => {
+                setActiveInformationSection(sectionId);
+                setSidebarVisible(false);
+              }}
+            />
           </div>
         </div>
       )}
