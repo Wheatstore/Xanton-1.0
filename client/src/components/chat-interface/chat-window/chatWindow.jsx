@@ -67,6 +67,7 @@ function ChatWindow() {
   const [sendError, setSendError] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [isInformationPanelVisible, setInformationPanelVisible] = useState(false);
   const [activeInformationSection, setActiveInformationSection] = useState("overview");
 
   const textareaRef = useRef(null);
@@ -247,6 +248,12 @@ function ChatWindow() {
   const schemaPrompts = Array.isArray(botDetails.conversation?.suggestedQuestions) ? botDetails.conversation.suggestedQuestions : [];
   const openingPrompts = schemaPrompts.length ? schemaPrompts.slice(0, 4) : starterPrompts;
   const conversationFollowUps = schemaPrompts.length > 4 ? schemaPrompts.slice(4, 7) : followUpPrompts;
+  const openInformationSection = (sectionId = activeInformationSection) => {
+    setActiveInformationSection(sectionId);
+    if (!window.matchMedia("(min-width: 1536px)").matches) {
+      setInformationPanelVisible(true);
+    }
+  };
 
   const factsPanel = (
     <CharacterInfoPanel
@@ -274,7 +281,7 @@ function ChatWindow() {
             activeCharacter={{ name: botName, image: botProfilePicture, description: biography }}
             informationSections={informationSections}
             activeInformationSection={activeInformationSection}
-            onInformationSectionChange={setActiveInformationSection}
+            onInformationSectionChange={openInformationSection}
           />
         </aside>
 
@@ -353,20 +360,22 @@ function ChatWindow() {
               <span className="h-1.5 w-1.5 rounded-full bg-stone-300" />
               <span className="h-1.5 w-1.5 rounded-full bg-stone-200" />
             </div>
+            {informationSections.length > 0 && (
+              <button
+                type="button"
+                onClick={() => openInformationSection()}
+                className="inline-flex items-center gap-2 rounded-xl border border-stone-200 bg-[#f2eee6] px-3 py-2 text-[10px] font-bold text-stone-700 shadow-sm transition hover:border-stone-900 hover:bg-white 2xl:hidden"
+                aria-label={`Explore biography and historical information about ${botName}`}
+              >
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-stone-900 text-[9px] text-white">i</span>
+                <span className="hidden md:inline">Explore profile</span>
+                <span className="rounded-full bg-white px-1.5 py-0.5 text-[9px] text-stone-500">{informationSections.length}</span>
+              </button>
+            )}
             <span className="ml-2 hidden rounded-lg bg-[#f2eee6] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-stone-500 sm:block">
               Live transcript
             </span>
           </div>
-
-          {informationSections.length > 0 && <details className="group flex-none border-b border-stone-100 bg-white 2xl:hidden">
-            <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-3 text-xs font-semibold text-stone-700">
-              <span>Facts &amp; information about {botName || "this figure"}</span>
-              <span className="text-lg font-light transition group-open:rotate-45">+</span>
-            </summary>
-            <div className="custom-scrollbar max-h-[42vh] overflow-y-auto bg-[#f8f5ef] p-4">
-              {factsPanel}
-            </div>
-          </details>}
 
           <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto bg-[#fcfbf8] px-4 py-6 sm:px-8">
             {!hasConversation && !loadingMessages ? (
@@ -505,15 +514,50 @@ function ChatWindow() {
               onInformationSectionChange={(sectionId) => {
                 setActiveInformationSection(sectionId);
                 setSidebarVisible(false);
+                setInformationPanelVisible(true);
               }}
             />
           </div>
         </div>
       )}
 
+      {isInformationPanelVisible && informationSections.length > 0 && (
+        <div className="fixed inset-0 z-[60] 2xl:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 h-full w-full bg-stone-950/25 backdrop-blur-[2px]"
+            onClick={() => setInformationPanelVisible(false)}
+            aria-label="Close character information"
+          />
+          <aside className="absolute inset-y-0 right-0 flex w-[min(94vw,440px)] flex-col border-l border-stone-200 bg-[#f5f2ec] shadow-[-24px_0_70px_rgba(45,38,29,0.16)] animate-[info-drawer-in_.25s_ease-out]">
+            <div className="flex flex-none items-center gap-3 border-b border-stone-200 bg-white px-5 py-4">
+              <div className="h-11 w-11 flex-none overflow-hidden rounded-xl bg-stone-200">
+                {botProfilePicture ? <img src={botProfilePicture} alt="" className="h-full w-full object-cover" /> : <LogoMark />}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400">Character guide</p>
+                <p className="truncate font-serif text-lg font-semibold text-stone-900">{botName}</p>
+              </div>
+              <button type="button" onClick={() => setInformationPanelVisible(false)} className="grid h-9 w-9 place-items-center rounded-full border border-stone-200 bg-[#f8f5ef] text-lg text-stone-500 transition hover:border-stone-900 hover:text-stone-950" aria-label="Close character information">×</button>
+            </div>
+            <div className="border-b border-stone-200 bg-[#f8f5ef] px-5 py-3">
+              <p className="text-xs leading-5 text-stone-500">Browse biography, defining moments, ideas, documents, and historical debates without leaving the conversation.</p>
+            </div>
+            <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto p-4 sm:p-5">
+              {factsPanel}
+            </div>
+          </aside>
+        </div>
+      )}
+
       <style>{`
         @keyframes drawer-in {
           from { transform: translateX(-100%); }
+          to { transform: translateX(0); }
+        }
+
+        @keyframes info-drawer-in {
+          from { transform: translateX(100%); }
           to { transform: translateX(0); }
         }
 
