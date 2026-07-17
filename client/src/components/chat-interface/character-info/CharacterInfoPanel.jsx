@@ -2,25 +2,63 @@
 
 const asArray = (value) => (Array.isArray(value) ? value.filter(Boolean) : value ? [value] : []);
 const hasText = (value) => typeof value === "string" ? value.trim().length > 0 : value !== undefined && value !== null;
-const hasObjectValues = (value) => value && typeof value === "object" && Object.values(value).some((item) => asArray(item).some(hasText));
+const hasContent = (value) => {
+  if (Array.isArray(value)) return value.some(hasContent);
+  if (value && typeof value === "object") return Object.values(value).some(hasContent);
+  return hasText(value);
+};
+const hasObjectValues = (value) => value && typeof value === "object" && Object.values(value).some(hasContent);
+const meaningfulItems = (value, keys) => asArray(value).filter((item) => {
+  if (typeof item === "string") return hasText(item);
+  if (!item || typeof item !== "object") return false;
+  return keys.some((key) => hasContent(item[key]));
+});
 
 export function buildCharacterSections(details = {}) {
   const biography = details.biography;
   const profile = details.profile;
   const sections = [];
 
-  if (hasText(biography?.short) || hasText(biography?.detailed) || hasText(biography?.historicalImportance) || hasObjectValues(profile) || hasText(details.description)) {
+  const hasProfile = [
+    profile?.fullName,
+    profile?.subtitle,
+    profile?.birthDateDisplay,
+    profile?.birthDate,
+    profile?.birthPlace,
+    profile?.deathDateDisplay,
+    profile?.deathDate,
+    profile?.deathPlace,
+    profile?.ageAtDeath,
+    profile?.heightCm,
+    ...asArray(profile?.alternateNames),
+    ...asArray(profile?.nationalities),
+    ...asArray(profile?.occupations),
+    ...asArray(profile?.eras),
+    ...asArray(profile?.positionsHeld),
+  ].some(hasText);
+
+  if (hasText(biography?.short) || hasText(biography?.detailed) || hasText(biography?.historicalImportance) || hasProfile || hasText(details.description)) {
     sections.push({ id: "overview", label: "Biography" });
   }
-  if (hasObjectValues(details.conversation)) sections.push({ id: "conversationGuide", label: "Conversation guide" });
-  if (asArray(details.timeline).length || asArray(details.keyMoments).length) sections.push({ id: "timeline", label: "Timeline" });
+  const conversation = details.conversation || {};
+  if (
+    hasText(conversation.personalityDescription) ||
+    hasText(conversation.speakingStyle) ||
+    asArray(conversation.coreTopics).some(hasText) ||
+    asArray(conversation.suggestedQuestions).some(hasText) ||
+    asArray(conversation.knowledgeLimitations).some(hasText)
+  ) sections.push({ id: "conversationGuide", label: "Conversation guide" });
+  if (
+    meaningfulItems(details.timeline, ["title", "description", "summary", "dateDisplay", "startDate", "date"]).length ||
+    meaningfulItems(details.keyMoments, ["title", "description", "summary", "dateDisplay", "date"]).length
+  ) sections.push({ id: "timeline", label: "Timeline" });
   if (hasObjectValues(details.historicalContext)) sections.push({ id: "context", label: "Historical context" });
-  if (asArray(details.ideasAndBeliefs).length) sections.push({ id: "ideas", label: "Ideas & beliefs" });
-  if (asArray(details.documents).length) sections.push({ id: "documents", label: "Documents" });
-  if (asArray(details.relationships).length) sections.push({ id: "relationships", label: "People" });
-  if (asArray(details.controversies).length) sections.push({ id: "controversies", label: "Debates" });
+  if (meaningfulItems(details.ideasAndBeliefs, ["topic", "summary", "developmentOverTime"]).length) sections.push({ id: "ideas", label: "Ideas & beliefs" });
+  if (meaningfulItems(details.documents, ["title", "summary", "significance", "externalUrl"]).length) sections.push({ id: "documents", label: "Documents" });
+  if (meaningfulItems(details.relationships, ["personName", "description", "relationshipType"]).length) sections.push({ id: "relationships", label: "People" });
+  if (meaningfulItems(details.controversies, ["title", "summary", "historicalContext", "majorInterpretations"]).length) sections.push({ id: "controversies", label: "Debates" });
   if (hasObjectValues(details.legacy)) sections.push({ id: "legacy", label: "Legacy" });
-  if (asArray(details.sources).length) sections.push({ id: "sources", label: "Sources" });
+  if (meaningfulItems(details.sources, ["title", "organization", "type", "url"]).length) sections.push({ id: "sources", label: "Sources" });
   return sections;
 }
 
@@ -37,6 +75,7 @@ function Overview({ details, name }) {
   const biography = details.biography || {};
   const profile = details.profile || {};
   const rows = [
+    ["Full name", profile.fullName],
     ["Born", profile.birthDateDisplay || profile.birthDate || details.birthDate || details.born],
     ["Birthplace", profile.birthPlace || details.birthPlace],
     ["Died", profile.deathDateDisplay || profile.deathDate || details.deathDate || details.died],
@@ -45,6 +84,8 @@ function Overview({ details, name }) {
     ["Also known as", asArray(profile.alternateNames).join(", ")],
     ["Occupations", asArray(profile.occupations).join(", ") || details.occupation || details.role],
     ["Era", asArray(profile.eras).join(", ") || details.era],
+    ["Age at death", profile.ageAtDeath],
+    ["Height", profile.heightCm ? `${profile.heightCm} cm` : ""],
   ].filter(([, value]) => hasText(value));
   const positions = asArray(profile.positionsHeld);
 
@@ -61,7 +102,8 @@ function Overview({ details, name }) {
 }
 
 function Timeline({ details }) {
-  const entries = asArray(details.timeline).length ? asArray(details.timeline) : asArray(details.keyMoments);
+  const timelineEntries = meaningfulItems(details.timeline, ["title", "description", "summary", "dateDisplay", "startDate", "date"]);
+  const entries = timelineEntries.length ? timelineEntries : meaningfulItems(details.keyMoments, ["title", "description", "summary", "dateDisplay", "date"]);
   return <section className="rounded-[22px] border border-stone-200 bg-white p-5 shadow-sm"><SectionTitle eyebrow={`${entries.length} recorded moments`}>Timeline</SectionTitle><div className="relative space-y-5 before:absolute before:bottom-2 before:left-[5px] before:top-2 before:w-px before:bg-stone-200">{entries.map((entry,index) => <article key={entry.id || `${entry.title}-${index}`} className="relative pl-6"><span className="absolute left-0 top-1.5 h-2.5 w-2.5 rounded-full bg-stone-900 ring-4 ring-white"/><p className="text-[10px] font-bold uppercase tracking-[0.13em] text-stone-400">{entry.dateDisplay || entry.startDate || entry.date || "Date uncertain"}</p><h4 className="mt-1 font-serif text-base font-semibold text-stone-800">{entry.title}</h4>{(entry.description || entry.summary) && <p className="mt-1 text-xs leading-5 text-stone-600">{entry.description || entry.summary}</p>}{entry.significance && <p className="mt-2 text-[11px] italic leading-5 text-stone-500">Why it matters: {entry.significance}</p>}</article>)}</div></section>;
 }
 
@@ -82,12 +124,12 @@ function CharacterInfoContent({ activeTab, details, name }) {
     </div>;
   }
   if (activeTab === "context") return <section className="rounded-[22px] border border-stone-200 bg-white p-5"><SectionTitle eyebrow="The world around them">Historical context</SectionTitle><TextBlock title="Before their rise" text={details.historicalContext?.worldBeforeTheirRise}/><TextBlock title="During their lifetime" text={details.historicalContext?.worldDuringTheirLife}/><TextBlock title="Major challenges" text={details.historicalContext?.majorChallenges}/></section>;
-  if (activeTab === "ideas") return <CardList items={asArray(details.ideasAndBeliefs)} title="Ideas & beliefs" eyebrow="Positions and development" renderMeta={(item)=>item.confidence ? <p className="mb-1 text-[9px] font-bold uppercase tracking-[.15em] text-stone-400">{item.confidence}</p> : null} renderBody={(item)=><>{item.summary && <p className="mt-1 text-xs leading-5 text-stone-600">{item.summary}</p>}{item.developmentOverTime && <p className="mt-2 border-t border-stone-200 pt-2 text-[11px] leading-5 text-stone-500">Development: {item.developmentOverTime}</p>}</>} />;
-  if (activeTab === "documents") return <CardList items={asArray(details.documents)} title="Documents" eyebrow="Speeches, texts, and records" renderMeta={(item)=>{const meta=[item.documentType,item.dateDisplay].filter(Boolean).join(" · ");return meta ? <p className="mb-1 text-[9px] font-bold uppercase tracking-[.15em] text-stone-400">{meta}</p> : null;}} renderBody={(item)=><>{item.summary && <p className="mt-1 text-xs leading-5 text-stone-600">{item.summary}</p>}{item.significance && <p className="mt-2 text-[11px] italic leading-5 text-stone-500">{item.significance}</p>}{item.externalUrl && <a href={item.externalUrl} target="_blank" rel="noreferrer" className="mt-3 inline-block border-b border-stone-500 text-[10px] font-bold uppercase tracking-[.12em] text-stone-700">View document</a>}</>} />;
-  if (activeTab === "relationships") return <CardList items={asArray(details.relationships)} title="People" eyebrow="Relationships and contemporaries" renderMeta={(item)=>item.relationshipType ? <p className="mb-1 text-[9px] font-bold uppercase tracking-[.15em] text-stone-400">{item.relationshipType}</p> : null} renderBody={(item)=>item.description ? <p className="mt-1 text-xs leading-5 text-stone-600">{item.description}</p> : null} />;
-  if (activeTab === "controversies") return <CardList items={asArray(details.controversies)} title="Debates & controversies" eyebrow="Interpretations may differ" renderMeta={(item)=>item.confidence ? <p className="mb-1 text-[9px] font-bold uppercase tracking-[.15em] text-stone-400">{item.confidence}</p> : null} renderBody={(item)=><>{item.summary && <p className="mt-1 text-xs leading-5 text-stone-600">{item.summary}</p>}{item.historicalContext && <p className="mt-2 text-[11px] leading-5 text-stone-500">{item.historicalContext}</p>}{asArray(item.majorInterpretations).length>0 && <ul className="mt-3 space-y-2 border-t border-stone-200 pt-3">{item.majorInterpretations.map((view)=><li key={view} className="text-[11px] leading-5 text-stone-600">• {view}</li>)}</ul>}</>} />;
+  if (activeTab === "ideas") return <CardList items={meaningfulItems(details.ideasAndBeliefs, ["topic", "summary", "developmentOverTime"])} title="Ideas & beliefs" eyebrow="Positions and development" renderMeta={(item)=>item.confidence ? <p className="mb-1 text-[9px] font-bold uppercase tracking-[.15em] text-stone-400">{item.confidence}</p> : null} renderBody={(item)=><>{item.summary && <p className="mt-1 text-xs leading-5 text-stone-600">{item.summary}</p>}{item.developmentOverTime && <p className="mt-2 border-t border-stone-200 pt-2 text-[11px] leading-5 text-stone-500">Development: {item.developmentOverTime}</p>}</>} />;
+  if (activeTab === "documents") return <CardList items={meaningfulItems(details.documents, ["title", "summary", "significance", "externalUrl"])} title="Documents" eyebrow="Speeches, texts, and records" renderMeta={(item)=>{const meta=[item.documentType,item.dateDisplay].filter(Boolean).join(" · ");return meta ? <p className="mb-1 text-[9px] font-bold uppercase tracking-[.15em] text-stone-400">{meta}</p> : null;}} renderBody={(item)=><>{item.summary && <p className="mt-1 text-xs leading-5 text-stone-600">{item.summary}</p>}{item.significance && <p className="mt-2 text-[11px] italic leading-5 text-stone-500">{item.significance}</p>}{item.externalUrl && <a href={item.externalUrl} target="_blank" rel="noreferrer" className="mt-3 inline-block border-b border-stone-500 text-[10px] font-bold uppercase tracking-[.12em] text-stone-700">View document</a>}</>} />;
+  if (activeTab === "relationships") return <CardList items={meaningfulItems(details.relationships, ["personName", "description", "relationshipType"])} title="People" eyebrow="Relationships and contemporaries" renderMeta={(item)=>item.relationshipType ? <p className="mb-1 text-[9px] font-bold uppercase tracking-[.15em] text-stone-400">{item.relationshipType}</p> : null} renderBody={(item)=>item.description ? <p className="mt-1 text-xs leading-5 text-stone-600">{item.description}</p> : null} />;
+  if (activeTab === "controversies") return <CardList items={meaningfulItems(details.controversies, ["title", "summary", "historicalContext", "majorInterpretations"])} title="Debates & controversies" eyebrow="Interpretations may differ" renderMeta={(item)=>item.confidence ? <p className="mb-1 text-[9px] font-bold uppercase tracking-[.15em] text-stone-400">{item.confidence}</p> : null} renderBody={(item)=><>{item.summary && <p className="mt-1 text-xs leading-5 text-stone-600">{item.summary}</p>}{item.historicalContext && <p className="mt-2 text-[11px] leading-5 text-stone-500">{item.historicalContext}</p>}{asArray(item.majorInterpretations).some(hasText) && <ul className="mt-3 space-y-2 border-t border-stone-200 pt-3">{asArray(item.majorInterpretations).filter(hasText).map((view)=><li key={view} className="text-[11px] leading-5 text-stone-600">• {view}</li>)}</ul>}</>} />;
   if (activeTab === "legacy") return <section className="rounded-[22px] border border-stone-200 bg-white p-5"><SectionTitle eyebrow="Influence and interpretation">Legacy</SectionTitle><TextBlock title="Immediate impact" text={details.legacy?.immediateImpact}/><TextBlock title="Long-term impact" text={details.legacy?.longTermImpact}/><TextBlock title="Modern reputation" text={details.legacy?.modernReputation}/>{asArray(details.legacy?.historicalDebates).length>0 && <div className="border-t border-stone-100 pt-4"><p className="mb-2 text-[10px] font-bold uppercase tracking-[.14em] text-stone-400">Historical debates</p><ul className="space-y-2">{asArray(details.legacy.historicalDebates).map((debate)=><li key={typeof debate === "string" ? debate : debate.title} className="text-xs leading-5 text-stone-600">• {typeof debate === "string" ? debate : debate.summary || debate.title}</li>)}</ul></div>}</section>;
-  if (activeTab === "sources") return <CardList items={asArray(details.sources)} title="Sources" eyebrow="References for this profile" renderMeta={(item)=>{const meta=[item.type,item.organization].filter(Boolean).join(" · ");return meta ? <p className="mb-1 text-[9px] font-bold uppercase tracking-[.15em] text-stone-400">{meta}</p> : null;}} renderBody={(item)=>item.url ? <a href={item.url} target="_blank" rel="noreferrer" className="mt-2 inline-block break-all text-xs leading-5 text-stone-600 underline decoration-stone-300 underline-offset-4">Open source</a> : null} />;
+  if (activeTab === "sources") return <CardList items={meaningfulItems(details.sources, ["title", "organization", "type", "url"])} title="Sources" eyebrow="References for this profile" renderMeta={(item)=>{const meta=[item.type,item.organization].filter(Boolean).join(" · ");return meta ? <p className="mb-1 text-[9px] font-bold uppercase tracking-[.15em] text-stone-400">{meta}</p> : null;}} renderBody={(item)=>item.url ? <a href={item.url} target="_blank" rel="noreferrer" className="mt-2 inline-block break-all text-xs leading-5 text-stone-600 underline decoration-stone-300 underline-offset-4">Open source</a> : null} />;
   return null;
 }
 
