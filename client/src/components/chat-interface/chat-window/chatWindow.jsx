@@ -18,6 +18,7 @@ import {
 import { auth, db } from "../../../firebase";
 import Sidebar from "../sidebar/sidebar";
 import CharacterInfoPanel, { buildCharacterSections } from "../character-info/CharacterInfoPanel";
+import HistoricalExperience from "../character-info/HistoricalExperience";
 
 const starterPrompts = [
   "Describe the world you grew up in",
@@ -82,6 +83,9 @@ function ChatWindow() {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const [isInformationPanelVisible, setInformationPanelVisible] = useState(false);
   const [activeInformationSection, setActiveInformationSection] = useState("overview");
+  const [workspaceMode, setWorkspaceMode] = useState("explore");
+  const [exploredSections, setExploredSections] = useState([]);
+  const [activeWorkspaceExperience, setActiveWorkspaceExperience] = useState(null);
 
   const textareaRef = useRef(null);
   const endOfMessagesRef = useRef(null);
@@ -269,9 +273,48 @@ function ChatWindow() {
     ...(explorationCopy[section.id] || { title: section.label, description: "Explore this chapter" }),
   }));
   const activeExplorationStop = explorationStops.find((stop) => stop.id === activeInformationSection);
+  const experienceDetails = {
+    overview: { title: "Learn who they were", kicker: "Biography", description: "See their life, roles, dates, and historical importance.", action: "Read the biography", count: null },
+    timeline: { title: "Browse their life in order", kicker: "Timeline", description: "Move through dated events from their early life to their final years.", action: "Open the timeline", count: (botDetails.timeline?.length || botDetails.keyMoments?.length || 0) },
+    context: { title: "Understand their world", kicker: "Historical context", description: "Learn what was happening before, during, and around their lifetime.", action: "View the context", count: null },
+    ideas: { title: "Examine their beliefs", kicker: "Ideas & beliefs", description: "Choose a belief to see what it meant and how it shaped their actions.", action: "Choose a belief", count: botDetails.ideasAndBeliefs?.length || 0 },
+    documents: { title: "Examine historical records", kicker: "Documents", description: "Read summaries of letters, manuscripts, speeches, and other evidence.", action: "View the documents", count: botDetails.documents?.length || 0 },
+    relationships: { title: "See the people in their life", kicker: "Relationships", description: "Choose a person to understand their connection to the figure.", action: "Browse people", count: botDetails.relationships?.length || 0 },
+    controversies: { title: "Compare disputed accounts", kicker: "Debates", description: "Review competing interpretations and decide which claim to examine.", action: "Compare accounts", count: botDetails.controversies?.length || 0 },
+    legacy: { title: "See what changed afterward", kicker: "Legacy", description: "Compare their immediate impact, long-term influence, and reputation today.", action: "View their impact", count: botDetails.legacy?.historicalDebates?.length || 0 },
+    sources: { title: "Open the references", kicker: "Sources", description: "See the websites and records used to build this historical profile.", action: "Check sources", count: botDetails.sources?.length || 0 },
+    conversationGuide: { title: "Choose a question to ask", kicker: "Suggested questions", description: "Pick a prepared question and send it as a letter to the character.", action: "Choose a question", count: botDetails.conversation?.suggestedQuestions?.length || 0 },
+  };
+  const workspaceExperiences = explorationStops.map((stop) => ({ ...stop, ...experienceDetails[stop.id] }));
+  const recommendationOrder = ["overview", "timeline", "context", "ideas", "documents", "relationships", "controversies", "legacy", "sources", "conversationGuide"];
+  const recommendedExperience = recommendationOrder
+    .map((id) => workspaceExperiences.find((experience) => experience.id === id))
+    .find((experience) => experience && !exploredSections.includes(experience.id)) || workspaceExperiences[0];
+  const experienceGroups = [
+    { title: "Learn the story", description: "Life, events, setting, and impact", ids: ["overview", "timeline", "context", "legacy"] },
+    { title: "Understand people and ideas", description: "Beliefs and important relationships", ids: ["ideas", "relationships"] },
+    { title: "Examine evidence and debate", description: "Documents, disputed accounts, and references", ids: ["documents", "controversies", "sources"] },
+    { title: "Ask the character", description: "Choose a prepared question", ids: ["conversationGuide"] },
+  ].map((group) => ({
+    ...group,
+    experiences: group.ids.map((id) => workspaceExperiences.find((experience) => experience.id === id)).filter(Boolean),
+  })).filter((group) => group.experiences.length > 0);
+  const journeyProgress = informationSections.length
+    ? Math.round((exploredSections.length / informationSections.length) * 100)
+    : 0;
   const openInformationSection = (sectionId = activeInformationSection) => {
     setActiveInformationSection(sectionId);
+    setExploredSections((sections) => sections.includes(sectionId) ? sections : [...sections, sectionId]);
     setInformationPanelVisible(true);
+  };
+  const enterWorkspaceExperience = (sectionId) => {
+    setActiveWorkspaceExperience(sectionId);
+    setExploredSections((sections) => sections.includes(sectionId) ? sections : [...sections, sectionId]);
+    setInformationPanelVisible(false);
+  };
+  const askFromExperience = (question) => {
+    setWorkspaceMode("correspondence");
+    fillPrompt(question);
   };
 
   const factsPanel = (
@@ -312,14 +355,14 @@ function ChatWindow() {
         </div>
 
         {informationSections.length > 0 && (
-          <button type="button" onClick={() => openInformationSection()} className="ml-auto flex items-center gap-2 rounded-full bg-[#a34c35] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-stone-900 sm:px-4">
+          <button type="button" onClick={() => { setWorkspaceMode("explore"); setActiveWorkspaceExperience(null); setInformationPanelVisible(false); }} className="ml-auto flex items-center gap-2 rounded-full bg-[#a34c35] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-stone-900 sm:px-4">
             <span>Explore {firstName}</span>
             <span className="grid h-5 min-w-5 place-items-center rounded-full bg-white/20 px-1 text-[9px]">{informationSections.length}</span>
           </button>
         )}
       </header>
 
-      {explorationStops.length > 0 && (
+      {explorationStops.length > 0 && workspaceMode === "correspondence" && (
         <section className="relative z-20 flex flex-none items-stretch gap-2 border-b border-stone-900/10 bg-[#eee5d6] px-2 py-2 sm:px-3">
           <button type="button" onClick={() => openInformationSection()} className="group hidden w-[230px] flex-none flex-col justify-center rounded-[20px] border border-stone-900/10 bg-white/35 px-5 text-left transition hover:bg-[#fffaf1] md:flex xl:w-[280px] xl:px-7">
             <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#a34c35]">Beyond the conversation</span>
@@ -395,8 +438,80 @@ function ChatWindow() {
             </div>
           </div>
 
+          <nav className="flex flex-none justify-center border-b border-stone-900/10 bg-[#faf7f0] px-3 py-2.5 sm:px-5" aria-label="Choose between exploring history and writing a letter">
+            <div className="grid w-full max-w-[390px] grid-cols-2 rounded-full border border-stone-900/10 bg-[#eee8dd] p-1">
+              <button type="button" onClick={() => setWorkspaceMode("explore")} className={`flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition ${workspaceMode === "explore" ? "bg-stone-900 text-white shadow-sm" : "text-stone-500 hover:bg-white/70 hover:text-stone-900"}`}><span aria-hidden="true">⌂</span> Explore history</button>
+              <button type="button" onClick={() => setWorkspaceMode("correspondence")} className={`flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition ${workspaceMode === "correspondence" ? "bg-stone-900 text-white shadow-sm" : "text-stone-500 hover:bg-white/70 hover:text-stone-900"}`}><span aria-hidden="true">✉</span> Write a letter {messages.length > 0 && <span className="opacity-60">({messages.length})</span>}</button>
+            </div>
+          </nav>
+
           <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto bg-[#fffdf8] px-4 py-6 sm:px-8 lg:px-12">
-            {loadingMessages ? (
+            {workspaceMode === "explore" && activeWorkspaceExperience ? (
+              <div className="experience-stage mx-auto h-full max-w-5xl overflow-y-auto py-1 sm:py-4">
+                <HistoricalExperience
+                  sectionId={activeWorkspaceExperience}
+                  details={botDetails}
+                  name={botName || "this historical figure"}
+                  onAsk={askFromExperience}
+                  onBack={() => setActiveWorkspaceExperience(null)}
+                />
+              </div>
+            ) : workspaceMode === "explore" ? (
+              <div className="mx-auto max-w-4xl py-2 sm:py-5">
+                <div className="mb-6 flex items-end justify-between gap-4">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#a34c35]">Explore {botName || "history"}</p>
+                    <h2 className="mt-2 font-serif text-3xl text-stone-900 sm:text-4xl">Start with one simple step.</h2>
+                  </div>
+                  <div className="hidden w-36 sm:block">
+                    <div className="flex justify-between text-[9px] font-bold uppercase tracking-wider text-stone-400"><span>Completed</span><span>{journeyProgress}%</span></div>
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-stone-100"><div className="h-full rounded-full bg-[#a34c35] transition-all duration-700" style={{ width: `${journeyProgress}%` }} /></div>
+                  </div>
+                </div>
+
+                {recommendedExperience && (
+                  <button type="button" onClick={() => enterWorkspaceExperience(recommendedExperience.id)} className="group grid w-full gap-5 rounded-[30px] bg-stone-900 p-6 text-left text-white shadow-[0_18px_45px_rgba(28,25,23,0.16)] transition hover:-translate-y-0.5 sm:grid-cols-[1fr_auto] sm:items-center sm:p-8">
+                    <div>
+                      <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/45">Recommended next · {recommendedExperience.kicker}</p>
+                      <h3 className="mt-3 font-serif text-3xl leading-tight">{recommendedExperience.title}</h3>
+                      <p className="mt-2 max-w-xl text-sm leading-6 text-white/65">{recommendedExperience.description}</p>
+                    </div>
+                    <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-bold text-stone-900">{exploredSections.length ? "Continue" : "Start here"}<span className="transition group-hover:translate-x-1">→</span></span>
+                  </button>
+                )}
+
+                <section className="mt-8">
+                  <div className="mb-4 flex items-end justify-between gap-3">
+                    <div><h3 className="font-serif text-2xl text-stone-900">All activities</h3><p className="mt-1 text-xs text-stone-500">Everything is available. Choose any activity in any order.</p></div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">{workspaceExperiences.length} choices</span>
+                  </div>
+                  <div className="grid gap-3 lg:grid-cols-2">
+                    {experienceGroups.map((group) => (
+                      <section key={group.title} className="overflow-hidden rounded-[24px] border border-stone-900/10 bg-white">
+                        <div className="border-b border-stone-900/10 bg-[#f5ede1] px-5 py-3">
+                          <h4 className="font-serif text-lg text-stone-900">{group.title}</h4>
+                          <p className="mt-0.5 text-[10px] text-stone-500">{group.description}</p>
+                        </div>
+                        <div>
+                          {group.experiences.map((experience) => {
+                            const recommended = recommendedExperience?.id === experience.id;
+                            const visited = exploredSections.includes(experience.id);
+                            return <button type="button" key={experience.id} onClick={() => enterWorkspaceExperience(experience.id)} className="group flex w-full items-start gap-3 border-b border-stone-900/10 px-4 py-4 text-left transition last:border-b-0 hover:bg-[#faf7f0]">
+                              <span className={`grid h-9 w-9 flex-none place-items-center rounded-full font-serif text-sm ${recommended ? "bg-[#a34c35] text-white" : "bg-[#f0e6d8] text-[#a34c35]"}`}>{visited ? "✓" : experience.number}</span>
+                              <span className="min-w-0 flex-1">
+                                <span className="flex flex-wrap items-center gap-2"><span className="font-bold text-stone-800">{experience.title}</span>{recommended && <span className="rounded-full bg-[#a34c35]/10 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#a34c35]">Recommended</span>}{experience.count > 0 && <span className="text-[9px] font-bold text-stone-400">{experience.count} items</span>}</span>
+                                <span className="mt-1 block text-[11px] leading-5 text-stone-500">{experience.description}</span>
+                              </span>
+                              <span className="mt-2 transition group-hover:translate-x-1">→</span>
+                            </button>;
+                          })}
+                        </div>
+                      </section>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            ) : loadingMessages ? (
               <div className="grid h-full place-items-center">
                 <p className="animate-pulse font-serif text-stone-400">Opening the story…</p>
               </div>
@@ -438,7 +553,9 @@ function ChatWindow() {
                       {message.message && (
                         <div className="relative rounded-[22px] border border-stone-900/10 bg-white/65 p-4">
                           <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.24em] text-stone-400">Sent from the present</p>
-                          <p className="handwritten-note text-lg leading-8 text-stone-600 sm:text-xl">Dear {firstName}, &nbsp;{message.message}</p>
+                          <p className="correspondence-script text-lg leading-8 text-stone-700 sm:text-xl">Dear {firstName},</p>
+                          <p className="correspondence-script mt-2 text-lg leading-8 text-stone-700 sm:text-xl">{message.message}</p>
+                          <p className="correspondence-script mt-4 text-sm italic text-stone-400">— From a visitor in the present</p>
                         </div>
                       )}
 
@@ -464,6 +581,7 @@ function ChatWindow() {
             )}
           </div>
 
+          {workspaceMode === "correspondence" && (
           <div className="flex-none border-t border-stone-900/10 bg-[#faf7f0] p-3 sm:px-8 sm:py-4 lg:px-12">
             {hasConversation && !sendingMessage && (
               <div className="custom-scrollbar mb-3 flex gap-2 overflow-x-auto pb-1">
@@ -477,10 +595,11 @@ function ChatWindow() {
 
             <form onSubmit={handleSendMessage} className="relative">
               <div className="letter-composer relative rounded-[24px] border border-[#d7cab8] bg-[#fffdf8] px-4 pb-2 pt-3 shadow-[0_8px_24px_rgba(75,57,39,0.06)] transition focus-within:border-[#a34c35] focus-within:shadow-[0_10px_30px_rgba(75,57,39,0.12)] sm:rounded-[28px]">
-                <div className="mb-1 flex items-center gap-2 border-b border-stone-900/10 pb-2 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400">
-                  <span>To: {botName || "History"}</span>
-                  <span className="ml-auto">From: The present</span>
+                <div className="mb-3 flex items-center gap-2 border-b border-stone-900/10 pb-2 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400">
+                  <span className="flex items-center gap-2"><span className="grid h-5 w-5 place-items-center rounded-full bg-[#a34c35] text-[9px] text-white">✦</span>Letter across time</span>
+                  <span className="ml-auto hidden sm:inline">To: {botName || "History"}</span>
                 </div>
+                <p className="correspondence-script px-1 text-base text-stone-700 sm:text-lg">Dear {firstName},</p>
                 <div className="flex items-end gap-2">
                 <textarea
                   ref={textareaRef}
@@ -490,24 +609,25 @@ function ChatWindow() {
                     resizeTextarea(event.target);
                   }}
                   onKeyDown={handleKeyDown}
-                  placeholder={`Dear ${firstName}, I have always wondered…`}
+                  placeholder="I have always wondered…"
                   rows="1"
                   disabled={sendingMessage}
-                  className="handwritten-note max-h-[120px] min-h-[44px] flex-1 resize-none bg-transparent px-1 py-3 text-base text-stone-800 outline-none placeholder:text-stone-400 disabled:opacity-60 sm:text-lg"
+                  className="correspondence-script max-h-[120px] min-h-[48px] flex-1 resize-none bg-transparent px-1 py-2 text-base text-stone-800 outline-none placeholder:text-stone-400 disabled:opacity-60 sm:text-lg"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || sendingMessage}
-                  className="grid h-11 w-11 flex-none place-items-center rounded-full bg-[#a34c35] text-white transition hover:scale-105 hover:bg-stone-900 disabled:scale-100 disabled:bg-stone-200 disabled:text-stone-400"
+                  className="flex h-11 flex-none items-center justify-center gap-2 rounded-full bg-[#a34c35] px-4 text-white transition hover:scale-[1.03] hover:bg-stone-900 disabled:scale-100 disabled:bg-stone-200 disabled:text-stone-400"
                   aria-label="Send letter"
                 >
-                  {sendingMessage ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> : <ArrowIcon />}
+                  {sendingMessage ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> : <><span className="text-xs font-bold">Send</span><ArrowIcon /></>}
                 </button>
                 </div>
               </div>
             </form>
             <p className="mt-2 px-1 text-[10px] text-stone-400">{sendError || "This is a historical interpretation. Important facts should be verified."}</p>
           </div>
+          )}
         </section>
 
         {informationSections.length > 0 && (
@@ -592,9 +712,11 @@ function ChatWindow() {
           line-height: 0.78;
         }
 
-        .handwritten-note {
-          font-family: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
-          letter-spacing: -0.025em;
+        .correspondence-script {
+          font-family: Baskerville, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+          letter-spacing: 0.005em;
         }
 
         .letter-paper,
