@@ -1,16 +1,32 @@
-.user-profile-page-container{
-    display: flex;
-    margin: 0px;
-    padding: 0;
-    flex-direction: row;
+.profile-settings-page {
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background: #f3eee4;
+  color: #211e1a;
 }
 
-.sidebar-container-user-profile-page{
-    width: 17%;
+.profile-settings-page__texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  background-image:
+    radial-gradient(rgba(78, 63, 45, 0.12) 0.55px, transparent 0.7px),
+    radial-gradient(rgba(255, 255, 255, 0.65) 0.55px, transparent 0.7px);
+  background-position: 0 0, 5px 5px;
+  background-size: 10px 10px;
+  mix-blend-mode: multiply;
 }
 
-.user-profile-container-user-profile-page{
-    width: 83%;
-    margin-top: 0px;
-    background-color: rgba(0, 0, 0, 0.983);
+.profile-settings-page__glow {
+  position: fixed;
+  top: -24rem;
+  right: -15rem;
+  width: 48rem;
+  height: 48rem;
+  pointer-events: none;
+  border-radius: 999px;
+  background: rgba(255, 252, 244, 0.92);
+  filter: blur(30px);
 }

@@ -1,21 +1,14 @@
-import { Sidebar } from "../../components/chat-interface/chatExport"
-import UserProfile from "../../components/userProfile/userProfile"
-import "./userProfilePage.css"
+import UserProfile from "../../components/userProfile/userProfile";
+import "./userProfilePage.css";
 
-function UserProfilePage(){
-    return (
-        <>
-        <div className="user-profile-page-container">
-            <div className="sidebar-container-user-profile-page">
-                <Sidebar />
-            </div>
-            <div className="user-profile-container-user-profile-page">
-                <UserProfile />
-            </div>
-        </div>
-        </>
-    )
-    
+function UserProfilePage() {
+  return (
+    <main className="profile-settings-page">
+      <div className="profile-settings-page__texture" aria-hidden="true" />
+      <div className="profile-settings-page__glow" aria-hidden="true" />
+      <UserProfile />
+    </main>
+  );
 }
 
-export default UserProfilePage
+export default UserProfilePage;
