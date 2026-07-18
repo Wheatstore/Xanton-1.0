@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useParams } from "react-router-dom";
+import { BookOpen, Clock3, FileText, Globe2, Landmark, Lightbulb, MailQuestion, Scale, ScrollText, UsersRound } from "lucide-react";
 import {
   addDoc,
   collection,
@@ -45,6 +47,42 @@ const explorationCopy = {
   legacy: { title: "Their impact", description: "What they left behind" },
   sources: { title: "Evidence", description: "Check the sources" },
 };
+
+const experienceIcons = {
+  overview: BookOpen,
+  timeline: Clock3,
+  context: Globe2,
+  ideas: Lightbulb,
+  documents: ScrollText,
+  relationships: UsersRound,
+  controversies: Scale,
+  legacy: Landmark,
+  sources: FileText,
+  conversationGuide: MailQuestion,
+};
+
+function formatInlineText(text) {
+  return String(text).split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g).filter(Boolean).map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) return <strong key={`${part}-${index}`} className="font-semibold">{part.slice(2, -2)}</strong>;
+    if (part.startsWith("*") && part.endsWith("*")) return <em key={`${part}-${index}`}>{part.slice(1, -1)}</em>;
+    if (part.startsWith("`") && part.endsWith("`")) return <code key={`${part}-${index}`} className="rounded bg-stone-900/5 px-1.5 py-0.5 font-mono text-[0.88em]">{part.slice(1, -1)}</code>;
+    return <span key={`${part}-${index}`}>{part}</span>;
+  });
+}
+
+function FormattedText({ text, className = "" }) {
+  const blocks = String(text || "").split(/\n{2,}/).filter((block) => block.trim());
+  return <div className={`formatted-message ${className}`}>
+    {blocks.map((block, blockIndex) => {
+      const lines = block.split("\n").filter((line) => line.trim());
+      const bullets = lines.every((line) => /^\s*(?:[-•]|\*)\s+/.test(line));
+      const numbered = lines.every((line) => /^\s*\d+[.)]\s+/.test(line));
+      if (bullets) return <ul key={`${block}-${blockIndex}`} className="my-3 list-disc space-y-1.5 pl-5">{lines.map((line, lineIndex) => <li key={`${line}-${lineIndex}`}>{formatInlineText(line.replace(/^\s*(?:[-•]|\*)\s+/, ""))}</li>)}</ul>;
+      if (numbered) return <ol key={`${block}-${blockIndex}`} className="my-3 list-decimal space-y-1.5 pl-5">{lines.map((line, lineIndex) => <li key={`${line}-${lineIndex}`}>{formatInlineText(line.replace(/^\s*\d+[.)]\s+/, ""))}</li>)}</ol>;
+      return <p key={`${block}-${blockIndex}`} className="mb-3 last:mb-0">{lines.map((line, lineIndex) => <span key={`${line}-${lineIndex}`}>{formatInlineText(line)}{lineIndex < lines.length - 1 && <br />}</span>)}</p>;
+    })}
+  </div>;
+}
 
 function MenuIcon() {
   return (
@@ -285,13 +323,15 @@ function ChatWindow() {
     sources: { title: "Open the references", kicker: "Sources", description: "See the websites and records used to build this historical profile.", action: "Check sources", count: botDetails.sources?.length || 0 },
     conversationGuide: { title: "Choose a question to ask", kicker: "Suggested questions", description: "Pick a prepared question and send it as a letter to the character.", action: "Choose a question", count: botDetails.conversation?.suggestedQuestions?.length || 0 },
   };
-  const workspaceExperiences = explorationStops.map((stop) => ({ ...stop, ...experienceDetails[stop.id] }));
+  const workspaceExperiences = explorationStops.map((stop) => ({ ...stop, ...experienceDetails[stop.id], icon: experienceIcons[stop.id] || BookOpen }));
+  const timelineExperience = workspaceExperiences.find((experience) => experience.id === "timeline");
   const recommendationOrder = ["overview", "timeline", "context", "ideas", "documents", "relationships", "controversies", "legacy", "sources", "conversationGuide"];
   const recommendedExperience = recommendationOrder
     .map((id) => workspaceExperiences.find((experience) => experience.id === id))
     .find((experience) => experience && !exploredSections.includes(experience.id)) || workspaceExperiences[0];
+  const RecommendedIcon = recommendedExperience?.icon || BookOpen;
   const experienceGroups = [
-    { title: "Learn the story", description: "Life, events, setting, and impact", ids: ["overview", "timeline", "context", "legacy"] },
+    { title: "Learn the story", description: "Biography, timeline, historical setting, and impact", ids: ["overview", "timeline", "context", "legacy"] },
     { title: "Understand people and ideas", description: "Beliefs and important relationships", ids: ["ideas", "relationships"] },
     { title: "Examine evidence and debate", description: "Documents, disputed accounts, and references", ids: ["documents", "controversies", "sources"] },
     { title: "Ask the character", description: "Choose a prepared question", ids: ["conversationGuide"] },
@@ -413,8 +453,8 @@ function ChatWindow() {
             <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.3em] text-white/60">You have entered their world</p>
             <h1 className="font-serif text-5xl leading-[0.94]">{botName || "A voice from history"}</h1>
             {botDetails.profile?.subtitle && <p className="mt-4 max-w-md text-sm leading-6 text-white/70">{botDetails.profile.subtitle}</p>}
-            <blockquote className="mt-7 border-l border-[#d16b4b] pl-5 font-serif text-lg italic leading-7 text-white/90">
-              “{currentBotMessage || welcomeMessage || "Ask me about the world as I knew it."}”
+            <blockquote className="custom-scrollbar mt-7 max-h-44 overflow-y-auto border-l border-[#d16b4b] pl-5 pr-2 font-serif text-lg italic leading-7 text-white/90">
+              <FormattedText text={currentBotMessage || welcomeMessage || "Ask me about the world as I knew it."} />
             </blockquote>
             {coreTopics.length > 0 && (
               <div className="mt-7 flex flex-wrap gap-2">
@@ -469,14 +509,30 @@ function ChatWindow() {
                   </div>
                 </div>
 
-                {recommendedExperience && (
+                {recommendedExperience && recommendedExperience.id !== "timeline" && (
                   <button type="button" onClick={() => enterWorkspaceExperience(recommendedExperience.id)} className="group grid w-full gap-5 rounded-[30px] bg-stone-900 p-6 text-left text-white shadow-[0_18px_45px_rgba(28,25,23,0.16)] transition hover:-translate-y-0.5 sm:grid-cols-[1fr_auto] sm:items-center sm:p-8">
-                    <div>
+                    <div className="flex items-start gap-4">
+                      <span className="grid h-12 w-12 flex-none place-items-center rounded-[18px] bg-white/10"><RecommendedIcon className="h-6 w-6" strokeWidth={1.7} /></span>
+                      <div>
                       <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/45">Recommended next · {recommendedExperience.kicker}</p>
                       <h3 className="mt-3 font-serif text-3xl leading-tight">{recommendedExperience.title}</h3>
                       <p className="mt-2 max-w-xl text-sm leading-6 text-white/65">{recommendedExperience.description}</p>
+                      </div>
                     </div>
                     <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-bold text-stone-900">{exploredSections.length ? "Continue" : "Start here"}<span className="transition group-hover:translate-x-1">→</span></span>
+                  </button>
+                )}
+
+                {timelineExperience && (
+                  <button type="button" onClick={() => enterWorkspaceExperience("timeline")} className="group relative mt-5 grid w-full overflow-hidden rounded-[30px] border border-[#a34c35]/25 bg-[#f1e4d4] p-6 text-left shadow-[0_14px_38px_rgba(75,57,39,0.08)] transition hover:-translate-y-0.5 hover:border-[#a34c35]/50 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:gap-6 sm:p-7">
+                    <span className="absolute -right-5 -top-14 font-serif text-[150px] leading-none text-[#a34c35]/[0.06]" aria-hidden="true">{timelineExperience.count || ""}</span>
+                    <span className="grid h-16 w-16 place-items-center rounded-[22px] bg-[#a34c35] text-white shadow-md"><Clock3 className="h-8 w-8" strokeWidth={1.6} /></span>
+                    <span className="mt-4 min-w-0 sm:mt-0">
+                      <span className="flex flex-wrap items-center gap-2"><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#a34c35]">Timeline</span>{timelineExperience.count > 0 && <span className="rounded-full bg-white/70 px-2.5 py-1 text-[9px] font-bold text-[#a34c35]">{timelineExperience.count} dated moments</span>}{recommendedExperience?.id === "timeline" && <span className="rounded-full bg-stone-900 px-2.5 py-1 text-[8px] font-bold uppercase tracking-wider text-white">Recommended next</span>}</span>
+                      <span className="mt-2 block font-serif text-3xl leading-tight text-stone-900">Browse their life from beginning to end</span>
+                      <span className="mt-2 block max-w-xl text-sm leading-6 text-stone-600">Select any dated event, read what happened, and move forward or backward through the character&apos;s life.</span>
+                    </span>
+                    <span className="relative mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-stone-900 px-5 py-3 text-xs font-bold text-white sm:mt-0">Open timeline <span className="transition group-hover:translate-x-1">→</span></span>
                   </button>
                 )}
 
@@ -496,8 +552,9 @@ function ChatWindow() {
                           {group.experiences.map((experience) => {
                             const recommended = recommendedExperience?.id === experience.id;
                             const visited = exploredSections.includes(experience.id);
+                            const ExperienceIcon = experience.icon || BookOpen;
                             return <button type="button" key={experience.id} onClick={() => enterWorkspaceExperience(experience.id)} className="group flex w-full items-start gap-3 border-b border-stone-900/10 px-4 py-4 text-left transition last:border-b-0 hover:bg-[#faf7f0]">
-                              <span className={`grid h-9 w-9 flex-none place-items-center rounded-full font-serif text-sm ${recommended ? "bg-[#a34c35] text-white" : "bg-[#f0e6d8] text-[#a34c35]"}`}>{visited ? "✓" : experience.number}</span>
+                              <span className={`relative grid h-10 w-10 flex-none place-items-center rounded-[14px] ${recommended ? "bg-[#a34c35] text-white" : "bg-[#f0e6d8] text-[#a34c35]"}`}><ExperienceIcon className="h-[18px] w-[18px]" strokeWidth={1.8} />{visited && <span className="absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full bg-stone-900 text-[8px] text-white ring-2 ring-white">✓</span>}</span>
                               <span className="min-w-0 flex-1">
                                 <span className="flex flex-wrap items-center gap-2"><span className="font-bold text-stone-800">{experience.title}</span>{recommended && <span className="rounded-full bg-[#a34c35]/10 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#a34c35]">Recommended</span>}{experience.count > 0 && <span className="text-[9px] font-bold text-stone-400">{experience.count} items</span>}</span>
                                 <span className="mt-1 block text-[11px] leading-5 text-stone-500">{experience.description}</span>
@@ -554,7 +611,7 @@ function ChatWindow() {
                         <div className="relative rounded-[22px] border border-stone-900/10 bg-white/65 p-4">
                           <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.24em] text-stone-400">Sent from the present</p>
                           <p className="correspondence-script text-lg leading-8 text-stone-700 sm:text-xl">Dear {firstName},</p>
-                          <p className="correspondence-script mt-2 text-lg leading-8 text-stone-700 sm:text-xl">{message.message}</p>
+                          <FormattedText text={message.message} className="correspondence-script mt-2 text-lg leading-8 text-stone-700 sm:text-xl" />
                           <p className="correspondence-script mt-4 text-sm italic text-stone-400">— From a visitor in the present</p>
                         </div>
                       )}
@@ -563,7 +620,7 @@ function ChatWindow() {
                         <div className="letter-paper relative overflow-hidden rounded-[24px] border border-[#d8cbb8] px-5 py-6 shadow-[0_12px_30px_rgba(75,57,39,0.08)] sm:rounded-[28px] sm:px-7 sm:py-8">
                           <div className="absolute right-4 top-4 grid h-10 w-10 rotate-6 place-items-center rounded-full border border-[#a34c35]/35 text-[8px] font-bold uppercase tracking-widest text-[#a34c35]/60">Reply</div>
                           <p className="mb-5 flex items-center gap-3 pr-12 text-[9px] font-bold uppercase tracking-[0.24em] text-[#a34c35]"><span className="h-px w-7 bg-[#a34c35]" />A letter from {botName || "the historical record"}</p>
-                          <p className="memory-response font-serif text-xl leading-[1.75] text-stone-800 sm:text-[22px]">{message.reply}</p>
+                          <FormattedText text={message.reply} className="memory-response font-serif text-xl leading-[1.75] text-stone-800 sm:text-[22px]" />
                         </div>
                       )}
 
@@ -692,19 +749,21 @@ function ChatWindow() {
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(120, 113, 108, 0.35); }
 
         .immersive-chat {
-          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          font-family: Inter, "Avenir Next", Avenir, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 
         .immersive-chat .font-serif {
-          font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-          letter-spacing: -0.018em;
+          font-family: Baskerville, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+          font-weight: 400;
+          letter-spacing: -0.022em;
         }
 
         .immersive-chat .font-serif::first-letter {
           letter-spacing: 0;
         }
 
-        .memory-response::first-letter {
+        .memory-response::first-letter,
+        .memory-response > p:first-child::first-letter {
           float: left;
           margin: 0.08em 0.12em 0 0;
           color: #a34c35;
@@ -712,11 +771,23 @@ function ChatWindow() {
           line-height: 0.78;
         }
 
+        .formatted-message {
+          min-width: 0;
+          max-width: 100%;
+          overflow-wrap: anywhere;
+          word-break: normal;
+        }
+
+        .formatted-message code {
+          white-space: normal;
+          overflow-wrap: anywhere;
+        }
+
         .correspondence-script {
           font-family: Baskerville, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
           font-style: italic;
           font-weight: 400;
-          letter-spacing: 0.005em;
+          letter-spacing: 0.002em;
         }
 
         .letter-paper,

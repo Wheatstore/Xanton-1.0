@@ -46,10 +46,10 @@ function TimelineExperience({ details, name, onAsk, onBack }) {
   if (!event) return null;
   return <div>
     <ExperienceHeader eyebrow={`${events.length} moments in chronological order`} title="Walk through the timeline" description={`Follow ${name}'s life from beginning to end. Select any point to enter that moment.`} onBack={onBack}/>
-    <div className="grid items-start gap-5 md:grid-cols-[minmax(230px,0.72fr)_minmax(0,1.28fr)] lg:grid-cols-[minmax(260px,0.72fr)_minmax(0,1.28fr)]">
-      <nav className="custom-scrollbar relative max-h-[360px] overflow-y-auto rounded-[28px] border border-stone-900/10 bg-[#f8f3ea] px-3 py-5 md:max-h-[min(64vh,680px)]" aria-label={`${name} timeline`}>
-        <div className="absolute bottom-8 left-[32px] top-8 w-px bg-stone-300" aria-hidden="true" />
-        <ol className="relative space-y-1">
+    <div className="grid items-start gap-6 md:grid-cols-[minmax(280px,0.82fr)_minmax(0,1.18fr)] lg:grid-cols-[minmax(310px,0.82fr)_minmax(0,1.18fr)]">
+      <nav className="custom-scrollbar relative max-h-[420px] overflow-y-auto rounded-[30px] border border-stone-900/10 bg-[#f8f3ea] px-4 py-6 shadow-[0_12px_32px_rgba(75,57,39,0.06)] md:max-h-[min(70vh,740px)]" aria-label={`${name} timeline`}>
+        <div className="absolute bottom-9 left-[38px] top-9 w-px bg-stone-300" aria-hidden="true" />
+        <ol className="relative space-y-1.5">
           {events.map((item,index) => {
             const active = selected === index;
             return <li key={item.id || `${item.title}-${index}`}>
@@ -58,13 +58,13 @@ function TimelineExperience({ details, name, onAsk, onBack }) {
                 ref={(element) => { eventRefs.current[index] = element; }}
                 onClick={() => setSelected(index)}
                 aria-current={active ? "step" : undefined}
-                className={`group relative flex w-full items-start gap-4 rounded-[20px] px-3 py-3 text-left transition ${active ? "bg-white shadow-[0_8px_24px_rgba(75,57,39,0.09)]" : "hover:bg-white/60"}`}
+                className={`group relative flex w-full items-start gap-4 rounded-[22px] px-3.5 py-4 text-left transition ${active ? "bg-white shadow-[0_8px_24px_rgba(75,57,39,0.09)]" : "hover:bg-white/60"}`}
               >
-                <span className={`relative z-10 mt-1 h-3.5 w-3.5 flex-none rounded-full border-2 ring-4 ring-[#f8f3ea] transition ${active ? "border-[#a34c35] bg-[#a34c35] scale-110" : "border-stone-400 bg-[#f8f3ea] group-hover:border-[#a34c35]"}`} />
+                <span className={`relative z-10 mt-1 h-4 w-4 flex-none rounded-full border-2 ring-4 ring-[#f8f3ea] transition ${active ? "scale-110 border-[#a34c35] bg-[#a34c35]" : "border-stone-400 bg-[#f8f3ea] group-hover:border-[#a34c35]"}`} />
                 <span className="min-w-0">
-                  <span className={`block text-[9px] font-bold uppercase tracking-[0.16em] ${active ? "text-[#a34c35]" : "text-stone-400"}`}>{clean(item.dateDisplay || item.startDate || item.date || "Date unknown")}</span>
-                  <span className={`mt-1 block font-serif text-base leading-5 ${active ? "text-stone-900" : "text-stone-600"}`}>{clean(item.title)}</span>
-                  {(item.location || item.category) && <span className="mt-1 block truncate text-[9px] uppercase tracking-wider text-stone-400">{clean(item.location || item.category)}</span>}
+                  <span className={`block text-[10px] font-bold uppercase tracking-[0.16em] ${active ? "text-[#a34c35]" : "text-stone-400"}`}>{clean(item.dateDisplay || item.startDate || item.date || "Date unknown")}</span>
+                  <span className={`mt-1.5 block font-serif text-lg leading-6 ${active ? "text-stone-900" : "text-stone-600"}`}>{clean(item.title)}</span>
+                  {(item.location || item.category) && <span className="mt-1.5 block text-[10px] uppercase leading-4 tracking-wider text-stone-400">{clean(item.location || item.category)}</span>}
                 </span>
               </button>
             </li>;
@@ -73,21 +73,21 @@ function TimelineExperience({ details, name, onAsk, onBack }) {
       </nav>
 
       <div className="md:sticky md:top-0">
-        <article className="relative overflow-hidden rounded-[30px] border border-stone-900/10 bg-[#f3eadc] p-6 shadow-[0_16px_40px_rgba(75,57,39,0.08)] sm:p-8">
+        <article className="relative min-h-[430px] overflow-hidden rounded-[32px] border border-stone-900/10 bg-[#f3eadc] p-7 shadow-[0_16px_40px_rgba(75,57,39,0.08)] sm:min-h-[470px] sm:p-9">
           <span className="absolute -right-3 -top-8 font-serif text-[120px] leading-none text-stone-900/[0.04]">{String(selected+1).padStart(2,"0")}</span>
           <div className="flex items-center gap-3">
             <span className="rounded-full bg-[#a34c35] px-3 py-1 text-[9px] font-bold uppercase tracking-wider text-white">Moment {selected+1} of {events.length}</span>
             <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#a34c35]">{clean(event.dateDisplay || event.startDate || event.date || "Date uncertain")}</span>
           </div>
-          <h3 className="mt-4 max-w-xl font-serif text-3xl text-stone-900">{clean(event.title)}</h3>
+          <h3 className="mt-5 max-w-xl font-serif text-4xl leading-tight text-stone-900">{clean(event.title)}</h3>
           {(event.location || event.category) && <p className="mt-2 text-[10px] font-bold uppercase tracking-wider text-stone-400">{[clean(event.location), clean(event.category)].filter(Boolean).join(" · ")}</p>}
-          <p className="mt-6 max-w-2xl text-sm leading-7 text-stone-600">{clean(event.description || event.summary)}</p>
+          <p className="mt-7 max-w-2xl text-base leading-8 text-stone-600">{clean(event.description || event.summary)}</p>
           {event.significance && <div className="mt-6 rounded-[22px] bg-white/70 p-4"><p className="text-[9px] font-bold uppercase tracking-wider text-stone-400">Why this changed history</p><p className="mt-2 text-xs leading-6 text-stone-600">{clean(event.significance)}</p></div>}
           <AskAction onClick={()=>onAsk(`Take me back to ${clean(event.title)}. What did you see, fear, and decide in that moment?`)}>this moment</AskAction>
         </article>
         <div className="mt-4 flex justify-between gap-3">
-          <button type="button" disabled={selected===0} onClick={()=>setSelected(value=>value-1)} className="flex-1 rounded-full border border-stone-900/10 bg-white px-4 py-2.5 text-xs font-bold transition hover:border-stone-900 disabled:opacity-30">← Previous moment</button>
-          <button type="button" disabled={selected===events.length-1} onClick={()=>setSelected(value=>value+1)} className="flex-1 rounded-full border border-stone-900/10 bg-white px-4 py-2.5 text-xs font-bold transition hover:border-stone-900 disabled:opacity-30">Next moment →</button>
+          <button type="button" disabled={selected===0} onClick={()=>setSelected(value=>value-1)} className="flex-1 rounded-full border border-stone-900/10 bg-white px-4 py-3 text-sm font-bold transition hover:border-stone-900 disabled:opacity-30">← Previous moment</button>
+          <button type="button" disabled={selected===events.length-1} onClick={()=>setSelected(value=>value+1)} className="flex-1 rounded-full border border-stone-900/10 bg-white px-4 py-3 text-sm font-bold transition hover:border-stone-900 disabled:opacity-30">Next moment →</button>
         </div>
       </div>
     </div>
