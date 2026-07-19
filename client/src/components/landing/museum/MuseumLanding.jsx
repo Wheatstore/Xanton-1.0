@@ -4,30 +4,67 @@ import {
   ArrowRight,
   ArrowUpRight,
   BookOpen,
-  Compass,
-  Quote,
+  Clock3,
+  FileText,
+  Landmark,
+  MessageCircle,
   ScrollText,
+  Scale,
+  Users,
 } from "lucide-react";
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../../firebase";
 import MuseumFigureCard from "./MuseumFigureCard";
 import "./museumLanding.css";
 
-const encounterPrompts = [
+const discoveryPaths = [
   {
-    question: "What does courage demand of ordinary people?",
-    answer:
-      "Courage is not reserved for the remarkable. It begins when an ordinary person decides that conscience must be made visible through action.",
+    id: "timeline",
+    label: "Timeline",
+    icon: Clock3,
+    title: "Walk through a life, moment by moment.",
+    description: "Move through turning points in order, then open any moment for the story behind the date.",
+    eyebrow: "17 moments in chronological order",
+    featureTitle: "Siege of Boston ends",
+    featureDate: "March 17, 1776",
+    featureText: "The British evacuated Boston after Washington’s forces secured the heights above the city.",
+    markers: ["1732 · Birth", "1754 · First command", "1776 · Boston", "1789 · Presidency"],
   },
   {
-    question: "Which moment changed the course of your life?",
-    answer:
-      "A life is rarely altered by one moment alone. It is shaped by the instant when humiliation becomes resolve, and resolve becomes service.",
+    id: "evidence",
+    label: "Documents",
+    icon: FileText,
+    title: "Examine what the past left behind.",
+    description: "Open letters, speeches, and records. Learn who created them, why they matter, and what they leave out.",
+    eyebrow: "Artifact desk · Primary record",
+    featureTitle: "Washington’s Farewell Address",
+    featureDate: "September 19, 1796",
+    featureText: "Study the address as evidence: its intended audience, political purpose, and influence on the young republic.",
+    markers: ["Authorship", "Historical setting", "Why it matters", "Limits of the source"],
   },
   {
-    question: "What would you ask of this generation?",
-    answer:
-      "Do not inherit the language of justice without accepting its obligations. Let conviction be measured by what you are willing to practice.",
+    id: "ideas",
+    label: "Ideas & debates",
+    icon: Scale,
+    title: "Investigate beliefs, choices, and contradictions.",
+    description: "Compare interpretations, follow an idea over time, and decide which claims deserve closer examination.",
+    eyebrow: "Idea lens · Competing interpretations",
+    featureTitle: "Power and civic restraint",
+    featureDate: "An idea across a lifetime",
+    featureText: "Explore how Washington’s public ideals interacted with ambition, precedent, and the unresolved contradictions of his era.",
+    markers: ["Central belief", "How it changed", "A contradiction", "Historian’s question"],
+  },
+  {
+    id: "people",
+    label: "People & world",
+    icon: Users,
+    title: "See the forces surrounding one person.",
+    description: "Meet allies and rivals, enter the historical setting, and trace consequences beyond a single biography.",
+    eyebrow: "People index · Historical setting",
+    featureTitle: "A revolution shaped by many lives",
+    featureDate: "Virginia · The thirteen colonies",
+    featureText: "Connect a familiar name to the people, conflicts, institutions, and conditions that made their choices possible.",
+    markers: ["Allies", "Rivals", "World around them", "Lasting impact"],
   },
 ];
 
@@ -40,7 +77,7 @@ function MuseumLanding() {
   const navigate = useNavigate();
   const [figures, setFigures] = useState([]);
   const [loadingFigures, setLoadingFigures] = useState(true);
-  const [activePrompt, setActivePrompt] = useState(0);
+  const [activePath, setActivePath] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -49,9 +86,7 @@ function MuseumLanding() {
       try {
         const snapshot = await getDocs(query(collection(db, "bots")));
         if (active) {
-          setFigures(
-            snapshot.docs.map((item) => ({ id: item.id, ...item.data() }))
-          );
+          setFigures(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })));
         }
       } catch (error) {
         console.error("Unable to load the historical collection:", error);
@@ -67,6 +102,7 @@ function MuseumLanding() {
   }, []);
 
   const featuredFigures = useMemo(() => figures.slice(0, 6), [figures]);
+  const selectedPath = discoveryPaths[activePath];
 
   return (
     <main className="museum-landing">
@@ -74,19 +110,18 @@ function MuseumLanding() {
         <div className="museum-paper-grain" />
         <div className="museum-hero-index" aria-hidden="true">
           <span>EST. MMXXIV</span>
-          <span>DIGITAL COLLECTION / 01</span>
+          <span>INTERACTIVE COLLECTION / 01</span>
         </div>
 
         <div className="museum-hero-copy">
-          <p className="museum-kicker">A living archive of human thought</p>
+          <p className="museum-kicker">An interactive museum of lives and ideas</p>
           <h1 id="museum-hero-title">
-            History is not silent.
-            <em>We simply stopped asking.</em>
+            Don’t just read history.
+            <em>Step inside it.</em>
           </h1>
           <p className="museum-hero-intro">
-            Meet the people behind the dates. Enter a carefully framed
-            conversation with the thinkers, leaders, artists, and dissenters
-            who changed how we understand the world.
+            Explore a life through its defining moments, people, ideas, and
+            surviving evidence—then write directly to the person at its center.
           </p>
           <div className="museum-hero-actions">
             <button type="button" onClick={() => navigate("/signup")}>
@@ -95,6 +130,12 @@ function MuseumLanding() {
             <button type="button" className="museum-text-link" onClick={() => navigate("/bots")}>
               Browse every figure <ArrowUpRight />
             </button>
+          </div>
+          <div className="museum-hero-features" aria-label="Available experiences">
+            <span><Clock3 /> Timelines</span>
+            <span><FileText /> Documents</span>
+            <span><Scale /> Debates</span>
+            <span><MessageCircle /> Letters</span>
           </div>
         </div>
 
@@ -123,63 +164,102 @@ function MuseumLanding() {
       <section className="museum-manifesto">
         <p className="museum-section-number">01 / THE PREMISE</p>
         <blockquote>
-          A date tells you <em>when.</em>
-          <br />A conversation asks <em>why.</em>
+          A name is only the beginning.
+          <br />Follow the life <em>behind it.</em>
         </blockquote>
         <div className="museum-manifesto-note">
-          <p>Echoes of History is an interpretive space for curiosity. Biography,
-          context, and conversation are brought together so the past feels
-          human again—not flattened into a timeline.</p>
-          <figure><img src="/images/art1.png" alt="Illustrated portrait of Socrates with a quotation about wisdom"/><figcaption>Study I · On wisdom and inquiry</figcaption></figure>
+          <p>
+            Echoes of History brings biography, chronology, historical context,
+            evidence, and correspondence into one guided experience. Start with
+            what interests you and reveal more only when you are ready.
+          </p>
+          <figure>
+            <img src="/images/art1.png" alt="Illustrated portrait of Socrates with a quotation about wisdom" />
+            <figcaption>Study I · On wisdom and inquiry</figcaption>
+          </figure>
         </div>
       </section>
 
-      <section className="museum-encounter" aria-labelledby="encounter-title">
-        <div className="museum-encounter-portrait">
-          <div className="museum-portrait-frame">
-            <img src="/images/gandhi-nobg.png" alt="Mahatma Gandhi" />
+      <section className="museum-paths" aria-labelledby="paths-title">
+        <div className="museum-paths-heading">
+          <div>
+            <p className="museum-section-number">02 / INSIDE EVERY LIFE</p>
+            <h2 id="paths-title">Choose how you want to explore.</h2>
           </div>
-          <div className="museum-portrait-label">
-            <span>On view now</span>
-            <strong>Mahatma Gandhi</strong>
-            <small>1869–1948 · Statesman and activist</small>
+          <p>
+            No crowded dashboard and no required order. Begin with a timeline,
+            a document, an idea, or a person. Each path leads naturally to the next.
+          </p>
+        </div>
+
+        <div className="museum-paths-stage">
+          <nav className="museum-path-list" aria-label="Preview ways to explore history">
+            {discoveryPaths.map((path, index) => {
+              const Icon = path.icon;
+              return (
+                <button
+                  type="button"
+                  key={path.id}
+                  className={activePath === index ? "is-active" : ""}
+                  onClick={() => setActivePath(index)}
+                  aria-pressed={activePath === index}
+                >
+                  <span className="museum-path-icon"><Icon aria-hidden="true" /></span>
+                  <span>
+                    <strong>{path.label}</strong>
+                    <small>{path.title}</small>
+                  </span>
+                  <ArrowRight aria-hidden="true" />
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="museum-experience-preview" aria-live="polite">
+            <header>
+              <div>
+                <span>George Washington</span>
+                <strong>Explore history</strong>
+              </div>
+              <span className="museum-preview-status">Guided experience</span>
+            </header>
+
+            <div className="museum-preview-body">
+              <div className="museum-preview-copy">
+                <p>{selectedPath.eyebrow}</p>
+                <h3>{selectedPath.title}</h3>
+                <span>{selectedPath.description}</span>
+              </div>
+
+              <div className="museum-preview-card" key={selectedPath.id}>
+                <span className="museum-preview-number">0{activePath + 1}</span>
+                <p>{selectedPath.featureDate}</p>
+                <h4>{selectedPath.featureTitle}</h4>
+                <span>{selectedPath.featureText}</span>
+                <div className="museum-preview-tags">
+                  {selectedPath.markers.map((marker, markerIndex) => (
+                    <span key={marker} className={markerIndex === 2 ? "is-current" : ""}>
+                      {marker}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="museum-preview-correspondence">
+                <MessageCircle aria-hidden="true" />
+                <span>
+                  <strong>Turn discovery into a question</strong>
+                  <small>Write about any moment, source, person, or idea you uncover.</small>
+                </span>
+                <ArrowUpRight aria-hidden="true" />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="museum-encounter-content">
-          <p className="museum-section-number">02 / AN ENCOUNTER</p>
-          <h2 id="encounter-title">Begin with a question that matters.</h2>
-          <div className="museum-transcript" aria-live="polite">
-            <div className="museum-transcript-meta">
-              <span>Interpretive transcript</span>
-              <span>Excerpt 01</span>
-            </div>
-            <Quote aria-hidden="true" />
-            <p>{encounterPrompts[activePrompt].answer}</p>
-            <small>— A response presented in the voice of Mahatma Gandhi</small>
-          </div>
-          <div className="museum-question-list">
-            {encounterPrompts.map((prompt, index) => (
-              <button
-                type="button"
-                key={prompt.question}
-                className={activePrompt === index ? "is-active" : ""}
-                onClick={() => setActivePrompt(index)}
-              >
-                <span>0{index + 1}</span>
-                {prompt.question}
-                <ArrowRight />
-              </button>
-            ))}
-          </div>
-          <button type="button" className="museum-primary-link" onClick={() => navigate("/signup")}>
-            Continue the conversation <ArrowUpRight />
-          </button>
-          <p className="museum-disclaimer">
-            Interpretive conversations may contain inaccuracies. Important
-            claims should be checked against primary sources.
-          </p>
-        </div>
+        <button type="button" className="museum-paths-cta" onClick={() => navigate("/signup")}>
+          Open an interactive life <ArrowRight />
+        </button>
       </section>
 
       <section className="museum-collection" aria-labelledby="collection-title">
@@ -190,9 +270,9 @@ function MuseumLanding() {
           </div>
           <div>
             <p>
-              Browse a changing selection from the archive. Every portrait is
-              an invitation to ask about a decision, an era, or a life as it
-              was actually lived.
+              Every figure opens into a guided historical world: a life story,
+              chronological moments, relationships, evidence, debates, and a
+              place to ask your own questions.
             </p>
             <button type="button" onClick={() => navigate("/bots")}>
               View the complete collection <ArrowRight />
@@ -220,36 +300,34 @@ function MuseumLanding() {
 
       <section className="museum-interlude">
         <div className="museum-interlude-mark" aria-hidden="true">“</div>
-        <p>
-          The past is a foreign country; they do things differently there.
-        </p>
+        <p>The past is a foreign country; they do things differently there.</p>
         <span>L. P. Hartley · The Go-Between · 1953</span>
       </section>
 
       <section className="museum-method" aria-labelledby="method-title">
         <div className="museum-method-intro">
-          <p className="museum-section-number">04 / HOW TO VISIT</p>
-          <h2 id="method-title">Three ways to enter an era.</h2>
+          <p className="museum-section-number">04 / HOW IT WORKS</p>
+          <h2 id="method-title">Learn by following your curiosity.</h2>
         </div>
         <div className="museum-method-grid">
           {[
             {
-              icon: <Compass />,
+              icon: <Landmark />,
               number: "I",
-              title: "Choose a life",
-              text: "Begin with the person who unsettles, inspires, or puzzles you. Curiosity is the only required map.",
+              title: "Enter the world",
+              text: "Start with a clear portrait of the person, their era, and the forces shaping the choices ahead of them.",
             },
             {
               icon: <BookOpen />,
               number: "II",
-              title: "Ask beyond the textbook",
-              text: "Move past dates and titles. Ask about private doubts, difficult choices, rivals, and consequences.",
+              title: "Follow what interests you",
+              text: "Open a moment, idea, relationship, debate, or document. Each experience adapts to the records available.",
             },
             {
-              icon: <ScrollText />,
+              icon: <MessageCircle />,
               number: "III",
-              title: "Return to the record",
-              text: "Treat every exchange as a doorway. Follow it into biographies, documents, and primary sources.",
+              title: "Write across time",
+              text: "Turn something you discovered into a focused letter. Ask for a defense, explanation, memory, or perspective.",
             },
           ].map((item) => (
             <article key={item.number}>
@@ -267,8 +345,8 @@ function MuseumLanding() {
           <p className="museum-section-number">05 / FROM THE READING ROOM</p>
           <h2>History rewards the second question.</h2>
           <p>
-            Continue beyond the conversation with essays on people, events,
-            and the complicated ideas they left behind.
+            Continue beyond an individual life with essays on people, events,
+            evidence, and the complicated ideas they left behind.
           </p>
           <button type="button" onClick={() => navigate("/articles")}>
             Enter the reading room <ArrowRight />
@@ -277,7 +355,7 @@ function MuseumLanding() {
         <div className="museum-document-stack" aria-hidden="true">
           <div className="museum-document museum-document-back">
             <span>ARCHIVE / NOTES</span>
-            <img className="museum-document-art" src="/images/art5.png" alt="Illustration of a writing quill over manuscript" />
+            <img className="museum-document-art" src="/images/art5.png" alt="" />
           </div>
           <div className="museum-document museum-document-front">
             <span>FIELD RECORD · NO. 17</span>
@@ -292,7 +370,7 @@ function MuseumLanding() {
         <img src="/images/art2.png" alt="" aria-hidden="true" />
         <div>
           <p className="museum-section-number">THE ARCHIVE IS OPEN</p>
-          <h2>The next question<br />belongs to you.</h2>
+          <h2>There is more than one<br />way into the past.</h2>
           <button type="button" onClick={() => navigate("/signup")}>
             Begin your visit <ArrowRight />
           </button>
