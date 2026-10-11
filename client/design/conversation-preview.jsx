@@ -19,14 +19,23 @@ const figures = [
 const details={
  profile:{fullName:'Mahatma Gandhi',subtitle:'Activist · India · 1869–1948',birthDateDisplay:'1869',birthPlace:'Porbandar, India',deathDateDisplay:'1948',occupations:['Activist'],eras:['19th–20th century']},
  biography:{short:'Explore nonviolent resistance, personal conviction, and the choices that shape a movement.',detailed:'This is development fixture content for reviewing the UI. It is not a complete historical record.',historicalImportance:'The fixture lets us verify the full biography disclosure.'},
- timeline:[{title:'An early chapter',dateDisplay:'1869',description:'Development fixture text for inspecting the selected moment.'},{title:'A turning point',dateDisplay:'1915',description:'A second fixture moment for testing timeline navigation.'}],
+ timeline:[
+  {title:'An early chapter',dateDisplay:'1869',location:'Preview location',category:'Early life',description:'Development fixture content, not a historical account. This moment introduces the chronological record.',significance:'A short explanation helps readers see why a recorded event belongs in the story.'},
+  {title:'Learning and discovery',dateDisplay:'1888',category:'Education',description:'Development fixture content for checking how a second event appears along the line.'},
+  {title:'A different world',dateDisplay:'1893',category:'Journeys',description:'Development fixture content for checking a journey on the timeline.',significance:'The selected date and the event remain connected as you explore.'},
+  {title:'An idea takes shape',dateDisplay:'1906',category:'Ideas',description:'Development fixture content for an event with a longer account. '+ 'This additional paragraph is included to verify that the reader can expand the complete record without losing the selected date. '.repeat(4)},
+  {title:'A turning point',dateDisplay:'1915',category:'Public life',description:'Development fixture content for testing navigation between moments.'},
+  {title:'A defining moment',dateDisplay:'1930',category:'Public life',description:'Development fixture content for inspecting a selected later moment.',significance:'The record can distinguish what happened from why it mattered.'},
+  {title:'A changing world',dateDisplay:'1947',category:'Later life',description:'Development fixture content for testing navigation near the end of the timeline.'},
+  {title:'The final chapter',dateDisplay:'1948',category:'Later life',description:'Development fixture content for checking the last event and disabled next control.'},
+ ],
  documents:[{title:'A letter from the collection',documentType:'Letter',dateDisplay:'1930',summary:'Development fixture content for reviewing document selection.',significance:'This is not a historical document.'}],
  ideasAndBeliefs:[{topic:'Nonviolent resistance',summary:'Development fixture text for reviewing an idea.',developmentOverTime:'Additional fixture context.'},{topic:'Personal conviction',summary:'A second fixture idea.'}],
- relationships:[{personName:'A contemporary',relationshipType:'Colleague',description:'Fixture relationship text.'}],
+ relationships:[{personName:'A contemporary',relationshipType:'Colleague',description:'Fixture relationship text.'},{personName:'An early influence',relationshipType:'Mentor',description:'Development fixture for a different kind of connection.'},{personName:'A fellow organizer',relationshipType:'Colleague',description:'Development fixture for filtering more than one connection.'}],
  historicalContext:{worldBeforeTheirRise:'Fixture context for an early scene.',worldDuringTheirLife:'Fixture context for a later scene.'},
  controversies:[{title:'A contested decision',summary:'Fixture text for comparing interpretations.',majorInterpretations:['One interpretation.','Another interpretation.']}],
- legacy:{immediateImpact:'Development fixture for the legacy view.'},
- sources:[{title:'Preview reference',organization:'Development fixture',type:'Reference',url:'https://example.com'}],
+ legacy:{immediateImpact:'Development fixture for the immediate impact view.',longTermImpact:'Development fixture for comparing a longer perspective.',modernReputation:'Development fixture for reviewing how interpretations change.'},
+ sources:[{title:'Preview reference',organization:'Development fixture',type:'Reference',url:'https://example.com'},{title:'An archive catalogue',organization:'Preview archive',type:'Archive',url:'https://example.com/archive'},{title:'An offline reference',organization:'Preview library',type:'Reference'}],
  conversation:{suggestedQuestions:['What decision changed your life?','What did nonviolence mean to you?','How did you respond to doubt?'],coreTopics:['Nonviolent resistance'],personalityDescription:'Development fixture for the portrayal description.',speakingStyle:'Development fixture for speaking style.',knowledgeLimitations:['AI portrayal may simplify historical nuance.']},
 };
 function Preview(){

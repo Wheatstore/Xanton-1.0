@@ -1,265 +1,178 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Check, ChevronDown, GitBranch, Lightbulb, MapPin, MessageCircle, Search, X } from "lucide-react";
+import { buildCharacterSections } from "./CharacterInfoPanel";
+import { chapterInfo, clean, eventDate, excerpt, historicalDate, list, orderedEvents, sourceHref } from "./historyData";
+import "./history.css";
 
-const list = (value) => Array.isArray(value) ? value.filter(Boolean) : [];
-const clean = (value = "") => typeof value === "string" ? value.replace(/\s*\[[^\]]+\]\s*$/g, "").trim() : typeof value === "number" ? String(value) : value?.summary || value?.description || value?.title || "";
-
-function ExperienceHeader({ eyebrow, title, description, onBack }) {
-  const image = /artifact|evidence|investigation/i.test(eyebrow) ? "page-feedback-letters" : /idea|curiosity/i.test(eyebrow) ? "page-features-cabinet" : /people/i.test(eyebrow) ? "page-about-gallery" : "page-workspace-path";
-  return (
-    <><figure className="workspace-art"><img src={`/images/${image}.webp`} alt=""/><figcaption>Illustrative artwork · Echoes of History</figcaption></figure><header className="mb-7 flex items-start gap-4 border-b border-stone-900/10 pb-6">
-      {onBack && <button type="button" onClick={onBack} className="grid h-10 w-10 flex-none place-items-center rounded-full border border-stone-900/10 bg-white text-stone-600 transition hover:bg-stone-900 hover:text-white" aria-label="Back to life story">←</button>}
-      <div>
-        <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#214f78]">{eyebrow}</p>
-        <h2 className="mt-1 font-serif text-3xl leading-tight text-stone-900 sm:text-4xl">{title}</h2>
-        {description && <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">{description}</p>}
-      </div>
-    </header></>
-  );
+function ChapterHeader({ section, title, description }) {
+  const image = ["documents", "sources", "controversies"].includes(section) ? "page-feedback-letters" : ["ideas", "conversationGuide"].includes(section) ? "page-features-cabinet" : section === "relationships" ? "page-about-gallery" : "page-workspace-path";
+  return <header className={`hx-header hx-header-${section}`}><div><p className="hx-eyebrow">{chapterInfo[section][0]}</p><h2 tabIndex={-1}>{title}</h2><p className="hx-description">{description}</p></div><figure><img src={`/images/${image}.webp`} alt=""/><figcaption>Illustrative artwork</figcaption></figure></header>;
 }
 
-function AskAction({ children, onClick }) {
-  return <button type="button" onClick={onClick} className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#214f78] px-4 py-2.5 text-xs font-bold text-white transition hover:-translate-y-0.5 hover:bg-stone-900">Ask about this <span>→</span><span className="sr-only">{children}</span></button>;
+function ReadingText({ value, limit = 290 }) {
+  const [expanded, setExpanded] = useState(false);
+  const id = useId();
+  const text = clean(value);
+  if (!text) return null;
+  return <div className="hx-reading"><div id={id}>{(expanded ? text : excerpt(text, limit)).split(/\n\s*\n/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>{text.length > limit && <button type="button" className="hx-text-button" aria-expanded={expanded} aria-controls={id} onClick={() => setExpanded(value => !value)}>{expanded ? "Show less" : "Read the full text"}<ChevronDown size={14} className={expanded ? "is-open" : ""}/></button>}</div>;
 }
 
-function timelineOrder(event, index) {
-  const value = String(event.startDate || event.date || event.dateDisplay || "");
-  const match = value.match(/(-?\d{1,4})(?:-(\d{1,2}))?(?:-(\d{1,2}))?/);
-  if (!match) return Number.MAX_SAFE_INTEGER - 1000 + index;
-  const isBce = /\b(?:BC|BCE)\b/i.test(value);
-  const year = Math.abs(Number(match[1])) * (isBce ? -1 : 1);
-  const month = Number(match[2] || 0);
-  const day = Number(match[3] || 0);
-  return year * 10000 + month * 100 + day;
+function Detail({ title, children }) {
+  return <details className="hx-disclosure"><summary>{title}<ChevronDown size={16}/></summary><div>{children}</div></details>;
 }
 
-function TimelineExperience({ details, name, onAsk, onBack }) {
-  const sourceEvents = list(details.timeline).length ? list(details.timeline) : list(details.keyMoments);
-  const events = [...sourceEvents].sort((first, second) => timelineOrder(first, 0) - timelineOrder(second, 0));
-  const [selected, setSelected] = useState(0);
-  const eventRefs = useRef([]);
-  const event = events[selected];
+function AskAction({ onClick, children = "Ask about this" }) {
+  return <button type="button" className="hx-ask" onClick={onClick}><MessageCircle size={16}/>{children}<ArrowUpRight size={15}/></button>;
+}
 
+function Callout({ title = "Why it matters", value }) {
+  return clean(value) ? <aside className="hx-callout"><p className="hx-eyebrow">{title}</p><ReadingText value={value}/></aside> : null;
+}
+
+function ItemPicker({ items, selected, onChange, label, title = item => clean(item.title) }) {
+  if (items.length < 2) return null;
+  return <div className="hx-picker"><p className="hx-picker-label">{items.length} {label.toLowerCase()} <span>· Choose one to explore</span></p>{items.length > 8 ? <label className="hx-select-label">{label}<select value={selected} onChange={event => onChange(Number(event.target.value))}>{items.map((item, index) => <option key={index} value={index}>{title(item)}</option>)}</select></label> : <div className="hx-options" role="group" aria-label={label}>{items.map((item, index) => <button type="button" key={index} aria-pressed={selected === index} onClick={() => onChange(index)}><span>{String(index + 1).padStart(2, "0")}</span>{title(item)}{selected === index && <Check size={14}/>}</button>)}</div>}</div>;
+}
+
+function TimelineExperience({ details, onAsk }) {
+  const events = useMemo(() => orderedEvents(details), [details]);
+  const [selected, setSelected] = useState(() => events[0]?.recordIndex ?? 0);
+  const [query, setQuery] = useState("");
+  const railRef = useRef(null);
+  const pointRefs = useRef([]);
+  const id = useId();
+  const filtered = events.filter(event => [eventDate(event), event.title, event.location, event.category, event.description, event.summary].map(clean).join(" ").toLowerCase().includes(query.trim().toLowerCase()));
+  const index = Math.max(0, filtered.findIndex(event => event.recordIndex === selected));
+  const event = filtered[index];
+  const dated = events.filter(item => historicalDate(item.startDate || item.date || item.dateDisplay));
+  const select = (next, focus = false) => {
+    if (!filtered[next]) return;
+    setSelected(filtered[next].recordIndex);
+    if (focus) pointRefs.current[next]?.focus({ preventScroll: true });
+  };
   useEffect(() => {
-    eventRefs.current[selected]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }, [selected]);
-
-  if (!event) return null;
-  return <div>
-    <ExperienceHeader eyebrow={`${events.length} moments in chronological order`} title="Walk through the timeline" description={`Follow ${name}'s life from beginning to end. Select any point to enter that moment.`} onBack={onBack}/>
-    <label className="history-timeline-picker">Choose a moment<select value={selected} onChange={event=>setSelected(Number(event.target.value))}>{events.map((item,index)=><option key={item.id||index} value={index}>{clean(item.dateDisplay||item.startDate||item.date)} · {clean(item.title)}</option>)}</select></label>
-    <div className="grid items-start gap-6 md:grid-cols-[minmax(280px,0.82fr)_minmax(0,1.18fr)] lg:grid-cols-[minmax(310px,0.82fr)_minmax(0,1.18fr)]">
-      <nav className="history-timeline-list custom-scrollbar relative max-h-[420px] overflow-y-auto rounded-[6px] border border-stone-900/10 bg-[#f8f6f1] px-4 py-6 shadow-[0_12px_32px_rgba(75,57,39,0.06)] md:max-h-[min(70vh,740px)]" aria-label={`${name} timeline`}>
-        <div className="absolute bottom-9 left-[38px] top-9 w-px bg-stone-300" aria-hidden="true" />
-        <ol className="relative space-y-1.5">
-          {events.map((item,index) => {
-            const active = selected === index;
-            return <li key={item.id || `${item.title}-${index}`}>
-              <button
-                type="button"
-                ref={(element) => { eventRefs.current[index] = element; }}
-                onClick={() => setSelected(index)}
-                aria-current={active ? "step" : undefined}
-                className={`group relative flex w-full items-start gap-4 rounded-[6px] px-3.5 py-4 text-left transition ${active ? "bg-white shadow-[0_8px_24px_rgba(75,57,39,0.09)]" : "hover:bg-white/60"}`}
-              >
-                <span className={`relative z-10 mt-1 h-4 w-4 flex-none rounded-full border-2 ring-4 ring-[#f8f6f1] transition ${active ? "scale-110 border-[#214f78] bg-[#214f78]" : "border-stone-400 bg-[#f8f6f1] group-hover:border-[#214f78]"}`} />
-                <span className="min-w-0">
-                  <span className={`block text-[10px] font-bold uppercase tracking-[0.16em] ${active ? "text-[#214f78]" : "text-stone-400"}`}>{clean(item.dateDisplay || item.startDate || item.date || "Date unknown")}</span>
-                  <span className={`mt-1.5 block font-serif text-lg leading-6 ${active ? "text-stone-900" : "text-stone-600"}`}>{clean(item.title)}</span>
-                  {(item.location || item.category) && <span className="mt-1.5 block text-[10px] uppercase leading-4 tracking-wider text-stone-400">{clean(item.location || item.category)}</span>}
-                </span>
-              </button>
-            </li>;
-          })}
-        </ol>
-      </nav>
-
-      <div className="md:sticky md:top-0">
-        <article className="relative min-h-[430px] overflow-hidden rounded-[6px] border border-stone-900/10 bg-[#eeeee6] p-7 shadow-[0_16px_40px_rgba(75,57,39,0.08)] sm:min-h-[470px] sm:p-9">
-          <span className="absolute -right-3 -top-8 font-serif text-[120px] leading-none text-stone-900/[0.04]">{String(selected+1).padStart(2,"0")}</span>
-          <div className="flex items-center gap-3">
-            <span className="rounded-full bg-[#214f78] px-3 py-1 text-[9px] font-bold uppercase tracking-wider text-white">Moment {selected+1} of {events.length}</span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#214f78]">{clean(event.dateDisplay || event.startDate || event.date || "Date uncertain")}</span>
+    const rail = railRef.current;
+    const point = pointRefs.current[index];
+    if (!rail || !point) return;
+    const left = point.getBoundingClientRect().left - rail.getBoundingClientRect().left + rail.scrollLeft - (rail.clientWidth - point.clientWidth) / 2;
+    rail.scrollTo({ left, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }, [index, query]);
+  return <>
+    <ChapterHeader section="timeline" title="A life, moment by moment." description="Follow the line. Choose a date to discover what happened and why it mattered."/>
+    <section className="hx-timeline" aria-label="Interactive life timeline">
+      <div className="hx-timeline-heading"><div><p className="hx-eyebrow">{events.length} recorded moments</p><p className="hx-timeline-range">{dated.length ? eventDate(dated[0]) : "Dates not recorded"}{dated.length > 1 && <><span aria-hidden="true">—</span>{eventDate(dated.at(-1))}</>}</p></div>{events.length > 5 && <label className="hx-search"><Search size={16}/><span className="sr-only">Find a timeline event</span><input type="search" aria-label="Find a timeline event" value={query} onChange={event => setQuery(event.target.value)} placeholder="Find a moment…"/>{query && <button type="button" onClick={() => setQuery("")} aria-label="Clear timeline search"><X size={15}/></button>}</label>}</div>
+      {event ? <>
+        <p className="hx-timeline-hint" id={`${id}-help`}>Scroll along the line or use the arrow keys. Events are spaced for readability, not to scale.</p>
+        <div className="hx-timeline-scroll" ref={railRef}>
+          <div className="hx-timeline-track" role="tablist" aria-label="Timeline events" aria-describedby={`${id}-help`}>
+            {filtered.map((item, position) => <button type="button" role="tab" id={`${id}-event-${position}`} aria-controls={`${id}-detail`} aria-selected={index === position} tabIndex={index === position ? 0 : -1} key={item.recordIndex} ref={element => { pointRefs.current[position] = element; }} className={`hx-timepoint${index === position ? " is-selected" : ""}`} onClick={() => select(position)} onKeyDown={keyEvent => {
+              const next = keyEvent.key === "ArrowRight" ? Math.min(filtered.length - 1, position + 1) : keyEvent.key === "ArrowLeft" ? Math.max(0, position - 1) : keyEvent.key === "Home" ? 0 : keyEvent.key === "End" ? filtered.length - 1 : null;
+              if (next !== null) { keyEvent.preventDefault(); select(next, true); }
+            }}><span className="hx-point-date">{eventDate(item)}</span><span className="hx-point-line" aria-hidden="true"><span/></span><span className="hx-point-title">{clean(item.title) || "Recorded moment"}</span>{item.category && <span className="hx-point-category">{clean(item.category)}</span>}</button>)}
           </div>
-          <h3 className="mt-5 max-w-xl font-serif text-4xl leading-tight text-stone-900">{clean(event.title)}</h3>
-          {(event.location || event.category) && <p className="mt-2 text-[10px] font-bold uppercase tracking-wider text-stone-400">{[clean(event.location), clean(event.category)].filter(Boolean).join(" · ")}</p>}
-          <p className="mt-7 max-w-2xl text-base leading-8 text-stone-600">{clean(event.description || event.summary)}</p>
-          {event.significance && <div className="mt-6 rounded-[6px] bg-white/70 p-4"><p className="text-[9px] font-bold uppercase tracking-wider text-stone-400">Why this changed history</p><p className="mt-2 text-xs leading-6 text-stone-600">{clean(event.significance)}</p></div>}
-          <AskAction onClick={()=>onAsk(`Take me back to ${clean(event.title)}. What did you see, fear, and decide in that moment?`)}>this moment</AskAction>
-        </article>
-        <div className="mt-4 flex justify-between gap-3">
-          <button type="button" disabled={selected===0} onClick={()=>setSelected(value=>value-1)} className="flex-1 rounded-full border border-stone-900/10 bg-white px-4 py-3 text-sm font-bold transition hover:border-stone-900 disabled:opacity-30">← Previous moment</button>
-          <button type="button" disabled={selected===events.length-1} onClick={()=>setSelected(value=>value+1)} className="flex-1 rounded-full border border-stone-900/10 bg-white px-4 py-3 text-sm font-bold transition hover:border-stone-900 disabled:opacity-30">Next moment →</button>
         </div>
-      </div>
-    </div>
-  </div>;
+        <div className="hx-timeline-controls"><button type="button" disabled={index === 0} onClick={() => select(index - 1)} aria-label="Previous moment"><ArrowLeft size={17}/><span>Earlier</span></button><div className="hx-scrubber"><label htmlFor={`${id}-scrub`}>Moment {index + 1} of {filtered.length}</label><input id={`${id}-scrub`} type="range" min="0" max={Math.max(0, filtered.length - 1)} step="1" value={index} disabled={filtered.length < 2} aria-label="Move through the timeline" aria-valuetext={`${eventDate(event)}: ${clean(event.title)}`} onChange={rangeEvent => select(Number(rangeEvent.target.value))}/></div><button type="button" disabled={index === filtered.length - 1} onClick={() => select(index + 1)} aria-label="Next moment"><span>Later</span><ArrowRight size={17}/></button></div>
+      </> : <div className="hx-empty" role="status"><p>{events.length ? `No moments match “${query}”.` : "No timeline events are recorded yet."}</p>{events.length > 0 && <button type="button" className="hx-text-button" onClick={() => setQuery("")}>Show every moment<ArrowRight size={16}/></button>}</div>}
+    </section>
+    {event && <article className="hx-event-detail" id={`${id}-detail`} role="tabpanel" aria-labelledby={`${id}-event-${index}`} tabIndex={0}><div className="hx-event-date"><p className="hx-eyebrow">In this moment</p><p>{eventDate(event)}</p>{event.location && <span><MapPin size={14}/>{clean(event.location)}</span>}</div><div className="hx-event-story" key={event.recordIndex}><h3>{clean(event.title) || "Recorded moment"}</h3><ReadingText value={event.description || event.summary}/><Callout value={event.significance}/><AskAction onClick={() => onAsk(`Take me back to ${clean(event.title) || eventDate(event)}. What happened, and why did this moment matter?`)}>Ask about this moment</AskAction></div></article>}
+  </>;
 }
 
-function InvestigationExperience({ details, name, onAsk, onBack }) {
+function ProfileExperience({ details, name, onAsk, onExplore, sections }) {
+  const profile = details.profile || {};
+  const biography = details.biography || {};
+  const facts = [["Full name", profile.fullName || name], ["Also known as", list(profile.alternateNames).map(clean).join(", ")], ["Born", profile.birthDateDisplay || profile.birthDate || details.birthDate || details.born], ["Birthplace", profile.birthPlace || details.birthPlace], ["Died", profile.deathDateDisplay || profile.deathDate || details.deathDate || details.died], ["Death place", profile.deathPlace], ["Nationality", list(profile.nationalities).map(clean).join(", ") || details.nationality], ["Era", list(profile.eras).map(clean).join(", ") || details.era], ["Known for", list(profile.occupations).map(clean).join(", ") || details.occupation || details.role], ["Age at death", profile.ageAtDeath], ["Height", profile.heightCm ? `${profile.heightCm} cm` : ""]].filter(([, value]) => clean(value));
+  const essentials = facts.filter(([label]) => ["Born", "Died", "Known for"].includes(label));
+  return <><ChapterHeader section="overview" title={`Meet ${name}.`} description={clean(profile.subtitle) || "Start with the person. Then follow what interests you."}/>
+    {essentials.length > 0 && <dl className="hx-fact-strip">{essentials.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{clean(value)}</dd></div>)}</dl>}
+    <article className="hx-profile-story"><div><p className="hx-eyebrow">The life behind the name</p><ReadingText value={biography.short || details.description || details.bio || details.about || (typeof biography === "string" ? biography : "")}/><Callout value={biography.historicalImportance}/><AskAction onClick={() => onAsk(`What is the most important thing to understand about your life, beyond what you are best known for?`)}>Ask about their life</AskAction></div><div className="hx-profile-record"><p className="hx-eyebrow">Look a little closer</p>{biography.detailed && <Detail title="Read the full biography"><ReadingText value={biography.detailed} limit={700}/></Detail>}<Detail title="Life & personal details"><dl className="hx-facts">{facts.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{clean(value)}</dd></div>)}</dl></Detail>{list(profile.positionsHeld).length > 0 && <Detail title="Positions held"><ul className="hx-bullet-list">{list(profile.positionsHeld).map((position, index) => <li key={index}>{clean(position)}</li>)}</ul></Detail>}</div></article>
+    {onExplore && <section className="hx-paths"><div className="hx-section-heading"><h3>Choose a way in.</h3><p>Follow your curiosity, one chapter at a time.</p></div><div className="hx-path-grid">{sections.filter(section => section.id !== "overview").map((section, index) => <button type="button" key={section.id} onClick={() => onExplore(section.id)}><span className="hx-path-number">{String(index + 1).padStart(2, "0")}</span><span><strong>{chapterInfo[section.id][0]}</strong><small>{chapterInfo[section.id][1]}</small></span><ArrowUpRight size={17}/></button>)}</div></section>}
+  </>;
+}
+
+function IdeaExperience({ details, name, onAsk }) {
+  const ideas = list(details.ideasAndBeliefs);
+  const [selected, setSelected] = useState(0);
+  const idea = ideas[selected];
+  if (!idea) return null;
+  return <><ChapterHeader section="ideas" title="The ideas behind the choices." description={`Explore what guided ${name}, one idea at a time.`}/><ItemPicker items={ideas} selected={selected} onChange={setSelected} label="Ideas" title={item => clean(item.topic) || "Untitled idea"}/><article key={selected} className="hx-reading-card"><div className="hx-card-title"><Lightbulb size={22}/><div><p className="hx-eyebrow">The central idea</p><h3>{clean(idea.topic)}</h3></div></div><ReadingText value={idea.summary}/>{idea.developmentOverTime && <Detail title="How this idea developed"><ReadingText value={idea.developmentOverTime}/></Detail>}{idea.confidence && <p className="hx-record-note">Record confidence: {clean(idea.confidence)}</p>}<AskAction onClick={() => onAsk(`How did your views on ${clean(idea.topic)} shape your actions, and did they ever change?`)}>Explore this idea in conversation</AskAction></article></>;
+}
+
+function ArtifactExperience({ details, onAsk }) {
+  const documents = list(details.documents);
+  const [selected, setSelected] = useState(0);
+  const artifact = documents[selected];
+  if (!artifact) return null;
+  return <><ChapterHeader section="documents" title="History, in its own words." description="Choose a record. Understand its purpose, then look at the original where available."/><ItemPicker items={documents} selected={selected} onChange={setSelected} label="Documents"/><article key={selected} className="hx-reading-card hx-document"><p className="hx-eyebrow">{[clean(artifact.documentType) || "Historical record", clean(artifact.dateDisplay)].filter(Boolean).join(" · ")}</p><h3>{clean(artifact.title)}</h3><ReadingText value={artifact.summary}/><Callout value={artifact.significance}/><div className="hx-actions"><AskAction onClick={() => onAsk(`Why was ${clean(artifact.title)} created, whose perspective does it represent, and what might it leave out?`)}>Discuss this record</AskAction>{sourceHref(artifact.externalUrl) && <a className="hx-text-button" href={sourceHref(artifact.externalUrl)} target="_blank" rel="noreferrer">Read the original<ArrowUpRight size={16}/></a>}</div></article></>;
+}
+
+function RelationshipExperience({ details, name, onAsk }) {
+  const people = list(details.relationships);
+  const [selected, setSelected] = useState(0);
+  const [filter, setFilter] = useState("All");
+  const types = [...new Set(people.map(person => clean(person.relationshipType) || "Other"))];
+  const visible = people.map((person, index) => ({ ...person, index })).filter(person => filter === "All" || (clean(person.relationshipType) || "Other") === filter);
+  const person = visible.find(item => item.index === selected) || visible[0];
+  return <><ChapterHeader section="relationships" title="No life happens alone." description={`Meet the people connected to ${name}. Select a person to understand their role.`}/>{types.length > 1 && <div className="hx-filters" role="group" aria-label="Relationship types">{["All", ...types].map(type => <button type="button" key={type} aria-pressed={filter === type} onClick={() => setFilter(type)}>{type}</button>)}</div>}<div className="hx-people-layout"><div className="hx-people" role="group" aria-label="People in this life">{visible.map(item => <button type="button" key={item.index} aria-pressed={person?.index === item.index} onClick={() => setSelected(item.index)}><span className="hx-person-initial">{clean(item.personName).charAt(0)}</span><span><strong>{clean(item.personName)}</strong><small>{clean(item.relationshipType) || "Connection"}</small></span><ArrowRight size={15}/></button>)}</div>{person && <article className="hx-reading-card" key={person.index}><p className="hx-eyebrow">{clean(person.relationshipType) || "Connection"}</p><h3>{clean(person.personName)}</h3><ReadingText value={person.description}/><AskAction onClick={() => onAsk(`How did ${clean(person.personName)} shape your choices, and how might they describe you differently?`)}>Ask about this connection</AskAction></article>}</div></>;
+}
+
+function InvestigationExperience({ details, name, onAsk }) {
   const cases = list(details.controversies);
   const [selected, setSelected] = useState(0);
   const [position, setPosition] = useState(null);
   const current = cases[selected];
   if (!current) return null;
-  const chooseCase = (index) => { setSelected(index); setPosition(null); };
-  return <div>
-    <ExperienceHeader eyebrow="Historical investigation" title="Open the case files" description="History does not always leave one uncontested answer. Compare the claims, inspect the context, and decide what the evidence supports." onBack={onBack}/>
-    <div className="grid gap-5 lg:grid-cols-[210px_1fr]">
-      <nav className="space-y-2">{cases.map((item,index)=><button type="button" key={item.title} onClick={()=>chooseCase(index)} className={`w-full rounded-[6px] border p-4 text-left transition ${selected===index?"border-stone-900 bg-stone-900 text-white":"border-stone-900/10 bg-white hover:border-stone-400"}`}><span className="text-[9px] font-bold uppercase tracking-wider opacity-50">Case {String(index+1).padStart(2,"0")}</span><span className="mt-1 block font-serif text-base leading-5">{clean(item.title)}</span></button>)}</nav>
-      <article className="rounded-[6px] border border-stone-900/10 bg-[#fbf7ef] p-5 sm:p-7">
-        <div className="flex items-center justify-between gap-3"><p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#214f78]">Status: {current.confidence || "debated"}</p><span className="rounded-full border border-[#214f78]/20 bg-[#214f78]/5 px-3 py-1 text-[9px] font-bold text-[#214f78]">You are the historian</span></div>
-        <h3 className="mt-4 font-serif text-2xl">{clean(current.title)}</h3>
-        <p className="mt-3 text-sm leading-6 text-stone-600">{clean(current.summary)}</p>
-        {current.historicalContext && <div className="mt-5 rounded-[6px] bg-white p-4"><p className="text-[9px] font-bold uppercase tracking-wider text-stone-400">Context</p><p className="mt-2 text-xs leading-6 text-stone-600">{clean(current.historicalContext)}</p></div>}
-        <p className="mb-3 mt-6 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400">Which interpretation deserves closer examination?</p>
-        <div className="space-y-2">{list(current.majorInterpretations).map((view,index)=><button type="button" key={view} onClick={()=>setPosition(index)} className={`w-full rounded-[6px] border p-4 text-left text-xs leading-6 transition ${position===index?"border-[#214f78] bg-[#214f78]/5 text-stone-900":"border-stone-900/10 bg-white text-stone-600 hover:border-stone-400"}`}><span className="mr-2 font-serif text-lg text-[#214f78]">{String.fromCharCode(65+index)}.</span>{clean(view)}</button>)}</div>
-        {position!==null && <div className="mt-5 rounded-[6px] border border-dashed border-[#214f78]/40 bg-white/60 p-4"><p className="text-xs leading-6 text-stone-600">Good historians test a position rather than simply accepting it. Ask {name} to defend or challenge this interpretation.</p><AskAction onClick={()=>onAsk(`Historians argue that ${clean(current.majorInterpretations[position])} How would you respond, and what evidence might challenge your account?`)}>this interpretation</AskAction></div>}
-      </article>
-    </div>
-  </div>;
+  const interpretations = list(current.majorInterpretations);
+  return <><ChapterHeader section="controversies" title="More than one perspective." description="Understand the debate, compare interpretations, and ask what evidence supports each one."/><ItemPicker items={cases} selected={selected} onChange={index => { setSelected(index); setPosition(null); }} label="Debates"/><article key={selected} className="hx-reading-card"><p className="hx-eyebrow">The question historians debate</p><h3>{clean(current.title)}</h3><ReadingText value={current.summary}/>{current.historicalContext && <Detail title="The context behind this debate"><ReadingText value={current.historicalContext}/></Detail>}{current.confidence && <p className="hx-record-note">Record confidence: {clean(current.confidence)}</p>}{interpretations.length > 0 && <section className="hx-interpretations"><div className="hx-section-heading"><h4>Compare the interpretations</h4><p>Select a perspective to discuss its evidence and assumptions.</p></div><div className="hx-comparison-grid">{interpretations.map((view, index) => <button type="button" key={index} aria-pressed={position === index} onClick={() => setPosition(position === index ? null : index)}><span className="hx-eyebrow">Perspective {index + 1}{position === index && <Check size={16}/>}</span><span>{clean(view)}</span><small>{position === index ? "Selected for discussion" : "Examine this perspective"}<ArrowUpRight size={14}/></small></button>)}</div></section>}<div className="hx-discussion-prompt"><p>{position === null ? "What evidence would help you understand this debate?" : `Ask ${name} to respond, then consider what their account might leave out.`}</p><AskAction onClick={() => onAsk(position === null ? `Help me understand the debate about ${clean(current.title)}. What evidence supports the different interpretations?` : `One interpretation is: “${clean(interpretations[position])}” How would you respond, and what evidence might challenge your account?`)}>{position === null ? "Discuss the debate" : "Question this interpretation"}</AskAction></div></article></>;
 }
 
-function ArtifactExperience({ details, onAsk, onBack }) {
-  const documents = list(details.documents);
-  const [selected, setSelected] = useState(0);
-  const artifact = documents[selected];
-  if (!artifact) return null;
-  return <div>
-    <ExperienceHeader eyebrow="Artifact desk" title="Examine the surviving record" description="Select an object from the desk. Consider who created it, why it survived, and what it cannot tell us." onBack={onBack}/>
-    <div className="grid gap-5 sm:grid-cols-[minmax(210px,0.75fr)_1.25fr]">
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-1">{documents.map((document,index)=><button type="button" key={document.id || document.title} onClick={()=>setSelected(index)} className={`relative min-h-[105px] overflow-hidden rounded-[6px] border p-4 text-left transition hover:-translate-y-0.5 ${selected===index?"border-[#214f78] bg-[#efe2d1] shadow-md":"border-stone-900/10 bg-white"}`}><span className="text-[9px] font-bold uppercase tracking-wider text-[#214f78]">{clean(document.documentType || "record")}</span><span className="mt-2 block font-serif text-base leading-5">{clean(document.title)}</span>{document.dateDisplay && <span className="mt-2 block text-[10px] text-stone-400">{clean(document.dateDisplay)}</span>}</button>)}</div>
-      <article className="letter-paper relative min-h-[360px] overflow-hidden rounded-[6px] border border-[#d8cbb8] p-6 shadow-[0_18px_40px_rgba(75,57,39,0.1)] sm:p-8">
-        <div className="absolute right-5 top-5 grid h-14 w-14 rotate-6 place-items-center rounded-full border border-[#214f78]/35 text-center text-[7px] font-bold uppercase tracking-wider text-[#214f78]/60">Archive<br/>copy</div>
-        <p className="pr-16 text-[9px] font-bold uppercase tracking-[0.22em] text-[#214f78]">Object {String(selected+1).padStart(2,"0")} · {clean(artifact.documentType || "historical record")}</p>
-        <h3 className="mt-5 max-w-md font-serif text-3xl">{clean(artifact.title)}</h3>
-        {artifact.summary && <p className="mt-6 text-sm leading-7 text-stone-600">{clean(artifact.summary)}</p>}
-        {artifact.significance && <div className="mt-6 border-l-2 border-[#214f78] pl-4"><p className="text-[9px] font-bold uppercase tracking-wider text-stone-400">Why it matters</p><p className="mt-2 text-xs leading-6 text-stone-600">{clean(artifact.significance)}</p></div>}
-        {artifact.externalUrl && <a href={artifact.externalUrl} target="_blank" rel="noreferrer" className="mt-5 inline-block text-xs font-bold underline underline-offset-4">Open the original record</a>}
-        <AskAction onClick={()=>onAsk(`I am examining ${clean(artifact.title)}. Why was it created, whose perspective does it represent, and what might it leave out?`)}>this artifact</AskAction>
-      </article>
-    </div>
-  </div>;
-}
-
-function concise(value, limit = 170) {
-  const text = clean(value || "");
-  if (text.length <= limit) return text;
-  const shortened = text.slice(0, limit);
-  return `${shortened.slice(0, shortened.lastIndexOf(" "))}…`;
-}
-
-function IdeaExperience({ details, name, onAsk, onBack }) {
-  const ideas = list(details.ideasAndBeliefs);
-  const [selected, setSelected] = useState(0);
-  const [expanded, setExpanded] = useState(false);
-  const idea = ideas[selected];
-  if (!idea) return null;
-  const chooseIdea = (index) => { setSelected(index); setExpanded(false); };
-
-  return <div>
-    <ExperienceHeader eyebrow="Idea lens" title={`What guided ${name}?`} description="Choose one idea at a time. Start with the takeaway, then open the deeper context only when you want it." onBack={onBack}/>
-    <div className="custom-scrollbar mb-5 flex gap-2 overflow-x-auto pb-2" role="tablist" aria-label={`${name} ideas`}>
-      {ideas.map((item,index)=><button type="button" role="tab" aria-selected={selected===index} tabIndex={selected===index ? 0 : -1} onKeyDown={event => {
-        const direction = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
-        if (!direction && event.key !== "Home" && event.key !== "End") return;
-        event.preventDefault();
-        const next = event.key === "Home" ? 0 : event.key === "End" ? ideas.length-1 : (index + direction + ideas.length) % ideas.length;
-        chooseIdea(next);
-        event.currentTarget.parentElement.querySelectorAll('[role="tab"]')[next]?.focus();
-      }} key={item.topic} onClick={()=>chooseIdea(index)} className={`min-w-[170px] rounded-[6px] border px-4 py-3 text-left transition ${selected===index?"border-stone-900 bg-stone-900 text-white shadow-md":"border-stone-900/10 bg-white text-stone-600 hover:border-stone-400"}`}><span className="text-[9px] font-bold uppercase tracking-wider opacity-50">Idea {String(index+1).padStart(2,"0")}</span><span className="mt-1 block font-serif text-base leading-5">{clean(item.topic)}</span></button>)}
-    </div>
-    <article className="grid overflow-hidden rounded-[6px] border border-stone-900/10 bg-[#eeeee6] sm:grid-cols-[150px_minmax(0,1fr)]">
-      <div className="flex flex-col justify-between bg-[#214f78] p-6 text-white">
-        <span className="font-serif text-6xl text-white/25">{String(selected+1).padStart(2,"0")}</span>
-        <div><p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/55">Confidence</p><p className="mt-1 text-xs font-bold capitalize">{idea.confidence || "reported"}</p></div>
-      </div>
-      <div className="p-6 sm:p-8">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#214f78]">The central idea</p>
-        <h3 className="mt-3 font-serif text-3xl leading-tight text-stone-900">{clean(idea.topic)}</h3>
-        <p className="mt-5 text-sm leading-7 text-stone-600">{expanded ? clean(idea.summary) : concise(idea.summary)}</p>
-        {expanded && idea.developmentOverTime && <div className="mt-5 rounded-[6px] bg-white/70 p-4"><p className="text-[9px] font-bold uppercase tracking-wider text-stone-400">How it developed</p><p className="mt-2 text-xs leading-6 text-stone-600">{clean(idea.developmentOverTime)}</p></div>}
-        {(clean(idea.summary).length > 170 || idea.developmentOverTime) && <button type="button" onClick={()=>setExpanded(value=>!value)} className="mt-5 rounded-full border border-stone-900/10 bg-white px-4 py-2 text-xs font-bold text-stone-600 transition hover:border-stone-900">{expanded?"Show less":"Open deeper context"}</button>}
-        <div><AskAction onClick={()=>onAsk(`Your views on ${clean(idea.topic)} seem important. How did this belief shape your actions, and did it ever change?`)}>this idea</AskAction></div>
-      </div>
-    </article>
-  </div>;
-}
-
-function RelationshipExperience({ details, name, onAsk, onBack }) {
-  const people = list(details.relationships);
-  const [selected, setSelected] = useState(0);
-  const [expanded, setExpanded] = useState(false);
-  const person = people[selected];
-  if (!person) return null;
-  const groups = people.reduce((result, item, index) => {
-    const label = clean(item.relationshipType || "Other connections");
-    const existing = result.find((group) => group.label === label);
-    if (existing) existing.items.push({ item, index });
-    else result.push({ label, items: [{ item, index }] });
-    return result;
-  }, []);
-  const choosePerson = (index) => { setSelected(index); setExpanded(false); };
-
-  return <div>
-    <ExperienceHeader eyebrow="People index" title={`Who shaped ${name}'s story?`} description="People are grouped by their role in the figure's life. Select a name for the essential connection." onBack={onBack}/>
-    <div className="grid gap-5 md:grid-cols-[minmax(240px,0.8fr)_minmax(0,1.2fr)]">
-      <div className="custom-scrollbar max-h-[520px] space-y-5 overflow-y-auto rounded-[6px] border border-stone-900/10 bg-[#f8f6f1] p-4">
-        {groups.map((group)=><section key={group.label}><p className="mb-2 px-2 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400">{group.label}</p><div className="space-y-1">{group.items.map(({item,index})=><button type="button" key={`${item.personName}-${index}`} onClick={()=>choosePerson(index)} className={`flex w-full items-center gap-3 rounded-[6px] px-3 py-3 text-left transition ${selected===index?"bg-stone-900 text-white shadow-md":"bg-white/60 text-stone-700 hover:bg-white"}`}><span className={`grid h-8 w-8 flex-none place-items-center rounded-full font-serif text-sm ${selected===index?"bg-white/15":"bg-[#eeeee6] text-[#214f78]"}`}>{clean(item.personName).charAt(0)}</span><span className="font-serif text-sm leading-5">{clean(item.personName)}</span></button>)}</div></section>)}
-      </div>
-      <article className="self-start rounded-[6px] border border-stone-900/10 bg-white p-6 shadow-sm md:sticky md:top-0 sm:p-8">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#214f78]">{clean(person.relationshipType || "Connection")}</p>
-        <h3 className="mt-3 font-serif text-3xl leading-tight">{clean(person.personName)}</h3>
-        <p className="mt-5 text-sm leading-7 text-stone-600">{expanded ? clean(person.description) : concise(person.description)}</p>
-        {clean(person.description).length > 170 && <button type="button" onClick={()=>setExpanded(value=>!value)} className="mt-5 rounded-full border border-stone-900/10 bg-[#f8f6f1] px-4 py-2 text-xs font-bold text-stone-600">{expanded?"Show less":"Read full connection"}</button>}
-        <div><AskAction onClick={()=>onAsk(`Tell me about ${clean(person.personName)}. How did this person shape your choices and how might they describe you differently?`)}>this person</AskAction></div>
-      </article>
-    </div>
-  </div>;
-}
-
-function SceneExperience({ details, name, onAsk, onBack, type }) {
+function SceneExperience({ details, name, onAsk, type }) {
   const isLegacy = type === "legacy";
-  const source = isLegacy ? details.legacy || {} : details.historicalContext || {};
-  const scenes = isLegacy ? [
-    ["Immediate impact", source.immediateImpact], ["Long-term impact", source.longTermImpact], ["Modern reputation", source.modernReputation], ...list(source.historicalDebates).map((text,index)=>[`Debate ${index+1}`,text])
-  ] : [["Before their rise",source.worldBeforeTheirRise],["During their life",source.worldDuringTheirLife],["Major challenges",source.majorChallenges]];
-  const available = scenes.filter(([,text])=>text);
-  const [selected,setSelected] = useState(0);
-  const scene=available[selected];
-  if(!scene) return null;
-  return <div><ExperienceHeader eyebrow={isLegacy?"Impact explorer":"World builder"} title={isLegacy?"Follow the consequences":"Enter the historical world"} description={isLegacy?`Trace how ${name}'s actions were remembered, challenged, and reinterpreted.`:"Move between historical scenes to understand the conditions surrounding the figure."} onBack={onBack}/><div className="grid gap-5 sm:grid-cols-[190px_1fr]"><div className="space-y-2">{available.map(([title],index)=><button type="button" key={`${title}-${index}`} onClick={()=>setSelected(index)} className={`w-full rounded-[6px] border px-4 py-3 text-left text-xs font-bold transition ${selected===index?"border-stone-900 bg-stone-900 text-white":"border-stone-900/10 bg-white"}`}>{title}</button>)}</div><article className="relative min-h-[330px] overflow-hidden rounded-[6px] border border-stone-900/10 bg-[#eeeee6] p-7 sm:p-9"><p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#214f78]">Scene {String(selected+1).padStart(2,"0")}</p><h3 className="mt-4 font-serif text-3xl">{scene[0]}</h3><p className="mt-6 text-sm leading-7 text-stone-600">{clean(scene[1])}</p><AskAction onClick={()=>onAsk(`Help me understand ${scene[0].toLowerCase()}. What would you want a student to notice, and what might your critics add?`)}>this scene</AskAction></article></div></div>;
+  const source = (isLegacy ? details.legacy : details.historicalContext) || {};
+  const scenes = (isLegacy ? [["Immediate impact", source.immediateImpact], ["Long-term impact", source.longTermImpact], ["Modern reputation", source.modernReputation], ...list(source.historicalDebates).map((text, index) => [`Debate ${index + 1}`, text])] : [["Before their rise", source.worldBeforeTheirRise], ["During their life", source.worldDuringTheirLife], ["Major challenges", source.majorChallenges]]).filter(([, value]) => clean(value));
+  const [selected, setSelected] = useState(0);
+  const [compare, setCompare] = useState(false);
+  if (!scenes.length) return null;
+  return <><ChapterHeader section={type} title={isLegacy ? "What changed. What stayed." : "Step into their world."} description={isLegacy ? `Follow the impact of ${name}, from immediate consequences to later interpretations.` : "See the wider picture: the world before, the world they knew, and its challenges."}/><div className="hx-view-toolbar"><p>{compare ? "Read the accounts side by side." : "Explore one part of the story at a time."}</p>{scenes.length > 1 && <button type="button" className="hx-toggle" aria-pressed={compare} onClick={() => setCompare(value => !value)}><GitBranch size={16}/>{compare ? "Read one at a time" : "Compare side by side"}</button>}</div>{!compare && <ItemPicker items={scenes} selected={selected} onChange={setSelected} label={isLegacy ? "Perspectives" : "Scenes"} title={item => item[0]}/>}<div className={compare ? "hx-scene-comparison" : ""}>{(compare ? scenes.map((scene, index) => ({ scene, index })) : [{ scene: scenes[selected], index: selected }]).map(({ scene, index }) => <article className="hx-reading-card" key={index}><p className="hx-eyebrow">{String(index + 1).padStart(2, "0")} / {String(scenes.length).padStart(2, "0")}</p><h3>{scene[0]}</h3><ReadingText value={scene[1]}/><AskAction onClick={() => onAsk(`Help me understand ${scene[0].toLowerCase()}. What should I notice, and what might other historians add?`)}>Ask about {isLegacy ? "this impact" : "this world"}</AskAction></article>)}</div></>;
 }
 
-function ProfileExperience({ details, name, onAsk }) {
-  const profile=details.profile||{};
-  const biography=details.biography||{};
-  const facts=[["Full name",profile.fullName||name],["Also known as",list(profile.alternateNames).join(", ")],["Born",profile.birthDateDisplay||profile.birthDate||details.birthDate||details.born],["Birthplace",profile.birthPlace||details.birthPlace],["Died",profile.deathDateDisplay||profile.deathDate||details.deathDate||details.died],["Death place",profile.deathPlace],["Nationality",list(profile.nationalities).join(", ")||details.nationality],["Era",list(profile.eras).join(", ")||details.era],["Known for",list(profile.occupations).join(", ")||details.occupation||details.role],["Age at death",profile.ageAtDeath],["Height",profile.heightCm ? `${profile.heightCm} cm` : ""]].filter(([,value])=>value);
-  const [revealed,setRevealed]=useState(false);
-  return <div><ExperienceHeader eyebrow="Life story" title={`Meet ${name}`} description="Start with the public record, then look beyond the label history gave them."/><div className="grid gap-5 sm:grid-cols-[0.8fr_1.2fr]"><section className="rounded-[6px] bg-stone-900 p-6 text-white"><p className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/45">At a glance</p><h3 className="mt-4 font-serif text-3xl">{profile.fullName||name}</h3>{profile.subtitle&&<p className="mt-2 text-sm text-white/60">{clean(profile.subtitle)}</p>}<dl className="mt-6 divide-y divide-white/10">{facts.map(([label,value])=><div key={label} className="py-3"><dt className="text-[9px] font-bold uppercase tracking-wider text-white/40">{label}</dt><dd className="mt-1 text-xs leading-5 text-white/80">{clean(value)}</dd></div>)}</dl></section><section className="rounded-[6px] border border-stone-900/10 bg-[#eeeee6] p-6 sm:p-8"><p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#214f78]">The life behind the name</p><p className="mt-4 font-serif text-xl leading-8 text-stone-700">{clean(biography.short||details.description||details.bio||details.about|| (typeof details.biography === "string" ? details.biography : ""))}</p>{!revealed&&biography.detailed?<button type="button" onClick={()=>setRevealed(true)} className="mt-6 rounded-full border border-stone-900/10 bg-white px-4 py-2 text-xs font-bold">Reveal the fuller story</button>:null}{revealed&&<div className="mt-6 animate-[fade-in_.4s_ease-out]"><p className="text-sm leading-7 text-stone-600">{clean(biography.detailed)}</p></div>}{biography.historicalImportance&&<p className="mt-5 border-l-2 border-[#214f78] pl-4 text-xs leading-6 text-stone-600">{clean(biography.historicalImportance)}</p>}{list(profile.positionsHeld).length>0&&<details className="history-portrayal"><summary>Positions held</summary><ul>{list(profile.positionsHeld).map(position=><li key={position}>{clean(position)}</li>)}</ul></details>}<AskAction onClick={()=>onAsk(`When people reduce your life to "${clean(profile.subtitle||biography.short)}", what important part of your story do they miss?`)}>their life story</AskAction></section></div></div>;
+function CuriosityExperience({ details, name, onAsk }) {
+  const conversation = details.conversation || {};
+  const questions = list(conversation.suggestedQuestions);
+  const topics = list(conversation.coreTopics);
+  return <><ChapterHeader section="conversationGuide" title="A good question opens a door." description={`Choose a question for ${name}. It will appear in your message box, ready to edit or send.`}/><div className="hx-question-grid">{questions.map((question, index) => <button type="button" key={index} onClick={() => onAsk(clean(question))}><span className="hx-eyebrow">Question {String(index + 1).padStart(2, "0")}</span><strong>{clean(question)}</strong><span className="hx-question-action">Use this question<ArrowUpRight size={17}/></span></button>)}</div>{topics.length > 0 && <section className="hx-topics"><h3>Or follow a topic.</h3><div className="hx-filters">{topics.map((topic, index) => <button type="button" key={index} onClick={() => onAsk(`I want to explore ${clean(topic)}. Where should we begin?`)}>{clean(topic)}<ArrowUpRight size={14}/></button>)}</div></section>}{(conversation.personalityDescription || conversation.speakingStyle || list(conversation.knowledgeLimitations).length > 0 || conversation.knowledgeCutoffDate) && <Detail title="About this AI portrayal">{conversation.personalityDescription && <ReadingText value={conversation.personalityDescription}/>} {conversation.speakingStyle && <ReadingText value={conversation.speakingStyle}/>} {conversation.knowledgeCutoffDate && <p>Knowledge reviewed through {clean(conversation.knowledgeCutoffDate)}</p>}<ul className="hx-bullet-list">{list(conversation.knowledgeLimitations).map((item, index) => <li key={index}>{clean(item)}</li>)}</ul></Detail>}</>;
 }
 
-function CuriosityExperience({ details, name, onAsk, onBack }) {
-  const questions=list(details.conversation?.suggestedQuestions);
-  const topics=list(details.conversation?.coreTopics);
-  return <div><ExperienceHeader eyebrow="Questions to ask" title="Choose your next question" description={`Use the archive to begin a more focused exchange with ${name}.`} onBack={onBack}/><div className="grid gap-3 sm:grid-cols-2">{questions.map((question,index)=><button type="button" key={question} onClick={()=>onAsk(clean(question))} className="group min-h-[140px] rounded-[6px] border border-stone-900/10 bg-[#fbf7ef] p-5 text-left transition hover:-translate-y-1 hover:border-[#214f78]/40 hover:shadow-lg"><span className="text-[9px] font-bold uppercase tracking-wider text-[#214f78]">Question {String(index+1).padStart(2,"0")}</span><span className="mt-3 block font-serif text-lg leading-6">{clean(question)}</span><span className="mt-4 inline-block text-xs transition group-hover:translate-x-1">Begin →</span></button>)}</div>{topics.length>0&&<div className="mt-7 rounded-[6px] bg-[#eeeee6] p-5"><p className="mb-3 text-[9px] font-bold uppercase tracking-wider text-stone-500">Or follow a topic</p><div className="flex flex-wrap gap-2">{topics.map(topic=><button type="button" key={topic} onClick={()=>onAsk(`I want to explore ${clean(topic)}. Where should we begin?`)} className="rounded-full border border-stone-900/10 bg-white px-3 py-2 text-xs">{clean(topic)}</button>)}</div></div>}{(details.conversation?.personalityDescription||details.conversation?.speakingStyle||list(details.conversation?.knowledgeLimitations).length>0)&&<details className="history-portrayal"><summary>About this AI portrayal</summary>{details.conversation?.personalityDescription&&<p>{clean(details.conversation.personalityDescription)}</p>}{details.conversation?.speakingStyle&&<p>{clean(details.conversation.speakingStyle)}</p>}{details.conversation?.knowledgeCutoffDate&&<p>Knowledge reviewed through {clean(details.conversation.knowledgeCutoffDate)}</p>}{list(details.conversation?.knowledgeLimitations).length>0&&<ul>{list(details.conversation.knowledgeLimitations).map(item=><li key={clean(item)}>{clean(item)}</li>)}</ul>}</details>}</div>;
+function EvidenceExperience({ details }) {
+  const sources = list(details.sources);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("All");
+  const types = [...new Set(sources.map(source => clean(source.type)).filter(Boolean))];
+  const visible = sources.filter(source => (filter === "All" || clean(source.type) === filter) && [source.title, source.organization, source.type].map(clean).join(" ").toLowerCase().includes(query.toLowerCase().trim()));
+  return <><ChapterHeader section="sources" title="Go back to the evidence." description="Explore the references behind this profile. Compare accounts and follow the original sources."/><div className="hx-source-toolbar"><label className="hx-search"><Search size={16}/><span className="sr-only">Search sources</span><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search title or institution…"/></label><p role="status">{visible.length} of {sources.length} sources</p></div>{types.length > 1 && <div className="hx-filters" role="group" aria-label="Source types">{["All", ...types].map(type => <button type="button" key={type} aria-pressed={filter === type} onClick={() => setFilter(type)}>{type}</button>)}</div>}<div className="hx-source-grid">{visible.map((source, index) => <article key={source.id || `${source.title}-${index}`}><BookOpen size={20}/><p className="hx-eyebrow">{clean(source.type) || "Reference"}</p><h3>{clean(source.title) || "Untitled source"}</h3>{source.organization && <p>{clean(source.organization)}</p>}{sourceHref(source.url) ? <a href={sourceHref(source.url)} target="_blank" rel="noreferrer">Open source<ArrowUpRight size={16}/></a> : <p className="hx-record-note">No online link in this record.</p>}</article>)}</div>{visible.length === 0 && <div className="hx-empty"><p>No sources match these filters.</p><button type="button" className="hx-text-button" onClick={() => { setQuery(""); setFilter("All"); }}>Clear filters<ArrowRight size={16}/></button></div>}</>;
 }
 
-function EvidenceExperience({ details, onBack }) {
-  const sources=list(details.sources);
-  return <div><ExperienceHeader eyebrow="Evidence room" title="Check the record" description="Historical interpretation is only as strong as its evidence. Open a source and consider what kind of account it provides." onBack={onBack}/><div className="grid gap-3 sm:grid-cols-2">{sources.map((source,index)=><a key={source.id||source.url} href={source.url} target="_blank" rel="noreferrer" className="group rounded-[6px] border border-stone-900/10 bg-white p-5 transition hover:-translate-y-1 hover:border-[#214f78]/40 hover:shadow-lg"><span className="text-[9px] font-bold uppercase tracking-wider text-[#214f78]">Evidence {String(index+1).padStart(2,"0")} · {source.type}</span><h3 className="mt-3 font-serif text-xl">{source.title}</h3>{source.organization&&<p className="mt-2 text-xs text-stone-500">{source.organization}</p>}<span className="mt-5 inline-block text-xs font-bold">Open source <span className="transition group-hover:translate-x-1">↗</span></span></a>)}</div></div>;
-}
-
-export default function HistoricalExperience({ sectionId, details, name, onAsk, onBack }) {
-  useEffect(() => { window.requestAnimationFrame(() => document.querySelector(".cw-history-content, .experience-stage")?.scrollTo({ top: 0, behavior: "smooth" })); }, [sectionId]);
-  const props=useMemo(()=>({details,name,onAsk,onBack}),[details,name,onAsk,onBack]);
-  if(sectionId==="timeline") return <TimelineExperience {...props}/>;
-  if(sectionId==="controversies") return <InvestigationExperience {...props}/>;
-  if(sectionId==="documents") return <ArtifactExperience {...props}/>;
-  if(sectionId==="ideas") return <IdeaExperience {...props}/>;
-  if(sectionId==="relationships") return <RelationshipExperience {...props}/>;
-  if(sectionId==="context"||sectionId==="legacy") return <SceneExperience {...props} type={sectionId}/>;
-  if(sectionId==="conversationGuide") return <CuriosityExperience {...props}/>;
-  if(sectionId==="sources") return <EvidenceExperience details={details} onBack={onBack}/>;
-  return <ProfileExperience {...props}/>;
+export default function HistoricalExperience({ sectionId, details, name, onAsk, onExplore, onBack }) {
+  const rootRef = useRef(null);
+  const sections = useMemo(() => buildCharacterSections(details).sort((a, b) => Object.keys(chapterInfo).indexOf(a.id) - Object.keys(chapterInfo).indexOf(b.id)), [details]);
+  useEffect(() => {
+    rootRef.current?.closest(".cw-history-content, .experience-stage")?.scrollTo({ top: 0, behavior: "instant" });
+    rootRef.current?.querySelector(".hx-header h2")?.focus({ preventScroll: true });
+  }, [sectionId]);
+  const props = { details, name, onAsk, onExplore, sections };
+  const position = sections.findIndex(section => section.id === sectionId);
+  const previous = sections[position - 1];
+  const next = sections[position + 1];
+  let content;
+  if (sectionId === "timeline") content = <TimelineExperience {...props}/>;
+  else if (sectionId === "controversies") content = <InvestigationExperience {...props}/>;
+  else if (sectionId === "documents") content = <ArtifactExperience {...props}/>;
+  else if (sectionId === "ideas") content = <IdeaExperience {...props}/>;
+  else if (sectionId === "relationships") content = <RelationshipExperience {...props}/>;
+  else if (sectionId === "context" || sectionId === "legacy") content = <SceneExperience {...props} type={sectionId}/>;
+  else if (sectionId === "conversationGuide") content = <CuriosityExperience {...props}/>;
+  else if (sectionId === "sources") content = <EvidenceExperience {...props}/>;
+  else content = <ProfileExperience {...props}/>;
+  return <div className="hx-experience" ref={rootRef}>{content}{onExplore && sections.length > 1 ? <nav className="hx-chapter-footer" aria-label="Continue exploring"><p>Chapter {position + 1} of {sections.length}<span>Keep exploring</span></p><div>{previous && <button type="button" onClick={() => onExplore(previous.id)}><ArrowLeft size={17}/><span><small>Previous chapter</small>{chapterInfo[previous.id][0]}</span></button>}{next && <button type="button" onClick={() => onExplore(next.id)}><span><small>Next chapter</small>{chapterInfo[next.id][0]}</span><ArrowRight size={17}/></button>}</div></nav> : onBack && <button type="button" className="hx-text-button hx-back" onClick={onBack}><ArrowLeft size={16}/>Back to life story</button>}</div>;
 }

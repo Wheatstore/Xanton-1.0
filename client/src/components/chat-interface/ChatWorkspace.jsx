@@ -182,7 +182,7 @@ export default function ChatWorkspace({ details = {}, name, image, welcomeMessag
         </div>
       </main> : <main className="cw-history" aria-label={`Explore ${name}'s history`}>
         <div className="cw-history-toolbar"><button type="button" onClick={() => changeMode("conversation")}><ArrowLeft size={16} />Back to conversation</button><label>Chapter<select value={activeSection || ""} onChange={event => setSection(event.target.value)}>{sections.map(item => <option key={item.id} value={item.id}>{sectionLabels[item.id] || item.label}</option>)}</select></label></div>
-        <div className="cw-history-content" tabIndex={0} aria-label="Historical chapter"><HistoricalExperience key={activeSection} sectionId={activeSection} details={details} name={name} onAsk={ask} onBack={sections.some(item => item.id === "overview") && activeSection !== "overview" ? () => setSection("overview") : undefined} /></div>
+        <div className="cw-history-content" tabIndex={0} aria-label="Historical chapter"><HistoricalExperience key={activeSection} sectionId={activeSection} details={details} name={name} onAsk={ask} onExplore={explore} onBack={sections.some(item => item.id === "overview") && activeSection !== "overview" ? () => setSection("overview") : undefined} /></div>
       </main>}
     </div>
 
