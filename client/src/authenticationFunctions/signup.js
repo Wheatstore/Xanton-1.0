@@ -1,7 +1,11 @@
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
-import axios from "axios"
-import { generateFromEmail, generateUsername } from "unique-username-generator";
+import { postAuthenticated } from "./api";
+import { generateUsername } from "unique-username-generator";
+
+const saveUser = user => postAuthenticated('/api/create/user', {
+  uid: user.uid, email: user.email, displayName: user.displayName, photoURL: user.photoURL,
+});
 
 // Function to sign up with email and password
 const signUpEmailPassword = async (email, password) => {
@@ -16,7 +20,7 @@ const signUpEmailPassword = async (email, password) => {
     }
     await updateProfile(user, {displayName: username})
     // Additional user logic here if needed
-    axios.post("https://historia-backend-ycj7.onrender.com/api/create/user", user)
+    await saveUser(user)
   } catch (error) {
     console.error("There was an error creating a new user: ", error.code, error.message);
     throw error
@@ -27,10 +31,10 @@ const signUpEmailPassword = async (email, password) => {
 const signupLoginGoogle = async () => {
   const provider = new GoogleAuthProvider();
   try {
-    const result = await signInWithPopup(auth, provider);;
+    const result = await signInWithPopup(auth, provider);
     const user = result.user;
     // Additional user logic here if needed
-    axios.post("https://historia-backend-ycj7.onrender.com/api/create/user", user)
+    await saveUser(user)
   } catch (error) {
     console.error("There was an error signing in with Google: ", error.code, error.message);
     throw (error)
@@ -42,8 +46,7 @@ const signupLoginGoogle = async () => {
 const loginGoogle = async () => {
   const provider = new GoogleAuthProvider();
   try {
-    const result = await signInWithPopup(auth, provider);;
-    const user = result.user;
+    await signInWithPopup(auth, provider);
   } catch (error) {
     console.error("There was an error signing in with Google: ", error.code, error.message);
     throw (error)

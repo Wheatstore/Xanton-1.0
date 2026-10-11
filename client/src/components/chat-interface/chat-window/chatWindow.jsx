@@ -63,7 +63,19 @@ export default function ChatWindow() {
       messageDoc = await addDoc(collection(db, "users", user.uid, "characters", params.id, "messages"), {
         message: text.trim(), reply: null, sender: "user", timestamp: serverTimestamp(), pendingReply: true,
       });
-      const response = await axios.post(`https://historia-backend-ycj7.onrender.com/api/chat/${encodeURIComponent(user.uid)}/${encodeURIComponent(params.id)}/${encodeURIComponent(params.name)}`, { message: text.trim(), messageId: messageDoc.id });
+      const token = await auth.currentUser.getIdToken();
+      const response = await axios.post(
+        `https://historia-backend-ycj7.onrender.com/api/chat/${encodeURIComponent(user.uid)}/${encodeURIComponent(params.id)}/${encodeURIComponent(params.name)}`,
+        {
+          message: text.trim(),
+          messageId: messageDoc.id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       // Some service responses deliver the reply through the Firestore listener.
       if (response?.data?.reply) await updateDoc(messageDoc, { reply: response.data.reply, pendingReply: false, replyError: false });
       return true;

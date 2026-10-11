@@ -3,7 +3,7 @@ import { signOut } from "firebase/auth"
 
 const userSignOut = () => {
     try {
-        signOut(auth)
+        return signOut(auth)
     } catch (error) {
         console.error(error.code, error.message)
         throw (error)

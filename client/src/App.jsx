@@ -18,6 +18,7 @@ const Signup = lazy(() => import('./pages/auth/signupPage'));
 const Feedback = lazy(() => import('./pages/feedbackPage/feedbackPage'));
 const NotFound = lazy(() => import('./pages/error/404'));
 const MemberRoutes = lazy(() => import('./MemberRoutes'));
+const ReturningMemberRoute = lazy(() => import('./ReturningMemberRoute'));
 
 function ScrollToPage() {
   const { pathname, hash } = useLocation();
@@ -29,7 +30,7 @@ function ScrollToPage() {
 
 export default function App() {
   return <BrowserRouter><RouteSEO /><ScrollToPage /><Suspense fallback={<div className="route-loading" role="status">Opening the archive…</div>}><Routes>
-    <Route path="/" element={<LandingPage />} />
+    <Route path="/" element={<ReturningMemberRoute><LandingPage /></ReturningMemberRoute>} />
     <Route path="/about" element={<About />} />
     <Route path="/features" element={<Features />} />
     <Route path="/bots" element={<BotsDirectory />} />
@@ -39,7 +40,7 @@ export default function App() {
     <Route path="/privacy" element={<Privacy />} />
     <Route path="/terms" element={<Terms />} />
     <Route path="/sitemap" element={<Sitemap />} />
-    <Route path="/login" element={<Login />} />
+    <Route path="/login" element={<ReturningMemberRoute><Login /></ReturningMemberRoute>} />
     <Route path="/signup" element={<Signup />} />
     <Route path="/feedback" element={<Feedback />} />
     {['/user', '/chat/:id/:name', '/create-new-bot', '/submitted', '/profile/:username', '/admin'].map(path => <Route key={path} path={path} element={<MemberRoutes />} />)}
