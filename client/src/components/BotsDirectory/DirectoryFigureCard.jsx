@@ -1,24 +1,26 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, MapPin, UserRound } from "lucide-react";
+import { ArrowRight, UserRound } from "lucide-react";
 import { useArchiveAuth } from "../../hooks/useArchiveAuth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
+import { normalizeFigure } from "./figureData";
+import "./collection.css";
 
 export default function DirectoryFigureCard({ figure }) {
   const [user] = useArchiveAuth(auth);
   const [opening, setOpening] = useState(false);
+  const [openError, setOpenError] = useState("");
   const [shouldLoadImage, setShouldLoadImage] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
   const imageContainerRef = useRef(null);
   const navigate = useNavigate();
 
-  const role = figure.role || figure.occupation || figure.knownFor || figure.title || "Historical figure";
-  const summary = figure.description || figure.biography || figure.bio || figure.about || "Discover this figure's life, ideas, and place in history through conversation.";
-  const period = figure.lifespan || figure.years || figure.dates || figure.era || [figure.birthYear, figure.deathYear].filter(Boolean).join("–");
-  const place = figure.birthPlace || figure.location || figure.country || figure.nationality || "";
+  figure = normalizeFigure(figure);
+  const { role, period } = figure;
+  const summary = figure.description || "Discover their life, ideas, and the world they knew.";
 
   useEffect(() => {
     const imageContainer = imageContainerRef.current;
@@ -47,6 +49,7 @@ export default function DirectoryFigureCard({ figure }) {
     if (opening) return;
     if (!user) { navigate("/signup"); return; }
     setOpening(true);
+    setOpenError("");
     try {
       const chatId = `${figure.id}_${figure.name.replace(/\s+/g, "_")}`;
       const chatRef = doc(db, "users", user.uid, "previousChats", chatId);
@@ -55,10 +58,11 @@ export default function DirectoryFigureCard({ figure }) {
         ...(existing.exists() ? {} : { img: figure.img, name: figure.name, character: figure.id }),
         timestamp: serverTimestamp(),
       }, { merge: true });
-      navigate(`/chat/${figure.id}/${figure.name}`);
+      navigate(`/chat/${encodeURIComponent(figure.id)}/${encodeURIComponent(figure.name)}`);
     } catch (error) {
       console.error("Unable to open conversation:", error);
       setOpening(false);
+      setOpenError("Couldn’t open the conversation. Please try again.");
     }
   };
 
@@ -83,11 +87,11 @@ export default function DirectoryFigureCard({ figure }) {
       <div className="bd-card-content">
         <p className="bd-card-role">{role}</p>
         <h2>{figure.name}</h2>
-        {place && <p className="bd-card-place"><MapPin />{place}</p>}
         <p className="bd-card-summary">{summary}</p>
-        <button type="button" onClick={openConversation} disabled={opening}>
-          {opening ? "Opening conversation…" : <>Start a conversation <ArrowRight /></>}
+        <button type="button" onClick={openConversation} disabled={opening} aria-label={`Start a conversation with ${figure.name}`}>
+          {opening ? "Opening…" : <>Start conversation <ArrowRight /></>}
         </button>
+        {openError && <p className="bd-card-error" role="alert">{openError}</p>}
       </div>
     </article>
   );

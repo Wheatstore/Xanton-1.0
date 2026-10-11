@@ -37,7 +37,7 @@ export function buildCharacterSections(details = {}) {
     ...asArray(profile?.positionsHeld),
   ].some(hasText);
 
-  if (hasText(biography?.short) || hasText(biography?.detailed) || hasText(biography?.historicalImportance) || hasProfile || hasText(details.description)) {
+  if ((typeof biography === "string" && hasText(biography)) || hasText(biography?.short) || hasText(biography?.detailed) || hasText(biography?.historicalImportance) || hasProfile || hasText(details.description) || hasText(details.bio) || hasText(details.about)) {
     sections.push({ id: "overview", label: "Biography" });
   }
   const conversation = details.conversation || {};
