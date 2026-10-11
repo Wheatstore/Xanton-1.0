@@ -1,32 +1,15 @@
-.profile-settings-page {
-  position: relative;
-  min-height: 100dvh;
-  overflow-x: hidden;
-  background: #f3eee4;
-  color: #211e1a;
-}
-
-.profile-settings-page__texture {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.3;
-  background-image:
-    radial-gradient(rgba(78, 63, 45, 0.12) 0.55px, transparent 0.7px),
-    radial-gradient(rgba(255, 255, 255, 0.65) 0.55px, transparent 0.7px);
-  background-position: 0 0, 5px 5px;
-  background-size: 10px 10px;
-  mix-blend-mode: multiply;
-}
-
-.profile-settings-page__glow {
-  position: fixed;
-  top: -24rem;
-  right: -15rem;
-  width: 48rem;
-  height: 48rem;
-  pointer-events: none;
-  border-radius: 999px;
-  background: rgba(255, 252, 244, 0.92);
-  filter: blur(30px);
-}
+.profile-settings-page { min-height: calc(100dvh - 80px); background: var(--mp-paper); color: var(--mp-ink); }
+.profile-identity-card { background: #eeeee6; color: var(--mp-ink); box-shadow: none; }
+.profile-identity-card::after { content: none; }
+.profile-card-art { display: block; width: calc(100% + 56px); max-width: none; height: 130px; margin: -28px -28px 28px; object-fit: cover; object-position: 50% 35%; }
+.profile-identity-card>p,.profile-account-facts dt { color: var(--mp-muted); }
+.profile-account-facts dd { color: var(--mp-ink); }
+.profile-card-rule { background: var(--mp-line); }
+.profile-portrait-status { border-color: #eeeee6; }
+.profile-form-card { background: var(--mp-light); box-shadow: none; }
+.profile-input-wrap { background: var(--mp-light); }
+.profile-input-wrap:focus-within { border-color: var(--mp-blue); box-shadow: 0 0 0 3px #214f7810; }
+.profile-form-actions { background: #eeeee6; }
+.profile-action--primary { background: var(--mp-blue); border-color: var(--mp-blue); border-radius: 5px; }
+.profile-action--secondary { border-radius: 5px; }
+@media(max-width:430px) { .profile-card-art { margin: -24px -24px 24px; width: calc(100% + 48px); } }

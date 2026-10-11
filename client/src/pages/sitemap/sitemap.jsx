@@ -1,57 +1,10 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-
-export default function SitemapPage() {
-  return (
-    <main style={{ maxWidth: 900, margin: "0 auto", padding: "64px 24px" }}>
-      <Helmet>
-        <title>Sitemap | Echoes of History AI</title>
-        <meta
-          name="description"
-          content="A complete sitemap of all public pages on Echoes of History AI."
-        />
-        <link rel="canonical" href="https://echoesofhistoryai.org/sitemap" />
-      </Helmet>
-
-      <h1>Sitemap</h1>
-      <p>
-        This page provides an overview of all publicly accessible pages on
-        Echoes of History AI.
-      </p>
-
-      <section>
-        <h2>Core Pages</h2>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/bots">Historical Figures</Link></li>
-          <li><Link to="/features">Features</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/team">Team</Link></li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Trust & Legal</h2>
-        <ul>
-          <li><Link to="/privacy">Privacy Policy</Link></li>
-          <li><Link to="/terms">Terms of Service</Link></li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Community</h2>
-        <ul>
-          <li><Link to="/feedback">Feedback</Link></li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Looking for bots?</h2>
-        <p>
-          Visit the <Link to="/bots">Historical Figures directory</Link> to
-          explore and chat with available characters.
-        </p>
-      </section>
-    </main>
-  );
-}
+import { ArrowUpRight } from "lucide-react";
+import Navbar from "../../components/navbar/navbar";
+import { MuseumPageHero, MuseumFooter } from "../../components/museum/MuseumPage";
+const groups = [
+  { title: "Explore", links: [["Home","/","A place to begin"],["Our Figures","/bots","Meet the people behind the dates"],["Features","/features","See how Echoes works"],["Articles","/articles","Find your next good read"]] },
+  { title: "Get to know us", links: [["About","/about","The idea behind Echoes"],["Partners","/partners","Bring history to your community"],["Feedback","/feedback","Help shape the experience"]] },
+  { title: "Your account & privacy", links: [["Log in","/login","Continue a conversation"],["Sign up","/signup","Begin a new chapter"],["Privacy Policy","/privacy","How your information is handled"],["Terms of Service","/terms","The terms for using Echoes"]] },
+];
+export default function SitemapPage() { return <div className="mp-page"><Navbar/><MuseumPageHero eyebrow="FIND YOUR WAY" title="A map of" italic="Echoes of History." description="Choose a path. There’s something to discover around every corner." image="/images/page-sitemap-atlas.webp" imageAlt="An artist’s interpretation of a maritime atlas with a compass rose and sailing ships"/><main className="mp-section sitemap-grid">{groups.map(group => <section key={group.title}><h2>{group.title}</h2>{group.links.map(([title,path,description]) => <Link key={path} to={path}><span><strong>{title}</strong><small>{description}</small></span><ArrowUpRight size={16}/></Link>)}</section>)}</main><MuseumFooter/></div>; }

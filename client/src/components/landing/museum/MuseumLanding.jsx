@@ -1,398 +1,84 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  BookOpen,
-  Clock3,
-  FileText,
-  Landmark,
-  MessageCircle,
-  ScrollText,
-  Scale,
-  Users,
-} from "lucide-react";
-import { collection, getDocs, query } from "firebase/firestore";
-import { db } from "../../../firebase";
-import MuseumFigureCard from "./MuseumFigureCard";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FiArrowRight, FiClock, FiFileText, FiMessageCircle, FiPlus, FiSearch, FiUsers } from "react-icons/fi";
+import { GoLaw } from "react-icons/go";
 import "./museumLanding.css";
 
 const discoveryPaths = [
-  {
-    id: "timeline",
-    label: "Timeline",
-    icon: Clock3,
-    title: "Walk through a life, moment by moment.",
-    description: "Move through turning points in order, then open any moment for the story behind the date.",
-    eyebrow: "17 moments in chronological order",
-    featureTitle: "Siege of Boston ends",
-    featureDate: "March 17, 1776",
-    featureText: "The British evacuated Boston after Washington’s forces secured the heights above the city.",
-    markers: ["1732 · Birth", "1754 · First command", "1776 · Boston", "1789 · Presidency"],
-  },
-  {
-    id: "evidence",
-    label: "Documents",
-    icon: FileText,
-    title: "Examine what the past left behind.",
-    description: "Open letters, speeches, and records. Learn who created them, why they matter, and what they leave out.",
-    eyebrow: "Artifact desk · Primary record",
-    featureTitle: "Washington’s Farewell Address",
-    featureDate: "September 19, 1796",
-    featureText: "Study the address as evidence: its intended audience, political purpose, and influence on the young republic.",
-    markers: ["Authorship", "Historical setting", "Why it matters", "Limits of the source"],
-  },
-  {
-    id: "ideas",
-    label: "Ideas & debates",
-    icon: Scale,
-    title: "Investigate beliefs, choices, and contradictions.",
-    description: "Compare interpretations, follow an idea over time, and decide which claims deserve closer examination.",
-    eyebrow: "Idea lens · Competing interpretations",
-    featureTitle: "Power and civic restraint",
-    featureDate: "An idea across a lifetime",
-    featureText: "Explore how Washington’s public ideals interacted with ambition, precedent, and the unresolved contradictions of his era.",
-    markers: ["Central belief", "How it changed", "A contradiction", "Historian’s question"],
-  },
-  {
-    id: "people",
-    label: "People & world",
-    icon: Users,
-    title: "See the forces surrounding one person.",
-    description: "Meet allies and rivals, enter the historical setting, and trace consequences beyond a single biography.",
-    eyebrow: "People index · Historical setting",
-    featureTitle: "A revolution shaped by many lives",
-    featureDate: "Virginia · The thirteen colonies",
-    featureText: "Connect a familiar name to the people, conflicts, institutions, and conditions that made their choices possible.",
-    markers: ["Allies", "Rivals", "World around them", "Lasting impact"],
-  },
+  { label: "Timeline", icon: FiClock, eyebrow: "A life in context", title: "Walk through a life, moment by moment.", description: "Follow the turning points that shaped a person. Connect the dates to the decisions, and the person to the world around them.", heading: "A revolution takes shape.", text: "As commander of the Continental Army, George Washington faced a question larger than any battlefield: could thirteen colonies become a nation?", topics: ["1732 · Early life", "1776 · Revolution", "1789 · Presidency", "1796 · Farewell"] },
+  { label: "Documents", icon: FiFileText, eyebrow: "Look closer at the evidence", title: "Examine what the past left behind.", description: "Explore letters, speeches, and records. Consider who created them, who they were for, and what their words reveal—or leave unsaid.", heading: "Washington’s Farewell Address", text: "Read the address in the context of a young republic. Consider its audience, political purpose, and the concerns Washington chose to leave with the nation.", topics: ["The author", "The audience", "The context", "The interpretation"] },
+  { label: "Ideas & debates", icon: GoLaw, eyebrow: "Make room for complexity", title: "Great lives. Difficult questions.", description: "Explore beliefs, choices, and contradictions. Compare interpretations and consider what the evidence can tell us.", heading: "What should power look like?", text: "Explore Washington’s public commitment to civic restraint alongside the contradictions of his life and the institutions of his era.", topics: ["Public ideals", "Private choices", "Contradictions", "Lasting influence"] },
+  { label: "People & world", icon: FiUsers, eyebrow: "A person in their world", title: "No life happens in isolation.", description: "Meet allies and rivals, explore the historical setting, and trace connections beyond a single biography.", heading: "A revolution shaped by many lives", text: "Connect Washington’s story to the people, conflicts, and conditions around him. Discover how one life fits into a much larger history.", topics: ["Allies", "Rivals", "Historical setting", "Lasting impact"] },
 ];
 
-const fallbackPortraits = [
-  "/images/georgewashington-nobg.png",
-  "/images/gandhi-nobg.png",
+const previewArtwork = [
+  { image: "home-world-map.webp", alt: "Illustrative antique-style map with intricate coastlines and a compass rose" },
+  { image: "home-notebook.webp", alt: "Illustrated handwritten field notes on aged parchment" },
+  { image: "home-manuscript.webp", alt: "Illustrated illuminated manuscript with a scholar reading" },
+  { image: "home-street.webp", alt: "Illustrative archival-style scene of everyday life on a cobblestone street" },
 ];
 
-function MuseumLanding() {
+const figures = [
+  { name: "George Washington", dates: "1732–1799", category: "Leadership & revolution", image: "washington-480.webp", description: "Explore the person behind the presidency.", tone: "stone" },
+  { name: "Mahatma Gandhi", dates: "1869–1948", category: "Ideas & social change", image: "gandhi-480.webp", description: "Examine a life shaped by nonviolent resistance.", tone: "sage" },
+  { name: "Martin Luther King Jr.", dates: "1929–1968", category: "Civil rights & justice", image: "mlk-480.webp", description: "Meet a voice that helped move a movement.", tone: "clay" },
+];
+
+const questions = [
+  ["What is Echoes of History?", "Echoes of History is an interactive history platform. Explore historical figures through biographies, timelines, documents, ideas, and AI-powered conversations."],
+  ["Am I talking to a real historical figure?", "No. Conversations are AI-generated interpretations, not authentic statements or primary sources. Responses can contain mistakes. Use them to spark curiosity, and check important claims against reliable historical sources."],
+  ["How do I get started?", "Browse Our Figures to find someone who interests you. Create an account to explore their life and start a conversation. You can also read historical stories in Articles."],
+];
+
+export default function MuseumLanding() {
   const navigate = useNavigate();
-  const [figures, setFigures] = useState([]);
-  const [loadingFigures, setLoadingFigures] = useState(true);
+  const [search, setSearch] = useState("");
   const [activePath, setActivePath] = useState(0);
-
-  useEffect(() => {
-    let active = true;
-
-    async function loadFigures() {
-      try {
-        const snapshot = await getDocs(query(collection(db, "bots")));
-        if (active) {
-          setFigures(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })));
-        }
-      } catch (error) {
-        console.error("Unable to load the historical collection:", error);
-      } finally {
-        if (active) setLoadingFigures(false);
-      }
-    }
-
-    loadFigures();
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  const featuredFigures = useMemo(() => figures.slice(0, 6), [figures]);
-  const selectedPath = discoveryPaths[activePath];
+  const selected = discoveryPaths[activePath];
+  const artwork = previewArtwork[activePath];
 
   return (
-    <main className="museum-landing">
-      <section className="museum-hero" aria-labelledby="museum-hero-title">
-        <div className="museum-paper-grain" />
-        <div className="museum-hero-index" aria-hidden="true">
-          <span>EST. MMXXIV</span>
-          <span>INTERACTIVE COLLECTION / 01</span>
+    <main className="archive-home" id="main-content" tabIndex={-1}>
+      <section className="archive-hero" aria-labelledby="hero-title">
+        <img className="archive-hero-art" src="/images/home-landscape.webp" alt="An oil-painted Mediterranean landscape with an olive tree, a lake, and a distant hilltop village" width="1920" height="1080" loading="eager" />
+        <div className="archive-hero-tint" />
+        <div className="archive-hero-copy">
+          <h1 id="hero-title">Don’t just read history.<br />Step inside it.</h1>
+          <p>Explore the lives and ideas of historical figures.<br /> Then ask your own questions through AI-powered conversations.</p>
+          <div className="history-hero-actions"><Link className="archive-primary" to="/bots">Explore our figures <FiArrowRight aria-hidden="true" /></Link><a className="history-hero-secondary" href="#experience">How it works</a></div>
         </div>
-
-        <div className="museum-hero-copy">
-          <p className="museum-kicker">An interactive museum of lives and ideas</p>
-          <h1 id="museum-hero-title">
-            Don’t just read history.
-            <em>Step inside it.</em>
-          </h1>
-          <p className="museum-hero-intro">
-            Explore a life through its defining moments, people, ideas, and
-            surviving evidence—then write directly to the person at its center.
-          </p>
-          <div className="museum-hero-actions">
-            <button type="button" onClick={() => navigate("/signup")}>
-              Enter the collection <ArrowRight />
-            </button>
-            <button type="button" className="museum-text-link" onClick={() => navigate("/bots")}>
-              Browse every figure <ArrowUpRight />
-            </button>
-          </div>
-          <div className="museum-hero-features" aria-label="Available experiences">
-            <span><Clock3 /> Timelines</span>
-            <span><FileText /> Documents</span>
-            <span><Scale /> Debates</span>
-            <span><MessageCircle /> Letters</span>
-          </div>
-        </div>
-
-        <div className="museum-hero-art" aria-label="Portraits from the collection">
-          <div className="museum-portrait museum-portrait-primary">
-            <span>PLATE I</span>
-            <img src={fallbackPortraits[0]} alt="George Washington" />
-            <p>George Washington · 1732–1799</p>
-          </div>
-          <div className="museum-portrait museum-portrait-secondary">
-            <span>PLATE II</span>
-            <img src={fallbackPortraits[1]} alt="Mahatma Gandhi" />
-          </div>
-          <div className="museum-portrait museum-portrait-tertiary">
-            <img src="/images/art6.png" alt="Geometric archival composition in black and ochre" />
-          </div>
-          <div className="museum-map-lines" aria-hidden="true" />
-        </div>
-
-        <div className="museum-scroll-cue" aria-hidden="true">
-          <span />
-          Scroll to begin
-        </div>
+        <form className="archive-search" role="search" onSubmit={event => { event.preventDefault(); navigate(search.trim() ? `/bots?search=${encodeURIComponent(search.trim())}` : "/bots"); }}>
+          <FiSearch size={21} aria-hidden="true" />
+          <input aria-label="Search historical figures" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search a name, era, or idea…" />
+          <button type="submit" aria-label="Search our figures"><FiArrowRight size={20} /></button>
+        </form>
       </section>
 
-      <section className="museum-manifesto">
-        <p className="museum-section-number">01 / THE PREMISE</p>
-        <blockquote>
-          A name is only the beginning.
-          <br />Follow the life <em>behind it.</em>
-        </blockquote>
-        <div className="museum-manifesto-note">
-          <p>
-            Echoes of History brings biography, chronology, historical context,
-            evidence, and correspondence into one guided experience. Start with
-            what interests you and reveal more only when you are ready.
-          </p>
-          <figure>
-            <img src="/images/art1.png" alt="Illustrated portrait of Socrates with a quotation about wisdom" />
-            <figcaption>Study I · On wisdom and inquiry</figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <section className="museum-paths" aria-labelledby="paths-title">
-        <div className="museum-paths-heading">
-          <div>
-            <p className="museum-section-number">02 / INSIDE EVERY LIFE</p>
-            <h2 id="paths-title">Choose how you want to explore.</h2>
-          </div>
-          <p>
-            No crowded dashboard and no required order. Begin with a timeline,
-            a document, an idea, or a person. Each path leads naturally to the next.
-          </p>
-        </div>
-
-        <div className="museum-paths-stage">
-          <nav className="museum-path-list" aria-label="Preview ways to explore history">
-            {discoveryPaths.map((path, index) => {
-              const Icon = path.icon;
-              return (
-                <button
-                  type="button"
-                  key={path.id}
-                  className={activePath === index ? "is-active" : ""}
-                  onClick={() => setActivePath(index)}
-                  aria-pressed={activePath === index}
-                >
-                  <span className="museum-path-icon"><Icon aria-hidden="true" /></span>
-                  <span>
-                    <strong>{path.label}</strong>
-                    <small>{path.title}</small>
-                  </span>
-                  <ArrowRight aria-hidden="true" />
-                </button>
-              );
-            })}
-          </nav>
-
-          <div className="museum-experience-preview" aria-live="polite">
-            <header>
-              <div>
-                <span>George Washington</span>
-                <strong>Explore history</strong>
-              </div>
-              <span className="museum-preview-status">Guided experience</span>
-            </header>
-
-            <div className="museum-preview-body">
-              <div className="museum-preview-copy">
-                <p>{selectedPath.eyebrow}</p>
-                <h3>{selectedPath.title}</h3>
-                <span>{selectedPath.description}</span>
-              </div>
-
-              <div className="museum-preview-card" key={selectedPath.id}>
-                <span className="museum-preview-number">0{activePath + 1}</span>
-                <p>{selectedPath.featureDate}</p>
-                <h4>{selectedPath.featureTitle}</h4>
-                <span>{selectedPath.featureText}</span>
-                <div className="museum-preview-tags">
-                  {selectedPath.markers.map((marker, markerIndex) => (
-                    <span key={marker} className={markerIndex === 2 ? "is-current" : ""}>
-                      {marker}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="museum-preview-correspondence">
-                <MessageCircle aria-hidden="true" />
-                <span>
-                  <strong>Turn discovery into a question</strong>
-                  <small>Write about any moment, source, person, or idea you uncover.</small>
-                </span>
-                <ArrowUpRight aria-hidden="true" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <button type="button" className="museum-paths-cta" onClick={() => navigate("/signup")}>
-          Open an interactive life <ArrowRight />
-        </button>
-      </section>
-
-      <section className="museum-collection" aria-labelledby="collection-title">
-        <div className="museum-collection-heading">
-          <div>
-            <p className="museum-section-number">03 / THE COLLECTION</p>
-            <h2 id="collection-title">Many lives.<br />Many ways into history.</h2>
-          </div>
-          <div>
-            <p>
-              Every figure opens into a guided historical world: a life story,
-              chronological moments, relationships, evidence, debates, and a
-              place to ask your own questions.
-            </p>
-            <button type="button" onClick={() => navigate("/bots")}>
-              View the complete collection <ArrowRight />
-            </button>
-          </div>
-        </div>
-
-        <div className="museum-figure-grid">
-          {loadingFigures
-            ? Array.from({ length: 6 }, (_, index) => (
-                <div className="museum-figure-skeleton" key={index} />
-              ))
-            : featuredFigures.map((figure, index) => (
-                <MuseumFigureCard figure={figure} index={index} key={figure.id} />
-              ))}
-        </div>
-
-        {!loadingFigures && featuredFigures.length === 0 && (
-          <div className="museum-empty-collection">
-            <ScrollText />
-            <p>The collection is being prepared. Please return shortly.</p>
-          </div>
-        )}
-      </section>
-
-      <section className="museum-interlude">
-        <div className="museum-interlude-mark" aria-hidden="true">“</div>
-        <p>The past is a foreign country; they do things differently there.</p>
-        <span>L. P. Hartley · The Go-Between · 1953</span>
-      </section>
-
-      <section className="museum-method" aria-labelledby="method-title">
-        <div className="museum-method-intro">
-          <p className="museum-section-number">04 / HOW IT WORKS</p>
-          <h2 id="method-title">Learn by following your curiosity.</h2>
-        </div>
-        <div className="museum-method-grid">
-          {[
-            {
-              icon: <Landmark />,
-              number: "I",
-              title: "Enter the world",
-              text: "Start with a clear portrait of the person, their era, and the forces shaping the choices ahead of them.",
-            },
-            {
-              icon: <BookOpen />,
-              number: "II",
-              title: "Follow what interests you",
-              text: "Open a moment, idea, relationship, debate, or document. Each experience adapts to the records available.",
-            },
-            {
-              icon: <MessageCircle />,
-              number: "III",
-              title: "Write across time",
-              text: "Turn something you discovered into a focused letter. Ask for a defense, explanation, memory, or perspective.",
-            },
-          ].map((item) => (
-            <article key={item.number}>
-              <div className="museum-method-icon">{item.icon}</div>
-              <span>{item.number}</span>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="museum-reading-room">
-        <div className="museum-reading-copy">
-          <p className="museum-section-number">05 / FROM THE READING ROOM</p>
-          <h2>History rewards the second question.</h2>
-          <p>
-            Continue beyond an individual life with essays on people, events,
-            evidence, and the complicated ideas they left behind.
-          </p>
-          <button type="button" onClick={() => navigate("/articles")}>
-            Enter the reading room <ArrowRight />
-          </button>
-        </div>
-        <div className="museum-document-stack" aria-hidden="true">
-          <div className="museum-document museum-document-back">
-            <span>ARCHIVE / NOTES</span>
-            <img className="museum-document-art" src="/images/art5.png" alt="" />
-          </div>
-          <div className="museum-document museum-document-front">
-            <span>FIELD RECORD · NO. 17</span>
-            <strong>To understand an age,<br />listen for its arguments.</strong>
-            <div className="museum-document-lines" />
-            <small>ECHOES OF HISTORY · READING ROOM</small>
+      <section className="archive-experience archive-wrap" id="experience" aria-labelledby="experience-title">
+        <div className="archive-heading"><div><p className="archive-eyebrow">The experience</p><h2 id="experience-title">Go beyond the dates.</h2></div><p>Follow a life. Explore the context.<br />Find your own way into the conversation.</p></div>
+        <div className="history-explorer">
+          <aside className="history-sidebar"><h3>One life.<br /> Many perspectives.</h3><div className="history-tabs" aria-label="Ways to explore a historical figure">{discoveryPaths.map(({label, icon:Icon}, index) => <button type="button" key={label} className={activePath === index ? "is-active" : ""} aria-pressed={activePath === index} aria-controls="history-preview" onClick={() => setActivePath(index)}><Icon size={19} aria-hidden="true" /><span>{label}</span></button>)}</div></aside>
+          <div className="history-preview" id="history-preview" aria-live="polite">
+            <div className="history-preview-heading"><p className="archive-eyebrow">{selected.eyebrow}</p><h3>{selected.title}</h3><p>{selected.description}</p></div>
+            <div className="history-preview-body"><figure className="history-preview-art"><img src={`/images/${artwork.image}`} alt={artwork.alt} width="900" height="600" loading="lazy" /><figcaption>Illustrative artwork · {selected.label}</figcaption></figure><div className="history-preview-story"><p className="archive-eyebrow">George Washington · {selected.label}</p><h4>{selected.heading}</h4><p>{selected.text}</p><ul>{selected.topics.map(topic => <li key={topic}>{topic}</li>)}</ul><Link className="archive-inline-link" to="/bots?search=George%20Washington">Explore George Washington <FiArrowRight /></Link></div></div>
+            <div className="history-preview-footer"><span><FiMessageCircle aria-hidden="true" /> Every life opens a conversation.</span><Link to="/features">See all features <FiArrowRight /></Link></div>
           </div>
         </div>
       </section>
 
-      <section className="museum-closing">
-        <img src="/images/art2.png" alt="" aria-hidden="true" />
-        <div>
-          <p className="museum-section-number">THE ARCHIVE IS OPEN</p>
-          <h2>There is more than one<br />way into the past.</h2>
-          <button type="button" onClick={() => navigate("/signup")}>
-            Begin your visit <ArrowRight />
-          </button>
-        </div>
+      <section className="history-figures archive-wrap" id="collection" aria-labelledby="collection-title">
+        <div className="archive-heading"><div><p className="archive-eyebrow">Our figures</p><h2 id="collection-title">Who would you like to meet?</h2></div><Link className="archive-view-all" to="/bots">View all figures <FiArrowRight /></Link></div>
+        <div className="history-figure-grid">{figures.map(figure => <Link className={`history-figure history-figure-${figure.tone}`} key={figure.name} to={`/bots?search=${encodeURIComponent(figure.name)}`}><div className="history-figure-art"><span className="history-figure-category">{figure.category}</span><img src={`/images/${figure.image}`} alt={`Portrait of ${figure.name}`} width="480" height="600" loading="lazy" /><span className="history-figure-dates">{figure.dates}</span><FiArrowRight className="history-figure-arrow" aria-hidden="true" /></div><h3>{figure.name}</h3><p>{figure.description}</p></Link>)}</div>
       </section>
 
-      <footer className="museum-footer">
-        <div className="museum-footer-brand">
-          <img src="/images/logoTransparent.png" alt="" />
-          <div><strong>Echoes</strong><span>of history</span></div>
-        </div>
-        <div className="museum-footer-links">
-          <div><span>Explore</span><button onClick={() => navigate("/bots")}>Collection</button><button onClick={() => navigate("/articles")}>Articles</button><button onClick={() => navigate("/about")}>About</button></div>
-          <div><span>Visit</span><button onClick={() => navigate("/login")}>Member login</button><button onClick={() => navigate("/signup")}>Join the archive</button><button onClick={() => navigate("/feedback")}>Contact</button></div>
-          <div><span>Legal</span><button onClick={() => navigate("/privacy")}>Privacy</button><button onClick={() => navigate("/terms")}>Terms</button><button onClick={() => navigate("/sitemap")}>Sitemap</button></div>
-        </div>
-        <p className="museum-footer-note">
-          © {new Date().getFullYear()} Echoes of History. An interpretive digital collection.
-        </p>
-      </footer>
+      <section className="history-conversation archive-wrap" aria-labelledby="conversation-title"><div><p className="archive-eyebrow">A conversation across time</p><h2 id="conversation-title">You bring the curiosity.<br />We’ll bring the past closer.</h2><p>Ask about a decision. Question an idea. Follow up on something unexpected. An AI interpretation of a historical figure gives you a new way to explore their life and world.</p><Link className="history-dark-button" to="/signup">Start your conversation <FiArrowRight /></Link><p className="history-ai-note">AI interpretations, not primary sources. Always an invitation to look deeper.</p></div><div className="history-conversation-art"><img src="/images/home-journal.webp" alt="Illustration of a handwritten journal with a coastal sketch" width="800" height="1000" loading="lazy" /><div><FiMessageCircle aria-hidden="true" /><p>“What shaped the way<br />you saw the world?”</p><span>Your next question is a beginning.</span></div></div></section>
+
+      <section className="history-more archive-wrap" aria-label="More from Echoes">
+        <Link to="/articles"><div className="history-editorial-art"><img src="/images/home-manuscript.webp" alt="An illustrated medieval manuscript with colorful floral ornament" width="1200" height="400" loading="lazy" /></div><div className="history-editorial-copy"><div><p className="archive-eyebrow">Articles</p><h3>Keep following the story.</h3><p>Read historical stories and perspectives for curious minds.</p></div><FiArrowRight aria-hidden="true" /></div></Link>
+        <Link to="/partners"><div className="history-editorial-art"><img src="/images/home-street.webp" alt="An archival-style illustration of people on a historic city street" width="800" height="1000" loading="lazy" /></div><div className="history-editorial-copy"><div><p className="archive-eyebrow">Partners</p><h3>History is better shared.</h3><p>Explore opportunities to work with Echoes of History.</p></div><FiArrowRight aria-hidden="true" /></div></Link>
+      </section>
+
+      <section className="history-faq archive-wrap" aria-labelledby="faq-title"><div><p className="archive-eyebrow">Before you begin</p><h2 id="faq-title">A few good questions.</h2></div><div>{questions.map(([question,answer]) => <details key={question}><summary>{question}<FiPlus aria-hidden="true" /></summary><p>{answer}</p></details>)}</div></section>
     </main>
   );
 }
-
-export default MuseumLanding;

@@ -1,42 +1,41 @@
-import { Helmet } from "react-helmet";
-import { useAuthState } from "react-firebase-hooks/auth";
-import NavbarHome from "../../components/navbar/navbar";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { FiArrowRight, FiMenu, FiX } from "react-icons/fi";
 import MuseumLanding from "../../components/landing/museum/MuseumLanding";
-import { auth } from "../../firebase";
 import "./landing.css";
 
-function LandingPage() {
-  const [, loading] = useAuthState(auth);
-  if (loading) return null;
+const links = [["Features", "/features"], ["About", "/about"], ["Our Figures", "/bots"], ["Partners", "/partners"], ["Articles", "/articles"]];
 
+export default function LandingPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+  useEffect(() => setMenuOpen(false), [location.pathname]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = (event) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        document.getElementById("echo-menu-toggle")?.focus();
+      }
+    };
+    document.addEventListener("keydown", close);
+    return () => document.removeEventListener("keydown", close);
+  }, [menuOpen]);
   return (
-    <>
-      <Helmet>
-        <title>Echoes of History — Explore Lives That Shaped the World</title>
-        <meta
-          name="description"
-          content="Explore historical lives through guided timelines, biographies, documents, ideas, debates, and letters across time."
-        />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://echoesofhistoryai.org/" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://echoesofhistoryai.org/" />
-        <meta property="og:title" content="Echoes of History — Explore Lives That Shaped the World" />
-        <meta
-          property="og:description"
-          content="Enter a living digital museum and explore history through timelines, evidence, ideas, and correspondence."
-        />
-        <meta property="og:image" content="https://echoesofhistoryai.org/images/og-image.jpg" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://echoesofhistoryai.org/images/og-image.jpg" />
-      </Helmet>
-
-      <div className="landing-page-container">
-        <NavbarHome />
-        <MuseumLanding />
-      </div>
-    </>
+    <div className="landing-page-container">
+      <header className={`echo-nav${menuOpen ? " menu-open" : ""}`}>
+        <div className="echo-nav-inner">
+          <Link className="echo-brand" to="/" aria-label="Echoes of History home"><span className="echo-logo-crop"><img src="/logoTransparent.png" alt="" width="500" height="500" /></span><span>Echoes<span>OF HISTORY</span></span></Link>
+          <nav className="echo-nav-links" aria-label="Main navigation">{links.map(([label, path]) => <Link key={path} to={path}>{label}</Link>)}<Link className="echo-login" to="/login">Log in</Link><Link className="echo-signup" to="/signup">Sign up <FiArrowRight /></Link></nav>
+          <button className="echo-menu-toggle" id="echo-menu-toggle" type="button" aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen} aria-controls="echo-mobile-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <FiX size={23} /> : <FiMenu size={23} />}</button>
+        </div>
+        {menuOpen && <nav id="echo-mobile-nav" className="echo-mobile-nav" aria-label="Mobile navigation">{[...links, ["Log in", "/login"], ["Create an account", "/signup"]].map(([label, path]) => <Link key={path} to={path}>{label}<FiArrowRight size={16} /></Link>)}</nav>}
+      </header>
+      <MuseumLanding />
+      <footer className="echo-footer">
+        <Link className="echo-brand" to="/" aria-label="Echoes of History home"><span className="echo-logo-crop"><img src="/logoTransparent.png" alt="" width="500" height="500" /></span><span>Echoes<span>OF HISTORY</span></span></Link>
+        <nav aria-label="Footer navigation"><Link to="/about">About</Link><Link to="/feedback">Contact</Link><Link to="/privacy">Privacy</Link><Link to="/terms">Terms</Link></nav>
+      </footer>
+    </div>
   );
 }
-
-export default LandingPage;

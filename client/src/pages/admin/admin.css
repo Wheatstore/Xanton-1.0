@@ -1,0 +1,17 @@
+.archive-admin { max-width: 1440px; margin: auto; font: 13px/1.6 Inter,sans-serif; color: #191a18; }
+.admin-sidebar { position: relative; flex-shrink: 0; display: flex; flex-direction: column; border-right: 1px solid #dcd9d1; }
+.admin-sidebar h2 { font: 30px "Libre Caslon Display",Georgia,serif; }
+.admin-sidebar nav { flex: 1; }
+.admin-sidebar nav button { font-size: 12px; }
+.admin-account { border-top: 1px solid #dcd9d1; }
+.archive-admin h1 { font: 40px "Libre Caslon Display",Georgia,serif; }
+.archive-admin h2:not(.admin-sidebar h2) { font: 27px "Libre Caslon Display",Georgia,serif; }
+.archive-admin .shadow,.archive-admin .shadow-sm { box-shadow: none; border: 1px solid #dcd9d1; }
+.archive-admin .bg-white { background: #fcfaf6; }
+.archive-admin .rounded-lg { border-radius: 6px; }
+.admin-art { margin: 28px 32px 0; }
+.admin-art img { display: block; width: 100%; height: 130px; object-fit: cover; border-radius: 5px; }
+.admin-art figcaption { margin-top: 8px; color: #5f6370; font-size: 9px; }
+.archive-admin button { cursor: pointer; }
+.archive-admin :is(button,a):focus-visible { outline: 2px solid #214f78; outline-offset: 3px; }
+@media(max-width:760px) { .archive-admin { flex-direction: column; }.admin-sidebar { width: 100%; border: 0; border-bottom: 1px solid #dcd9d1; }.admin-sidebar nav { display: flex; overflow-x: auto; margin: 0; }.admin-sidebar nav button { flex-shrink: 0; width: auto; white-space: nowrap; padding: 14px; }.admin-sidebar nav svg { display: none; }.admin-account { display: none; }.admin-main .p-8 { padding: 22px; }.admin-art { margin-inline: 22px; }.admin-main table { min-width: 600px; }.admin-main .bg-white:has(table) { overflow-x: auto; } }

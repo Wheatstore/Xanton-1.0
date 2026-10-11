@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -20,17 +21,22 @@ function searchableText(figure) {
 export default function BotsDirectory() {
   const [figures, setFigures] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [loadError, setLoadError] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(() => searchParams.get("search") || "");
+  useEffect(() => setSearch(searchParams.get("search") || ""), [searchParams]);
   const [activeFilter, setActiveFilter] = useState("all");
   const [sort, setSort] = useState("featured");
 
   useEffect(() => {
     async function loadFigures() {
       try {
+        if (!db) { setLoadError(true); return; }
         const snapshot = await getDocs(query(collection(db, "bots")));
         setFigures(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })));
       } catch (error) {
         console.error("Error fetching figures:", error);
+        setLoadError(true);
       } finally { setLoading(false); }
     }
     loadFigures();
@@ -58,26 +64,26 @@ export default function BotsDirectory() {
           <h1>Who would you like to meet?</h1>
           <p>Choose a historical figure and ask about their life, choices, ideas, or the world they knew.</p>
         </div>
-        <img src="/images/art6.png" alt="" aria-hidden="true" />
+        <img src="/images/page-figures-portraits.webp" alt="A painted collection of framed portraits in a historical study" />
       </header>
 
       <section className="bd-controls" aria-label="Browse historical figures">
         <label className="bd-search">
           <Search />
-          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search by name, era, profession, or idea" />
+          <input value={search} onChange={(event) => setSearch(event.target.value)} aria-label="Search historical figures" placeholder="Search by name, era, profession, or idea" />
           {search && <button type="button" onClick={() => setSearch("")} aria-label="Clear search"><X /></button>}
         </label>
         <div className="bd-filter-row">
           <div className="bd-filters" aria-label="Filter by field">
-            {filters.map((filter) => <button type="button" key={filter.id} onClick={() => setActiveFilter(filter.id)} className={activeFilter === filter.id ? "is-active" : ""}>{filter.label}</button>)}
+            {filters.map((filter) => <button type="button" key={filter.id} onClick={() => setActiveFilter(filter.id)} aria-pressed={activeFilter === filter.id} className={activeFilter === filter.id ? "is-active" : ""}>{filter.label}</button>)}
           </div>
           <label className="bd-sort"><SlidersHorizontal /><span>Sort</span><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="featured">Featured</option><option value="alphabetical">A–Z</option></select></label>
         </div>
       </section>
 
       <section className="bd-results">
-        <div className="bd-results-heading"><div><h2>Explore the collection</h2><p>{loading ? "Loading figures…" : `${visibleFigures.length} ${visibleFigures.length === 1 ? "figure" : "figures"} available`}</p></div>{(search || activeFilter !== "all") && <button type="button" onClick={clearFilters}>Clear all filters</button>}</div>
-        {loading ? <div className="bd-grid">{[1,2,3,4,5,6].map((item) => <div className="bd-skeleton" key={item} />)}</div> : visibleFigures.length ? <div className="bd-grid">{visibleFigures.map((figure) => <DirectoryFigureCard figure={figure} key={figure.id} />)}</div> : <div className="bd-empty"><Search /><h2>No figures found</h2><p>Try a different name or broaden your topic filter.</p><button type="button" onClick={clearFilters}>Show all figures</button></div>}
+        <div className="bd-results-heading"><div><h2>Explore the collection</h2><p>{loading ? "Loading figures…" : loadError ? "Collection connection unavailable" : `${visibleFigures.length} ${visibleFigures.length === 1 ? "figure" : "figures"} available`}</p></div>{(search || activeFilter !== "all") && <button type="button" onClick={clearFilters}>Clear all filters</button>}</div>
+        {loading ? <div className="bd-grid">{[1,2,3,4,5,6].map((item) => <div className="bd-skeleton" key={item} />)}</div> : loadError ? <div className="bd-empty"><Search/><h2>The collection couldn’t be loaded.</h2><p>Please try again later. Your search and filters are ready when the connection returns.</p></div> : visibleFigures.length ? <div className="bd-grid">{visibleFigures.map((figure) => <DirectoryFigureCard figure={figure} key={figure.id} />)}</div> : <div className="bd-empty"><Search /><h2>No figures found</h2><p>Try a different name or broaden your topic filter.</p><button type="button" onClick={clearFilters}>Show all figures</button></div>}
       </section>
     </main>
   );

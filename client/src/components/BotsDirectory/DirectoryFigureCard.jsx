@@ -2,12 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, MapPin, UserRound } from "lucide-react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useArchiveAuth } from "../../hooks/useArchiveAuth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 
 export default function DirectoryFigureCard({ figure }) {
-  const [user] = useAuthState(auth);
+  const [user] = useArchiveAuth(auth);
   const [opening, setOpening] = useState(false);
   const [shouldLoadImage, setShouldLoadImage] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);

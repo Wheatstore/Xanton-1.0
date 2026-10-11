@@ -5,10 +5,10 @@ body,
 #root,
 #main-content {
     min-height: 100%;
-    background: #f5f2ec;
+    background: #f8f9f4;
 }
 
-main#main-content {
+#main-content {
     margin: 0;
     padding: 0;
 }
@@ -49,3 +49,6 @@ main#main-content {
 * {
     box-sizing: border-box;
 }
+
+body { margin: 0; }
+.route-loading { min-height: 70vh; display: grid; place-items: center; padding: 24px; font: 14px Inter, system-ui, sans-serif; color: #515b3b; }

@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useArchiveAuth } from "../../../hooks/useArchiveAuth";
 import { useNavigate } from "react-router-dom";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 import { userSignOut } from "../../../authenticationFunctions/signout";
 
 function LogoMark() {
-  return <img src="/images/logoTransparent.png" alt="Echoes of History" className="h-full w-full object-contain brightness-0" />;
+  return <img src="/logoTransparent.png" alt="Echoes of History" className="h-full w-full object-contain brightness-0" />;
 }
 
 function ChatIcon() {
@@ -28,7 +28,7 @@ function CompassIcon() {
 }
 
 function Sidebar({ activeCharacter = null, informationSections = [], activeInformationSection = "", onInformationSectionChange }) {
-  const [user] = useAuthState(auth);
+  const [user] = useArchiveAuth(auth);
   const [previousChats, setPreviousChats] = useState([]);
   const [showSettings, setShowSettings] = useState(false);
   const settingsRef = useRef(null);
@@ -59,10 +59,10 @@ function Sidebar({ activeCharacter = null, informationSections = [], activeInfor
   }, [user]);
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-[#fffcf7] text-stone-800">
+    <div className="flex h-full min-h-0 flex-col bg-[#fcfaf6] text-stone-800">
       <div className="flex-none px-5 pb-5 pt-6">
         <button type="button" onClick={() => navigate("/")} className="group flex items-center gap-3 text-left">
-          <span className="grid h-10 w-10 place-items-center rounded-full border border-stone-300 bg-[#f8f5ef] p-2 transition group-hover:bg-white group-hover:text-black">
+          <span className="grid h-10 w-10 place-items-center rounded-full border border-stone-300 bg-[#f8f6f1] p-2 transition group-hover:bg-white group-hover:text-black">
             <LogoMark />
           </span>
           <span>

@@ -36,7 +36,7 @@
 }
 
 .profile-back-button:hover {
-  color: #a8452c;
+  color: #214f78;
   transform: translateX(-2px);
 }
 
@@ -59,7 +59,7 @@
 .profile-kicker,
 .profile-card-label {
   display: block;
-  color: #aa4931;
+  color: #214f78;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.21em;
@@ -71,7 +71,7 @@
 .profile-identity-card h2,
 .profile-settings--empty h1 {
   margin: 9px 0 0;
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-family: "Libre Caslon Display", Georgia, serif;
   font-weight: 400;
   letter-spacing: -0.035em;
 }
@@ -114,7 +114,7 @@
   top: 24px;
   overflow: hidden;
   padding: 28px;
-  border-radius: 28px;
+  border-radius: 6px;
   background: #211e1a;
   color: #f8f3e9;
 }
@@ -157,11 +157,11 @@
   place-items: center;
   border: 3px solid #211e1a;
   border-radius: 50%;
-  background: #b24e32;
+  background: #214f78;
   color: white;
 }
 
-.profile-card-label { color: #cf8068; }
+.profile-card-label { color: #214f78; }
 
 .profile-identity-card h2 {
   margin-top: 10px;
@@ -214,7 +214,7 @@
 
 .profile-form-card {
   overflow: hidden;
-  border-radius: 28px;
+  border-radius: 6px;
   background: rgba(255, 253, 248, 0.88);
 }
 
@@ -237,14 +237,14 @@
   height: 38px;
   place-items: center;
   border: 1px solid #ddd5c9;
-  border-radius: 13px;
+  border-radius: 5px;
   background: #f5efe5;
-  color: #9f452e;
+  color: #214f78;
 }
 
 .profile-section-heading h2 {
   margin: 1px 0 0;
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-family: "Libre Caslon Display", Georgia, serif;
   font-size: 24px;
   font-weight: 500;
   letter-spacing: -0.02em;
@@ -274,13 +274,13 @@
   display: flex;
   align-items: center;
   border: 1px solid #d8d0c5;
-  border-radius: 15px;
+  border-radius: 5px;
   background: #fffefa;
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .profile-input-wrap:focus-within {
-  border-color: #a94b32;
+  border-color: #214f78;
   box-shadow: 0 0 0 3px rgba(169, 75, 50, 0.1);
 }
 
@@ -317,7 +317,7 @@
   margin-top: 27px;
   padding: 17px 18px;
   border: 1px solid #e0d9cf;
-  border-radius: 15px;
+  border-radius: 5px;
   background: #f7f3ec;
 }
 
@@ -342,7 +342,7 @@
   margin: 0 38px 34px;
   padding: 16px;
   border: 1px solid #ded6ca;
-  border-radius: 17px;
+  border-radius: 5px;
   background: transparent;
   color: #34302b;
   text-align: left;
@@ -413,7 +413,7 @@
   color: #fffaf1;
 }
 
-.profile-action--primary:hover:not(:disabled) { background: #a94b32; border-color: #a94b32; }
+.profile-action--primary:hover:not(:disabled) { background: #214f78; border-color: #214f78; }
 
 .profile-settings--loading,
 .profile-settings--empty {
@@ -431,7 +431,7 @@
   width: 34px;
   height: 34px;
   border: 1px solid #bfb5a8;
-  border-top-color: #9f452e;
+  border-top-color: #214f78;
   border-radius: 50%;
   animation: profile-spin 900ms linear infinite;
 }
@@ -468,8 +468,8 @@
 @media (max-width: 430px) {
   .profile-back-button span { display: none; }
   .profile-settings__intro h1 { font-size: 42px; }
-  .profile-identity-card { padding: 24px; border-radius: 23px; }
-  .profile-form-card { border-radius: 23px; }
+  .profile-identity-card { padding: 24px; border-radius: 6px; }
+  .profile-form-card { border-radius: 6px; }
   .profile-section-heading h2 { font-size: 21px; }
 }
 

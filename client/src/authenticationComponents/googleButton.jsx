@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
+import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 function GoogleIcon() {
   return (
@@ -24,7 +25,7 @@ function GoogleAuthButton({ text = "Continue with Google", onSuccess, onError })
     setLocalError("");
 
     try {
-      const result = await signInWithPopup(getAuth(), new GoogleAuthProvider());
+      const result = await signInWithPopup(auth, new GoogleAuthProvider());
       if (onSuccess) onSuccess(result.user);
       else navigate("/user");
     } catch (error) {
@@ -41,8 +42,8 @@ function GoogleAuthButton({ text = "Continue with Google", onSuccess, onError })
       <button
         type="button"
         onClick={handleGoogleAuth}
-        disabled={isLoading}
-        className="flex w-full items-center justify-center gap-3 rounded-xl border border-stone-300 bg-white px-4 py-3.5 text-sm font-semibold text-stone-700 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-900 hover:text-stone-950 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+        disabled={isLoading || !auth}
+        className="auth-google"
       >
         {isLoading ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-stone-300 border-t-stone-900" /> : <GoogleIcon />}
         {isLoading ? "Connecting..." : text}

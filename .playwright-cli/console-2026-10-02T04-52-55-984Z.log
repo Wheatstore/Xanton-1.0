@@ -1,0 +1,61 @@
+[     338ms] [WARNING] Ignoring Event: localhost @ https://analytics.ahrefs.com/analytics.js:0
+[     586ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YFB5YCE7.js?v=9510af06:21608
+[     612ms] [ERROR] Warning: React does not recognize the `%s` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `%s` instead. If you accidentally passed it from a parent component, remove it from the DOM element.%s fetchPriority fetchpriority 
+    at img
+    at picture
+    at section
+    at main
+    at MuseumLanding (http://127.0.0.1:5173/src/components/landing/museum/MuseumLanding.jsx:87:39)
+    at div
+    at LandingPage (http://127.0.0.1:5173/src/pages/landing/landing.jsx:25:35)
+    at RenderedRoute (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=40cbc50d:4131:5)
+    at Routes (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=40cbc50d:4601:5)
+    at Suspense
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=40cbc50d:4544:15)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=40cbc50d:5290:5)
+    at App
+    at _a (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=4836621d:624:5) @ http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YFB5YCE7.js?v=9510af06:520
+[     624ms] [WARNING] ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition. @ http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=40cbc50d:4435
+[     624ms] [WARNING] ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath. @ http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=40cbc50d:4435
+[    9689ms] [WARNING] Ignoring Event: localhost @ https://analytics.ahrefs.com/analytics.js:0
+[    9692ms] [WARNING] Ignoring Event: localhost @ https://analytics.ahrefs.com/analytics.js:0
+[    9815ms] FirebaseError: Firebase: Error (auth/invalid-api-key).
+    at createErrorInternal (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:705:38)
+    at _assert (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:709:11)
+    at Component.instanceFactory (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:7874:7)
+    at Provider.getOrInitializeService (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-ZRP63T2P.js?v=9510af06:971:33)
+    at Provider.initialize (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-ZRP63T2P.js?v=9510af06:918:27)
+    at initializeAuth (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:3244:25)
+    at getAuth (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:7944:16)
+    at http://127.0.0.1:5173/src/firebase.js:19:14
+[    9815ms] FirebaseError: Firebase: Error (auth/invalid-api-key).
+    at createErrorInternal (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:705:38)
+    at _assert (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:709:11)
+    at Component.instanceFactory (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:7874:7)
+    at Provider.getOrInitializeService (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-ZRP63T2P.js?v=9510af06:971:33)
+    at Provider.initialize (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-ZRP63T2P.js?v=9510af06:918:27)
+    at initializeAuth (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:3244:25)
+    at getAuth (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:7944:16)
+    at http://127.0.0.1:5173/src/firebase.js:19:14
+[    9815ms] [ERROR] The above error occurred in the <Route.Provider> component:
+
+    at RenderedRoute (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=40cbc50d:4131:5)
+    at Routes (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=40cbc50d:4601:5)
+    at Suspense
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=40cbc50d:4544:15)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=40cbc50d:5290:5)
+    at App
+    at _a (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=4836621d:624:5)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries. @ http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YFB5YCE7.js?v=9510af06:14079
+[    9815ms] FirebaseError: Firebase: Error (auth/invalid-api-key).
+    at createErrorInternal (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:705:38)
+    at _assert (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:709:11)
+    at Component.instanceFactory (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:7874:7)
+    at Provider.getOrInitializeService (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-ZRP63T2P.js?v=9510af06:971:33)
+    at Provider.initialize (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-ZRP63T2P.js?v=9510af06:918:27)
+    at initializeAuth (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:3244:25)
+    at getAuth (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UJJ3WXG5.js?v=9510af06:7944:16)
+    at http://127.0.0.1:5173/src/firebase.js:19:14
+[   11243ms] [WARNING] Ignoring Event: localhost @ https://analytics.ahrefs.com/analytics.js:0

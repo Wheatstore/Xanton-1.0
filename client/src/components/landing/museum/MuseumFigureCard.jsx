@@ -2,12 +2,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowUpRight, UserRound } from "lucide-react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useArchiveAuth } from "../../../hooks/useArchiveAuth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 
 function MuseumFigureCard({ figure, index }) {
-  const [user] = useAuthState(auth);
+  const [user] = useArchiveAuth(auth);
   const [opening, setOpening] = useState(false);
   const navigate = useNavigate();
 

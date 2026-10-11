@@ -1,110 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-
-  <!-- Homepage (PRIMARY BRAND PAGE) -->
-  <url>
-    <loc>https://echoesofhistoryai.org/</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <!-- Bots Directory (IMPORTANT SEO PAGE) -->
-  <url>
-    <loc>https://echoesofhistoryai.org/bots</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Articles Directory (IMPORTANT SEO PAGE) -->
-  <url>
-    <loc>https://echoesofhistoryai.org/articles</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- About -->
-  <url>
-    <loc>https://echoesofhistoryai.org/about</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Features -->
-  <url>
-    <loc>https://echoesofhistoryai.org/features</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Human-readable sitemap page (optional but public in your router) -->
-  <url>
-    <loc>https://echoesofhistoryai.org/sitemap</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <!-- Legal / Trust Pages -->
-  <url>
-    <loc>https://echoesofhistoryai.org/privacy</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://echoesofhistoryai.org/terms</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- ===========================
-       DO NOT INCLUDE AUTH/PRIVATE/DYNAMIC PAGES
-       ===========================
-       /login
-       /signup
-       /user
-       /chat/:id/:name
-       /create-new-bot
-       /submitted
-       /profile/:username
-       /admin
-       /feedback   (leave out unless you want it indexed)
-       /articles/:slug (only include if you can list concrete slugs)
-  -->
-
-  <!-- ===========================
-       Individual Article Pages
-       Add ONLY when you can output real URLs
-       =========================== -->
-  <!--
-  <url>
-    <loc>https://echoesofhistoryai.org/articles/example-article-slug</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  -->
-
-  <!-- ===========================
-       Individual Bot Pages
-       Only include if they exist as real public routes (you currently don't have /bots/:slug in App.jsx)
-       =========================== -->
-  <!--
-  <url>
-    <loc>https://echoesofhistoryai.org/bots/albert-einstein</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  -->
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://echoesofhistoryai.org/</loc></url>
+  <url><loc>https://echoesofhistoryai.org/about</loc></url>
+  <url><loc>https://echoesofhistoryai.org/features</loc></url>
+  <url><loc>https://echoesofhistoryai.org/bots</loc></url>
+  <url><loc>https://echoesofhistoryai.org/articles</loc></url>
+  <url><loc>https://echoesofhistoryai.org/partners</loc></url>
+  <url><loc>https://echoesofhistoryai.org/privacy</loc></url>
+  <url><loc>https://echoesofhistoryai.org/terms</loc></url>
+  <url><loc>https://echoesofhistoryai.org/sitemap</loc></url>
 </urlset>

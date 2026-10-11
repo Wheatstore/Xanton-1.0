@@ -1,0 +1,214 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Echoes of History home" [ref=e7] [cursor=pointer]:
+          - /url: /
+          - generic [aria-hidden] [ref=e8]: e.
+          - generic [ref=e9]:
+            - text: echoes
+            - generic [ref=e10]: OF HISTORY
+        - navigation "Main navigation" [ref=e11]:
+          - link "The collection" [ref=e12] [cursor=pointer]:
+            - /url: /bots
+          - link "The experience" [ref=e13] [cursor=pointer]:
+            - /url: /features
+          - link "Our story" [ref=e14] [cursor=pointer]:
+            - /url: /about
+          - link "Reading room" [ref=e15] [cursor=pointer]:
+            - /url: /articles
+        - generic [ref=e16]:
+          - link "Log in" [ref=e17] [cursor=pointer]:
+            - /url: /login
+          - link "Step inside" [ref=e18] [cursor=pointer]:
+            - /url: /signup
+    - main [ref=e22]:
+      - region [ref=e23]:
+        - img "A marble philosopher in a sunlit gallery, framed by olive glass and a bronze orbit" [ref=e25]
+        - generic [ref=e27]:
+          - paragraph [ref=e28]: The past has more to say
+          - heading [level=1] [ref=e30]:
+            - text: History.A little more
+            - emphasis [ref=e31]: human.
+          - paragraph [ref=e32]: Meet the minds that shaped our world. Explore their lives. Question their ideas. Start a conversation across time.
+          - generic [ref=e33]:
+            - link "Begin your journey" [ref=e34] [cursor=pointer]:
+              - /url: /signup
+            - link "Meet the figures" [ref=e38] [cursor=pointer]:
+              - /url: "#collection"
+          - paragraph [ref=e41]: A new way to explore history, powered by curiosity & AI.
+        - generic [ref=e42]:
+          - generic [ref=e43]: STUDY No. 01
+          - generic [ref=e44]: The art of asking.
+        - generic [ref=e45]:
+          - generic [ref=e46]: A living collection of lives & ideas
+          - link "Scroll to discover" [ref=e47] [cursor=pointer]:
+            - /url: "#experience"
+          - generic [ref=e50]: Past / Present / Possibility
+      - region [ref=e51]:
+        - paragraph [ref=e52]: Old worlds. New perspectives.
+        - heading [level=2] [ref=e53]:
+          - text: There’s a personbehind
+          - emphasis [ref=e54]: every page.
+        - generic [ref=e55]:
+          - paragraph [ref=e56]: Beyond the dates and the familiar portraits are people who wondered, struggled, and changed the world.
+          - paragraph [ref=e57]: Echoes brings you closer. Follow a life, explore the evidence, and ask the questions that make history your own.
+          - link "Get to know Echoes" [ref=e58] [cursor=pointer]:
+            - /url: /about
+      - region [ref=e62]:
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - paragraph [ref=e65]: 01 / Follow your curiosity
+            - heading [level=2] [ref=e66]:
+              - text: One life.
+              - emphasis [ref=e67]: So many ways in.
+          - paragraph [ref=e68]: No prescribed path. Just a new perspective waiting behind every question.
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - generic "Choose an experience preview" [ref=e71]:
+              - button "The timeline" [pressed] [ref=e72] [cursor=pointer]
+              - button "The documents" [ref=e77] [cursor=pointer]
+              - button "The ideas" [ref=e82] [cursor=pointer]
+              - button "The conversation" [ref=e88] [cursor=pointer]
+            - generic [ref=e92]:
+              - paragraph [ref=e93]: A life in context
+              - heading "Every turning point has a story." [level=3] [ref=e94]
+              - paragraph [ref=e95]: Follow a life through the moments that shaped it. Connect the dates to the decisions, and the person to the world around them.
+              - link "Explore the experience" [ref=e96] [cursor=pointer]:
+                - /url: /features
+          - generic [ref=e100]:
+            - generic [ref=e101]:
+              - generic [ref=e102]: Inside the archive
+              - generic [ref=e104]: George Washington
+            - generic [ref=e105]:
+              - generic [ref=e106]: "1776"
+              - img "Portrait of George Washington" [ref=e108]
+              - generic [ref=e109]:
+                - paragraph [ref=e110]: The timeline / A preview
+                - heading "A revolution takes shape." [level=3] [ref=e111]
+                - paragraph [ref=e112]: "As commander of the Continental Army, George Washington faced a question larger than any battlefield: could thirteen colonies become a nation?"
+            - generic [ref=e113]:
+              - generic [ref=e114]: 1732 · A beginning
+              - generic [ref=e115]: 1776 · Revolution
+              - generic [ref=e116]: 1789 · Presidency
+              - generic [ref=e117]: 1796 · Farewell
+      - region [ref=e118]:
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - paragraph [ref=e121]: 02 / Extraordinary lives. Human stories.
+            - heading [level=2] [ref=e122]:
+              - text: Some minds
+              - emphasis [ref=e123]: stay with us.
+          - link "Explore the collection" [ref=e124] [cursor=pointer]:
+            - /url: /bots
+        - generic [ref=e128]:
+          - link "01 / Leadership & revolution Portrait of George Washington 1732—1799 George Washington The person behind the presidency." [ref=e129] [cursor=pointer]:
+            - /url: /bots?search=George%20Washington
+            - generic [ref=e130]:
+              - generic [ref=e131]: 01 / Leadership & revolution
+              - img "Portrait of George Washington" [ref=e137]
+              - generic [ref=e138]: 1732—1799
+            - generic [ref=e139]:
+              - heading "George Washington" [level=3] [ref=e140]
+              - paragraph [ref=e141]: The person behind the presidency.
+          - link "02 / Ideas & social change Portrait of Mahatma Gandhi 1869—1948 Mahatma Gandhi The possibilities of nonviolent resistance." [ref=e142] [cursor=pointer]:
+            - /url: /bots?search=Mahatma%20Gandhi
+            - generic [ref=e143]:
+              - generic [ref=e144]: 02 / Ideas & social change
+              - img "Portrait of Mahatma Gandhi" [ref=e150]
+              - generic [ref=e151]: 1869—1948
+            - generic [ref=e152]:
+              - heading "Mahatma Gandhi" [level=3] [ref=e153]
+              - paragraph [ref=e154]: The possibilities of nonviolent resistance.
+          - link "03 / Civil rights & justice Portrait of Martin Luther King Jr. 1929—1968 Martin Luther King Jr. A voice that moved a movement." [ref=e155] [cursor=pointer]:
+            - /url: /bots?search=Martin%20Luther%20King%20Jr.
+            - generic [ref=e156]:
+              - generic [ref=e157]: 03 / Civil rights & justice
+              - img "Portrait of Martin Luther King Jr." [ref=e163]
+              - generic [ref=e164]: 1929—1968
+            - generic [ref=e165]:
+              - heading "Martin Luther King Jr." [level=3] [ref=e166]
+              - paragraph [ref=e167]: A voice that moved a movement.
+      - region [ref=e168]:
+        - generic [ref=e169]:
+          - generic [aria-hidden] [ref=e170]: “
+          - paragraph [ref=e171]: A conversation centuries in the making
+          - heading [level=2] [ref=e172]:
+            - text: If you could ask them
+            - emphasis [ref=e173]: one question,
+            - text: what would it be?
+          - link "Find your conversation" [ref=e174] [cursor=pointer]:
+            - /url: /signup
+          - paragraph [ref=e178]: Imagined conversations. Real curiosity.AI interpretations, always an invitation to look deeper.
+      - generic [ref=e180]:
+        - generic [ref=e181]:
+          - img "An illustrated classical stone arch" [ref=e182]
+          - generic [ref=e183]: Notes from the archive / Vol. 01
+        - generic [ref=e184]:
+          - paragraph [ref=e185]: 03 / The reading room
+          - heading [level=2] [ref=e186]:
+            - text: Stay a little longer.
+            - emphasis [ref=e187]: Look a little closer.
+          - paragraph [ref=e188]: Stories, ideas, and historical perspectives for the endlessly curious. Follow a thread and see where it takes you.
+          - link "Step into the reading room" [ref=e189] [cursor=pointer]:
+            - /url: /articles
+      - region [ref=e193]:
+        - generic [ref=e194]:
+          - paragraph [ref=e195]: Before you step inside
+          - heading [level=2] [ref=e196]:
+            - text: A few good
+            - emphasis [ref=e197]: questions.
+        - generic [ref=e198]:
+          - group [ref=e199]:
+            - generic "What is Echoes of History?" [ref=e200] [cursor=pointer]
+          - group [ref=e202]:
+            - generic "Am I talking to a real historical figure?" [ref=e203] [cursor=pointer]
+          - group [ref=e205]:
+            - generic "Where should I begin?" [ref=e206] [cursor=pointer]
+          - group [ref=e208]:
+            - generic "Can I explore on my phone?" [ref=e209] [cursor=pointer]
+    - contentinfo [ref=e211]:
+      - generic [ref=e212]:
+        - generic [ref=e213]:
+          - link "echoes OF HISTORY" [ref=e214] [cursor=pointer]:
+            - /url: /
+            - generic [aria-hidden] [ref=e215]: e.
+            - generic [ref=e216]:
+              - text: echoes
+              - generic [ref=e217]: OF HISTORY
+          - paragraph [ref=e218]: The past is a beginning.
+        - generic [ref=e219]:
+          - generic [ref=e220]:
+            - generic [ref=e221]: Explore
+            - link "The collection" [ref=e222] [cursor=pointer]:
+              - /url: /bots
+            - link "The experience" [ref=e223] [cursor=pointer]:
+              - /url: /features
+            - link "Reading room" [ref=e224] [cursor=pointer]:
+              - /url: /articles
+          - generic [ref=e225]:
+            - generic [ref=e226]: Discover
+            - link "Our story" [ref=e227] [cursor=pointer]:
+              - /url: /about
+            - link "Partnerships" [ref=e228] [cursor=pointer]:
+              - /url: /partners
+            - link "Get in touch" [ref=e229] [cursor=pointer]:
+              - /url: /feedback
+          - generic [ref=e230]:
+            - generic [ref=e231]: Your next chapter
+            - link "Create an account" [ref=e232] [cursor=pointer]:
+              - /url: /signup
+            - link "Log in" [ref=e236] [cursor=pointer]:
+              - /url: /login
+      - generic [ref=e237]:
+        - generic [ref=e238]: © 2026 Echoes of History
+        - generic [ref=e239]: Made for curious minds, everywhere.
+        - generic [ref=e240]:
+          - link "Privacy" [ref=e241] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms" [ref=e242] [cursor=pointer]:
+            - /url: /terms
+          - link "Sitemap" [ref=e243] [cursor=pointer]:
+            - /url: /sitemap

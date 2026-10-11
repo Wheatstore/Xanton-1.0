@@ -1,50 +1,18 @@
 /* eslint-disable react/prop-types */
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { ArchiveBrand } from "../navbar/navbar";
 import "./museumPage.css";
 
-export function MuseumPageHero({ index, eyebrow, title, italic, description, image, imageAlt = "", children }) {
-  return (
-    <header className="mp-hero">
-      <div className="mp-hero-copy">
-        <p className="mp-index">{index} / {eyebrow}</p>
-        <h1>{title}{italic && <em>{italic}</em>}</h1>
-        {description && <p className="mp-deck">{description}</p>}
-        {children}
-      </div>
-      <div className={`mp-hero-art ${image?.includes("/art") ? "mp-hero-artwork" : ""}`} aria-hidden={!image}>
-        <span>{image?.includes("/art") ? "COLLECTION STUDY · EOH" : "ARCHIVE PLATE · EOH"}</span>
-        {image ? <img src={image} alt={imageAlt} /> : <div className="mp-line-art" />}
-      </div>
-    </header>
-  );
+export function MuseumPageHero({ eyebrow, title, italic, description, image = "/images/page-feedback-letters.webp", imageAlt = "", children }) {
+  return <header className="mp-hero">
+    <div className="mp-hero-copy"><p className="mp-index">{eyebrow}</p><h1>{title}{italic && " "}{italic && <em>{italic}</em>}</h1>{description && <p className="mp-deck">{description}</p>}{children}</div>
+    <figure className="mp-hero-art"><img src={image} alt={imageAlt}/><figcaption>Illustrative artwork · Echoes of History</figcaption></figure>
+  </header>;
 }
-
 export function MuseumFooter() {
-  const navigate = useNavigate();
-  return (
-    <footer className="mp-footer">
-      <div className="mp-footer-brand">
-        <img src="/images/logoTransparent.png" alt="" />
-        <p><strong>Echoes</strong><span>of history</span></p>
-      </div>
-      <div className="mp-footer-links">
-        {[['Collection','/bots'],['Articles','/articles'],['About','/about'],['Partners','/partners'],['Privacy','/privacy'],['Terms','/terms']].map(([label,path]) => (
-          <button type="button" key={path} onClick={() => navigate(path)}>{label}</button>
-        ))}
-      </div>
-      <p>© {new Date().getFullYear()} Echoes of History · An interpretive digital collection</p>
-    </footer>
-  );
+  return <footer className="mp-footer"><Link to="/" aria-label="Echoes of History home"><ArchiveBrand/></Link><div className="mp-footer-links">{[['About','/about'],['Feedback','/feedback'],['Privacy','/privacy'],['Terms','/terms'],['Sitemap','/sitemap']].map(([label,path]) => <Link key={path} to={path}>{label}</Link>)}</div><p>© {new Date().getFullYear()} Echoes of History. AI conversations are interpretations; verify important facts with trusted sources.</p></footer>;
 }
-
-export function MuseumCTA({ eyebrow = "THE ARCHIVE IS OPEN", title = "Continue your visit.", action = "Enter the collection", path = "/signup" }) {
-  const navigate = useNavigate();
-  return (
-    <section className="mp-cta">
-      <p className="mp-index">{eyebrow}</p>
-      <h2>{title}</h2>
-      <button type="button" className="mp-button" onClick={() => navigate(path)}>{action}<ArrowRight /></button>
-    </section>
-  );
+export function MuseumCTA({ eyebrow = "FOLLOW YOUR CURIOSITY", title = "History is a conversation away.", action = "Explore the figures", path = "/bots" }) {
+  return <section className="mp-cta"><div><p className="mp-index">{eyebrow}</p><h2>{title}</h2><Link className="mp-button" to={path}>{action}<ArrowRight size={17}/></Link></div><img src="/images/page-discovery-flowers.webp" alt="Cream wildflowers and terracotta poppies painted against a deep blue background" loading="lazy"/></section>;
 }

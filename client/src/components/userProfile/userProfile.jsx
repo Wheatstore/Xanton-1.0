@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useMemo, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useArchiveAuth } from "../../hooks/useArchiveAuth";
 import { updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import {
@@ -31,8 +32,7 @@ function formatAccountDate(value) {
   }).format(date);
 }
 
-function UserProfile() {
-  const [user, loading] = useAuthState(auth);
+export function ProfileEditor({ user, loading = false }) {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
@@ -128,11 +128,7 @@ function UserProfile() {
           <span>Back to collection</span>
         </button>
 
-        <img
-          className="profile-brand-mark"
-          src="/images/logoTransparent.png"
-          alt="Echoes of History"
-        />
+
       </header>
 
       <div className="profile-settings__intro">
@@ -141,11 +137,11 @@ function UserProfile() {
           <h1>Profile settings</h1>
           <p>Choose how your name appears while you explore and converse.</p>
         </div>
-        <span className="profile-record-number" aria-hidden="true">01</span>
+
       </div>
 
       <div className="profile-settings__layout">
-        <aside className="profile-identity-card">
+        <aside className="profile-identity-card"><img className="profile-card-art" src="/images/page-discovery-flowers.webp" alt="Cream wildflowers and terracotta poppies on blue paper"/>
           <div className="profile-portrait-frame">
             <img
               src={user.photoURL || FALLBACK_AVATAR}
@@ -263,4 +259,7 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default function UserProfile() {
+  const [user, loading] = useArchiveAuth(auth);
+  return <ProfileEditor user={user} loading={loading}/>;
+}

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useArchiveAuth } from "../../../hooks/useArchiveAuth";
 import { useParams } from "react-router-dom";
 import { BookOpen, Clock3, FileText, Globe2, Landmark, Lightbulb, MailQuestion, Scale, ScrollText, UsersRound } from "lucide-react";
 import {
@@ -19,6 +19,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 import Sidebar from "../sidebar/sidebar";
+import "../workspace.css";
 import CharacterInfoPanel, { buildCharacterSections } from "../character-info/CharacterInfoPanel";
 import HistoricalExperience from "../character-info/HistoricalExperience";
 
@@ -101,12 +102,12 @@ function ArrowIcon() {
 }
 
 function LogoMark() {
-  return <img src="/images/logoTransparent.png" alt="Echoes of History" className="h-full w-full object-contain brightness-0" />;
+  return <img src="/logoTransparent.png" alt="Echoes of History" className="h-full w-full object-contain brightness-0" />;
 }
 
 function ChatWindow() {
   const params = useParams();
-  const [user, authLoading] = useAuthState(auth);
+  const [user, authLoading] = useArchiveAuth(auth);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [botName, setBotName] = useState("");
@@ -292,7 +293,7 @@ function ChatWindow() {
 
   if (authLoading) {
     return (
-      <div className="grid h-[100dvh] place-items-center bg-[#f5f2ec]">
+      <div className="grid h-[100dvh] place-items-center bg-[#f8f6f1]">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-stone-200 border-t-stone-900" />
       </div>
     );
@@ -368,12 +369,12 @@ function ChatWindow() {
   );
 
   return (
-    <div className="immersive-chat relative flex h-[100dvh] flex-col overflow-hidden bg-[#f4efe5] text-[#282522]">
-      <div className="paper-texture pointer-events-none absolute inset-0" />
+    <div className="immersive-chat relative flex h-[100dvh] flex-col overflow-hidden bg-[#f8f6f1] text-[#282522]">
+
 
       <div className="relative z-10 flex min-h-0 flex-1 flex-col">
 
-      <header className="relative z-20 flex h-[68px] flex-none items-center border-b border-stone-900/10 bg-[#faf7f0]/95 px-3 backdrop-blur-xl sm:px-6">
+      <header className="relative z-20 flex h-[68px] flex-none items-center border-b border-stone-900/10 bg-[#f8f6f1]/95 px-3 backdrop-blur-xl sm:px-6">
         <button
           type="button"
           onClick={() => setSidebarVisible(true)}
@@ -395,7 +396,7 @@ function ChatWindow() {
         </div>
 
         {informationSections.length > 0 && (
-          <button type="button" onClick={() => { setWorkspaceMode("explore"); setActiveWorkspaceExperience(null); setInformationPanelVisible(false); }} className="ml-auto flex items-center gap-2 rounded-full bg-[#a34c35] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-stone-900 sm:px-4">
+          <button type="button" onClick={() => { setWorkspaceMode("explore"); setActiveWorkspaceExperience(null); setInformationPanelVisible(false); }} className="ml-auto flex items-center gap-2 rounded-full bg-[#214f78] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-stone-900 sm:px-4">
             <span>Explore {firstName}</span>
             <span className="grid h-5 min-w-5 place-items-center rounded-full bg-white/20 px-1 text-[9px]">{informationSections.length}</span>
           </button>
@@ -403,14 +404,14 @@ function ChatWindow() {
       </header>
 
       {explorationStops.length > 0 && workspaceMode === "correspondence" && (
-        <section className="relative z-20 flex flex-none items-stretch gap-2 border-b border-stone-900/10 bg-[#eee5d6] px-2 py-2 sm:px-3">
-          <button type="button" onClick={() => openInformationSection()} className="group hidden w-[230px] flex-none flex-col justify-center rounded-[20px] border border-stone-900/10 bg-white/35 px-5 text-left transition hover:bg-[#fffaf1] md:flex xl:w-[280px] xl:px-7">
-            <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#a34c35]">Beyond the conversation</span>
+        <section className="relative z-20 flex flex-none items-stretch gap-2 border-b border-stone-900/10 bg-[#eeeee6] px-2 py-2 sm:px-3">
+          <button type="button" onClick={() => openInformationSection()} className="group hidden w-[230px] flex-none flex-col justify-center rounded-[6px] border border-stone-900/10 bg-white/35 px-5 text-left transition hover:bg-[#fffaf1] md:flex xl:w-[280px] xl:px-7">
+            <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#214f78]">Beyond the conversation</span>
             <span className="mt-1 flex items-center gap-2 whitespace-nowrap font-serif text-base text-stone-900 xl:text-lg">Explore their world <span className="transition group-hover:translate-x-1">→</span></span>
           </button>
           <div className="custom-scrollbar flex min-w-0 flex-1 items-stretch gap-2 overflow-x-auto">
             <div className="flex w-28 flex-none flex-col justify-center px-3 md:hidden">
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#a34c35]">Explore</span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#214f78]">Explore</span>
               <span className="font-serif text-sm">Their world</span>
             </div>
             {explorationStops.map((stop) => (
@@ -418,10 +419,10 @@ function ChatWindow() {
                 type="button"
                 key={stop.id}
                 onClick={() => openInformationSection(stop.id)}
-                className="group relative flex w-[150px] flex-none items-center gap-3 rounded-[20px] border border-stone-900/10 bg-white/25 px-4 py-3 text-left transition hover:bg-[#fffaf1] sm:w-[170px]"
+                className="group relative flex w-[150px] flex-none items-center gap-3 rounded-[6px] border border-stone-900/10 bg-white/25 px-4 py-3 text-left transition hover:bg-[#fffaf1] sm:w-[170px]"
                 aria-label={`Explore ${stop.title}: ${stop.description}`}
               >
-                <span className="font-serif text-xl text-stone-400 transition group-hover:text-[#a34c35]">{stop.number}</span>
+                <span className="font-serif text-xl text-stone-400 transition group-hover:text-[#214f78]">{stop.number}</span>
                 <span className="min-w-0">
                   <span className="block truncate text-xs font-bold text-stone-800">{stop.title}</span>
                   <span className="mt-0.5 block truncate text-[10px] text-stone-500">{stop.description}</span>
@@ -439,7 +440,7 @@ function ChatWindow() {
             : "grid-rows-[minmax(0,1fr)_0px] lg:grid-cols-[minmax(0,1fr)_0px] lg:grid-rows-1 xl:grid-cols-[minmax(320px,0.8fr)_minmax(560px,1.2fr)_0px]"
         }`}
       >
-        <aside className="living-portrait relative hidden min-h-0 overflow-hidden rounded-[32px] border border-stone-900/10 shadow-[0_18px_50px_rgba(75,57,39,0.1)] xl:flex xl:flex-col">
+        <aside className="living-portrait relative hidden min-h-0 overflow-hidden rounded-[6px] border border-stone-900/10 shadow-none xl:flex xl:flex-col">
           <div className="absolute inset-0 overflow-hidden bg-stone-200">
             {botProfilePicture ? (
               <img src={botProfilePicture} alt={botName} className={`h-full w-full object-cover transition duration-[1800ms] ${isSpeaking ? "scale-[1.035]" : "scale-100"}`} />
@@ -466,26 +467,26 @@ function ChatWindow() {
           </div>
         </aside>
 
-        <section className="conversation-book flex min-w-0 flex-col overflow-hidden rounded-[28px] border border-stone-900/10 bg-[#fffdf8] shadow-[0_18px_50px_rgba(75,57,39,0.08)] sm:rounded-[32px]">
+        <section className="conversation-book flex min-w-0 flex-col overflow-hidden rounded-[6px] border border-stone-900/10 bg-[#fcfaf6] shadow-none sm:rounded-[6px]">
           <div className="flex flex-none items-center gap-4 border-b border-stone-900/10 px-4 py-3 xl:hidden">
-            <div className="relative h-14 w-14 flex-none overflow-hidden rounded-[18px] bg-stone-100">
+            <div className="relative h-14 w-14 flex-none overflow-hidden rounded-[6px] bg-stone-100">
               {botProfilePicture && <img src={botProfilePicture} alt="" className="h-full w-full object-cover" />}
             </div>
             <div>
-              <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] text-stone-400">Folio 01 · oral history</p>
+              <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] text-stone-400">AI historical interpretation</p>
               <p className="font-serif text-lg font-semibold text-stone-800">Letters across time</p>
               <p className="line-clamp-1 text-xs text-stone-400">Write from the present. Receive a reply from history.</p>
             </div>
           </div>
 
-          <nav className="flex flex-none justify-center border-b border-stone-900/10 bg-[#faf7f0] px-3 py-2.5 sm:px-5" aria-label="Choose between exploring history and writing a letter">
-            <div className="grid w-full max-w-[390px] grid-cols-2 rounded-full border border-stone-900/10 bg-[#eee8dd] p-1">
-              <button type="button" onClick={() => setWorkspaceMode("explore")} className={`flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition ${workspaceMode === "explore" ? "bg-stone-900 text-white shadow-sm" : "text-stone-500 hover:bg-white/70 hover:text-stone-900"}`}><span aria-hidden="true">⌂</span> Explore history</button>
-              <button type="button" onClick={() => setWorkspaceMode("correspondence")} className={`flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition ${workspaceMode === "correspondence" ? "bg-stone-900 text-white shadow-sm" : "text-stone-500 hover:bg-white/70 hover:text-stone-900"}`}><span aria-hidden="true">✉</span> Write a letter {messages.length > 0 && <span className="opacity-60">({messages.length})</span>}</button>
+          <nav className="flex flex-none justify-center border-b border-stone-900/10 bg-[#f8f6f1] px-3 py-2.5 sm:px-5" aria-label="Choose between exploring history and writing a letter">
+            <div className="grid w-full max-w-[390px] grid-cols-2 rounded-full border border-stone-900/10 bg-[#e9e5dc] p-1">
+              <button type="button" aria-pressed={workspaceMode === "explore"} onClick={() => setWorkspaceMode("explore")} className={`flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition ${workspaceMode === "explore" ? "bg-stone-900 text-white shadow-sm" : "text-stone-500 hover:bg-white/70 hover:text-stone-900"}`}><span aria-hidden="true">⌂</span> Explore history</button>
+              <button type="button" aria-pressed={workspaceMode === "correspondence"} onClick={() => setWorkspaceMode("correspondence")} className={`flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition ${workspaceMode === "correspondence" ? "bg-stone-900 text-white shadow-sm" : "text-stone-500 hover:bg-white/70 hover:text-stone-900"}`}><span aria-hidden="true">✉</span> Write a letter {messages.length > 0 && <span className="opacity-60">({messages.length})</span>}</button>
             </div>
           </nav>
 
-          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto bg-[#fffdf8] px-4 py-6 sm:px-8 lg:px-12">
+          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto bg-[#fcfaf6] px-4 py-6 sm:px-8 lg:px-12">
             {workspaceMode === "explore" && activeWorkspaceExperience ? (
               <div className="experience-stage mx-auto h-full max-w-5xl overflow-y-auto py-1 sm:py-4">
                 <HistoricalExperience
@@ -497,22 +498,22 @@ function ChatWindow() {
                 />
               </div>
             ) : workspaceMode === "explore" ? (
-              <div className="mx-auto max-w-4xl py-2 sm:py-5">
+              <div className="mx-auto max-w-4xl py-2 sm:py-5"><figure className="workspace-art"><img src="/images/page-workspace-path.webp" alt=""/><figcaption>Illustrative artwork · Explore a life, its ideas, and its world</figcaption></figure>
                 <div className="mb-6 flex items-end justify-between gap-4">
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#a34c35]">Explore {botName || "history"}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#214f78]">Explore {botName || "history"}</p>
                     <h2 className="mt-2 font-serif text-3xl text-stone-900 sm:text-4xl">Start with one simple step.</h2>
                   </div>
                   <div className="hidden w-36 sm:block">
                     <div className="flex justify-between text-[9px] font-bold uppercase tracking-wider text-stone-400"><span>Completed</span><span>{journeyProgress}%</span></div>
-                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-stone-100"><div className="h-full rounded-full bg-[#a34c35] transition-all duration-700" style={{ width: `${journeyProgress}%` }} /></div>
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-stone-100"><div className="h-full rounded-full bg-[#214f78] transition-all duration-700" style={{ width: `${journeyProgress}%` }} /></div>
                   </div>
                 </div>
 
                 {recommendedExperience && recommendedExperience.id !== "timeline" && (
-                  <button type="button" onClick={() => enterWorkspaceExperience(recommendedExperience.id)} className="group grid w-full gap-5 rounded-[30px] bg-stone-900 p-6 text-left text-white shadow-[0_18px_45px_rgba(28,25,23,0.16)] transition hover:-translate-y-0.5 sm:grid-cols-[1fr_auto] sm:items-center sm:p-8">
+                  <button type="button" onClick={() => enterWorkspaceExperience(recommendedExperience.id)} className="group grid w-full gap-5 rounded-[6px] bg-stone-900 p-6 text-left text-white shadow-[0_18px_45px_rgba(28,25,23,0.16)] transition hover:-translate-y-0.5 sm:grid-cols-[1fr_auto] sm:items-center sm:p-8">
                     <div className="flex items-start gap-4">
-                      <span className="grid h-12 w-12 flex-none place-items-center rounded-[18px] bg-white/10"><RecommendedIcon className="h-6 w-6" strokeWidth={1.7} /></span>
+                      <span className="grid h-12 w-12 flex-none place-items-center rounded-[6px] bg-white/10"><RecommendedIcon className="h-6 w-6" strokeWidth={1.7} /></span>
                       <div>
                       <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/45">Recommended next · {recommendedExperience.kicker}</p>
                       <h3 className="mt-3 font-serif text-3xl leading-tight">{recommendedExperience.title}</h3>
@@ -524,11 +525,11 @@ function ChatWindow() {
                 )}
 
                 {timelineExperience && (
-                  <button type="button" onClick={() => enterWorkspaceExperience("timeline")} className="group relative mt-5 grid w-full overflow-hidden rounded-[30px] border border-[#a34c35]/25 bg-[#f1e4d4] p-6 text-left shadow-[0_14px_38px_rgba(75,57,39,0.08)] transition hover:-translate-y-0.5 hover:border-[#a34c35]/50 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:gap-6 sm:p-7">
-                    <span className="absolute -right-5 -top-14 font-serif text-[150px] leading-none text-[#a34c35]/[0.06]" aria-hidden="true">{timelineExperience.count || ""}</span>
-                    <span className="grid h-16 w-16 place-items-center rounded-[22px] bg-[#a34c35] text-white shadow-md"><Clock3 className="h-8 w-8" strokeWidth={1.6} /></span>
+                  <button type="button" onClick={() => enterWorkspaceExperience("timeline")} className="group relative mt-5 grid w-full overflow-hidden rounded-[6px] border border-[#214f78]/25 bg-[#eeeee6] p-6 text-left shadow-[0_14px_38px_rgba(75,57,39,0.08)] transition hover:-translate-y-0.5 hover:border-[#214f78]/50 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:gap-6 sm:p-7">
+                    <span className="absolute -right-5 -top-14 font-serif text-[150px] leading-none text-[#214f78]/[0.06]" aria-hidden="true">{timelineExperience.count || ""}</span>
+                    <span className="grid h-16 w-16 place-items-center rounded-[6px] bg-[#214f78] text-white shadow-md"><Clock3 className="h-8 w-8" strokeWidth={1.6} /></span>
                     <span className="mt-4 min-w-0 sm:mt-0">
-                      <span className="flex flex-wrap items-center gap-2"><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#a34c35]">Timeline</span>{timelineExperience.count > 0 && <span className="rounded-full bg-white/70 px-2.5 py-1 text-[9px] font-bold text-[#a34c35]">{timelineExperience.count} dated moments</span>}{recommendedExperience?.id === "timeline" && <span className="rounded-full bg-stone-900 px-2.5 py-1 text-[8px] font-bold uppercase tracking-wider text-white">Recommended next</span>}</span>
+                      <span className="flex flex-wrap items-center gap-2"><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#214f78]">Timeline</span>{timelineExperience.count > 0 && <span className="rounded-full bg-white/70 px-2.5 py-1 text-[9px] font-bold text-[#214f78]">{timelineExperience.count} dated moments</span>}{recommendedExperience?.id === "timeline" && <span className="rounded-full bg-stone-900 px-2.5 py-1 text-[8px] font-bold uppercase tracking-wider text-white">Recommended next</span>}</span>
                       <span className="mt-2 block font-serif text-3xl leading-tight text-stone-900">Browse their life from beginning to end</span>
                       <span className="mt-2 block max-w-xl text-sm leading-6 text-stone-600">Select any dated event, read what happened, and move forward or backward through the character&apos;s life.</span>
                     </span>
@@ -543,7 +544,7 @@ function ChatWindow() {
                   </div>
                   <div className="grid gap-3 lg:grid-cols-2">
                     {experienceGroups.map((group) => (
-                      <section key={group.title} className="overflow-hidden rounded-[24px] border border-stone-900/10 bg-white">
+                      <section key={group.title} className="overflow-hidden rounded-[6px] border border-stone-900/10 bg-white">
                         <div className="border-b border-stone-900/10 bg-[#f5ede1] px-5 py-3">
                           <h4 className="font-serif text-lg text-stone-900">{group.title}</h4>
                           <p className="mt-0.5 text-[10px] text-stone-500">{group.description}</p>
@@ -553,10 +554,10 @@ function ChatWindow() {
                             const recommended = recommendedExperience?.id === experience.id;
                             const visited = exploredSections.includes(experience.id);
                             const ExperienceIcon = experience.icon || BookOpen;
-                            return <button type="button" key={experience.id} onClick={() => enterWorkspaceExperience(experience.id)} className="group flex w-full items-start gap-3 border-b border-stone-900/10 px-4 py-4 text-left transition last:border-b-0 hover:bg-[#faf7f0]">
-                              <span className={`relative grid h-10 w-10 flex-none place-items-center rounded-[14px] ${recommended ? "bg-[#a34c35] text-white" : "bg-[#f0e6d8] text-[#a34c35]"}`}><ExperienceIcon className="h-[18px] w-[18px]" strokeWidth={1.8} />{visited && <span className="absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full bg-stone-900 text-[8px] text-white ring-2 ring-white">✓</span>}</span>
+                            return <button type="button" key={experience.id} onClick={() => enterWorkspaceExperience(experience.id)} className="group flex w-full items-start gap-3 border-b border-stone-900/10 px-4 py-4 text-left transition last:border-b-0 hover:bg-[#f8f6f1]">
+                              <span className={`relative grid h-10 w-10 flex-none place-items-center rounded-[14px] ${recommended ? "bg-[#214f78] text-white" : "bg-[#e7edf0] text-[#214f78]"}`}><ExperienceIcon className="h-[18px] w-[18px]" strokeWidth={1.8} />{visited && <span className="absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full bg-stone-900 text-[8px] text-white ring-2 ring-white">✓</span>}</span>
                               <span className="min-w-0 flex-1">
-                                <span className="flex flex-wrap items-center gap-2"><span className="font-bold text-stone-800">{experience.title}</span>{recommended && <span className="rounded-full bg-[#a34c35]/10 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#a34c35]">Recommended</span>}{experience.count > 0 && <span className="text-[9px] font-bold text-stone-400">{experience.count} items</span>}</span>
+                                <span className="flex flex-wrap items-center gap-2"><span className="font-bold text-stone-800">{experience.title}</span>{recommended && <span className="rounded-full bg-[#214f78]/10 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#214f78]">Recommended</span>}{experience.count > 0 && <span className="text-[9px] font-bold text-stone-400">{experience.count} items</span>}</span>
                                 <span className="mt-1 block text-[11px] leading-5 text-stone-500">{experience.description}</span>
                               </span>
                               <span className="mt-2 transition group-hover:translate-x-1">→</span>
@@ -574,7 +575,7 @@ function ChatWindow() {
               </div>
             ) : !hasConversation ? (
               <div className="mx-auto flex h-full max-w-xl flex-col justify-center py-8">
-                <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[#a34c35]">Your visit begins here</p>
+                <figure className="workspace-art"><img src="/images/page-feedback-letters.webp" alt=""/><figcaption>Illustrative artwork · A question is a place to begin</figcaption></figure><p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[#214f78]">Your conversation begins here</p>
                 <h2 className="font-serif text-4xl font-medium leading-tight text-stone-900 sm:text-5xl">Send a letter into the past.</h2>
                 <p className="mb-8 mt-4 max-w-md text-sm leading-6 text-stone-500">Choose an opening thought or write your own. Your letter will become the beginning of a historical correspondence.</p>
                 <div className="w-full space-y-1">
@@ -583,7 +584,7 @@ function ChatWindow() {
                       type="button"
                       key={prompt}
                       onClick={() => fillPrompt(prompt)}
-                      className="group flex w-full items-center gap-4 border-b border-stone-900/10 py-4 text-left font-serif text-lg text-stone-700 transition hover:pl-2 hover:text-[#a34c35]"
+                      className="group flex w-full items-center gap-4 border-b border-stone-900/10 py-4 text-left font-serif text-lg text-stone-700 transition hover:pl-2 hover:text-[#214f78]"
                     >
                       <span className="text-[10px] font-bold tracking-widest text-stone-400">0{index + 1}</span>
                       <span>{prompt}</span>
@@ -601,14 +602,14 @@ function ChatWindow() {
                 </div>
 
                 {messages.map((message, messageIndex) => (
-                  <article key={message.id} className="relative grid grid-cols-[44px_minmax(0,1fr)] gap-4 rounded-[26px] border border-stone-900/10 bg-[#fbf7ef] p-4 sm:grid-cols-[64px_minmax(0,1fr)] sm:gap-6 sm:rounded-[30px] sm:p-6">
+                  <article key={message.id} className="relative grid grid-cols-[44px_minmax(0,1fr)] gap-4 rounded-[6px] border border-stone-900/10 bg-[#fbf7ef] p-4 sm:grid-cols-[64px_minmax(0,1fr)] sm:gap-6 sm:rounded-[6px] sm:p-6">
                     <aside aria-hidden="true" className="pt-1 text-center">
-                      <p className="font-serif text-2xl text-[#a34c35]">{String(messageIndex + 1).padStart(2, "0")}</p>
+                      <p className="font-serif text-2xl text-[#214f78]">{String(messageIndex + 1).padStart(2, "0")}</p>
                       <div className="mx-auto mt-3 h-12 w-px bg-stone-300" />
                     </aside>
                     <div className="min-w-0 space-y-7">
                       {message.message && (
-                        <div className="relative rounded-[22px] border border-stone-900/10 bg-white/65 p-4">
+                        <div className="relative rounded-[6px] border border-stone-900/10 bg-white/65 p-4">
                           <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.24em] text-stone-400">Sent from the present</p>
                           <p className="correspondence-script text-lg leading-8 text-stone-700 sm:text-xl">Dear {firstName},</p>
                           <FormattedText text={message.message} className="correspondence-script mt-2 text-lg leading-8 text-stone-700 sm:text-xl" />
@@ -617,9 +618,9 @@ function ChatWindow() {
                       )}
 
                       {message.reply && (
-                        <div className="letter-paper relative overflow-hidden rounded-[24px] border border-[#d8cbb8] px-5 py-6 shadow-[0_12px_30px_rgba(75,57,39,0.08)] sm:rounded-[28px] sm:px-7 sm:py-8">
-                          <div className="absolute right-4 top-4 grid h-10 w-10 rotate-6 place-items-center rounded-full border border-[#a34c35]/35 text-[8px] font-bold uppercase tracking-widest text-[#a34c35]/60">Reply</div>
-                          <p className="mb-5 flex items-center gap-3 pr-12 text-[9px] font-bold uppercase tracking-[0.24em] text-[#a34c35]"><span className="h-px w-7 bg-[#a34c35]" />A letter from {botName || "the historical record"}</p>
+                        <div className="letter-paper relative overflow-hidden rounded-[6px] border border-[#d8cbb8] px-5 py-6 shadow-[0_12px_30px_rgba(75,57,39,0.08)] sm:rounded-[6px] sm:px-7 sm:py-8">
+                          <div className="absolute right-4 top-4 grid h-10 w-10 rotate-6 place-items-center rounded-full border border-[#214f78]/35 text-[8px] font-bold uppercase tracking-widest text-[#214f78]/60">Reply</div>
+                          <p className="mb-5 flex items-center gap-3 pr-12 text-[9px] font-bold uppercase tracking-[0.24em] text-[#214f78]"><span className="h-px w-7 bg-[#214f78]" />A letter from {botName || "the historical record"}</p>
                           <FormattedText text={message.reply} className="memory-response font-serif text-xl leading-[1.75] text-stone-800 sm:text-[22px]" />
                         </div>
                       )}
@@ -639,11 +640,11 @@ function ChatWindow() {
           </div>
 
           {workspaceMode === "correspondence" && (
-          <div className="flex-none border-t border-stone-900/10 bg-[#faf7f0] p-3 sm:px-8 sm:py-4 lg:px-12">
+          <div className="flex-none border-t border-stone-900/10 bg-[#f8f6f1] p-3 sm:px-8 sm:py-4 lg:px-12">
             {hasConversation && !sendingMessage && (
               <div className="custom-scrollbar mb-3 flex gap-2 overflow-x-auto pb-1">
                 {conversationFollowUps.map((prompt) => (
-                  <button type="button" key={prompt} onClick={() => fillPrompt(prompt)} className="flex-none rounded-full border border-stone-200 bg-[#f8f5ef] px-3.5 py-1.5 text-xs text-stone-600 transition hover:border-stone-900 hover:text-stone-950">
+                  <button type="button" key={prompt} onClick={() => fillPrompt(prompt)} className="flex-none rounded-full border border-stone-200 bg-[#f8f6f1] px-3.5 py-1.5 text-xs text-stone-600 transition hover:border-stone-900 hover:text-stone-950">
                     {prompt}
                   </button>
                 ))}
@@ -651,9 +652,9 @@ function ChatWindow() {
             )}
 
             <form onSubmit={handleSendMessage} className="relative">
-              <div className="letter-composer relative rounded-[24px] border border-[#d7cab8] bg-[#fffdf8] px-4 pb-2 pt-3 shadow-[0_8px_24px_rgba(75,57,39,0.06)] transition focus-within:border-[#a34c35] focus-within:shadow-[0_10px_30px_rgba(75,57,39,0.12)] sm:rounded-[28px]">
+              <div className="letter-composer relative rounded-[6px] border border-[#d7cab8] bg-[#fcfaf6] px-4 pb-2 pt-3 shadow-[0_8px_24px_rgba(75,57,39,0.06)] transition focus-within:border-[#214f78] focus-within:shadow-[0_10px_30px_rgba(75,57,39,0.12)] sm:rounded-[6px]">
                 <div className="mb-3 flex items-center gap-2 border-b border-stone-900/10 pb-2 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400">
-                  <span className="flex items-center gap-2"><span className="grid h-5 w-5 place-items-center rounded-full bg-[#a34c35] text-[9px] text-white">✦</span>Letter across time</span>
+                  <span className="flex items-center gap-2"><span className="grid h-5 w-5 place-items-center rounded-full bg-[#214f78] text-[9px] text-white">✦</span>Letter across time</span>
                   <span className="ml-auto hidden sm:inline">To: {botName || "History"}</span>
                 </div>
                 <p className="correspondence-script px-1 text-base text-stone-700 sm:text-lg">Dear {firstName},</p>
@@ -674,7 +675,7 @@ function ChatWindow() {
                 <button
                   type="submit"
                   disabled={!input.trim() || sendingMessage}
-                  className="flex h-11 flex-none items-center justify-center gap-2 rounded-full bg-[#a34c35] px-4 text-white transition hover:scale-[1.03] hover:bg-stone-900 disabled:scale-100 disabled:bg-stone-200 disabled:text-stone-400"
+                  className="flex h-11 flex-none items-center justify-center gap-2 rounded-full bg-[#214f78] px-4 text-white transition hover:scale-[1.03] hover:bg-stone-900 disabled:scale-100 disabled:bg-stone-200 disabled:text-stone-400"
                   aria-label="Send letter"
                 >
                   {sendingMessage ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> : <><span className="text-xs font-bold">Send</span><ArrowIcon /></>}
@@ -690,7 +691,7 @@ function ChatWindow() {
         {informationSections.length > 0 && (
           <aside
             aria-hidden={!isInformationPanelVisible}
-            className={`research-desk flex min-h-0 min-w-0 flex-col overflow-hidden rounded-[28px] border-stone-900/10 bg-[#f5f2ec] shadow-[0_18px_50px_rgba(75,57,39,0.08)] transition-[opacity,transform,visibility] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] sm:rounded-[32px] ${
+            className={`research-desk flex min-h-0 min-w-0 flex-col overflow-hidden rounded-[6px] border-stone-900/10 bg-[#f8f6f1] shadow-none transition-[opacity,transform,visibility] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] sm:rounded-[6px] ${
               isInformationPanelVisible
                 ? "visible translate-x-0 border opacity-100 delay-150"
                 : "pointer-events-none invisible translate-x-6 border-0 opacity-0 delay-500"
@@ -701,12 +702,12 @@ function ChatWindow() {
                 {botProfilePicture ? <img src={botProfilePicture} alt="" className="h-full w-full object-cover" /> : <LogoMark />}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#a34c35]">Research desk · {botName}</p>
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#214f78]">Research desk · {botName}</p>
                 <p className="truncate font-serif text-base font-semibold text-stone-900 sm:text-lg">{activeExplorationStop?.title || "Life story"}</p>
               </div>
-              <button type="button" onClick={() => setInformationPanelVisible(false)} className="grid h-9 w-9 place-items-center rounded-full border border-stone-200 bg-[#f8f5ef] text-lg text-stone-500 transition hover:border-stone-900 hover:text-stone-950" aria-label="Close research desk">×</button>
+              <button type="button" onClick={() => setInformationPanelVisible(false)} className="grid h-9 w-9 place-items-center rounded-full border border-stone-200 bg-[#f8f6f1] text-lg text-stone-500 transition hover:border-stone-900 hover:text-stone-950" aria-label="Close research desk">×</button>
             </div>
-            <div className="hidden flex-none border-b border-stone-200 bg-[#f8f5ef] px-5 py-3 sm:block">
+            <div className="hidden flex-none border-b border-stone-200 bg-[#f8f6f1] px-5 py-3 sm:block">
               <p className="text-xs leading-5 text-stone-500">{activeExplorationStop?.description || "Choose a chapter and discover more."} Keep this desk open while you continue the conversation.</p>
             </div>
             <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto p-3 sm:p-5">
@@ -753,7 +754,7 @@ function ChatWindow() {
         }
 
         .immersive-chat .font-serif {
-          font-family: Baskerville, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+          font-family: "Libre Caslon Display", Georgia, serif;
           font-weight: 400;
           letter-spacing: -0.022em;
         }
@@ -766,7 +767,7 @@ function ChatWindow() {
         .memory-response > p:first-child::first-letter {
           float: left;
           margin: 0.08em 0.12em 0 0;
-          color: #a34c35;
+          color: #214f78;
           font-size: 3.2em;
           line-height: 0.78;
         }
@@ -784,7 +785,7 @@ function ChatWindow() {
         }
 
         .correspondence-script {
-          font-family: Baskerville, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+          font-family: "Libre Caslon Display", Georgia, serif;
           font-style: italic;
           font-weight: 400;
           letter-spacing: 0.002em;
@@ -792,7 +793,7 @@ function ChatWindow() {
 
         .letter-paper,
         .letter-composer {
-          background-color: #fffdf8;
+          background-color: #fcfaf6;
           background-image:
             linear-gradient(90deg, transparent 0, transparent 24px, rgba(163, 76, 53, 0.08) 25px, transparent 26px),
             repeating-linear-gradient(0deg, transparent 0, transparent 27px, rgba(82, 71, 58, 0.055) 28px);

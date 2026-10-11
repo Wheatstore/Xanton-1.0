@@ -3,11 +3,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Info, User } from "lucide-react";
 import { db, auth } from "../../../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useArchiveAuth } from "../../../hooks/useArchiveAuth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 function BotCard({ person, index, isGridView = true }) {
-  const [user] = useAuthState(auth);
+  const [user] = useArchiveAuth(auth);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
   const navigate = useNavigate();

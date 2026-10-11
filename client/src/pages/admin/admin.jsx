@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import Navbar from '../../components/navbar/navbar';
+import './admin.css';
 
 // Simple SVG icons as components to replace Heroicons
 const DashboardIcon = () => (
@@ -85,17 +87,17 @@ function Admin() {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <><Navbar/><div className="archive-admin flex min-h-[calc(100dvh-80px)] bg-[#f8f6f1]">
       {/* Sidebar */}
-      <div className="w-64 bg-gray-900 text-white">
-        <div className="p-4 border-b border-gray-800">
+      <aside className="admin-sidebar w-64 bg-[#eeeee6] text-stone-800">
+        <div className="p-4 border-b border-stone-300">
           <h2 className="text-xl font-bold">Admin Panel</h2>
         </div>
         
         <nav className="mt-4">
           <button 
             onClick={() => setActiveTab('dashboard')}
-            className={`flex items-center w-full px-4 py-3 ${activeTab === 'dashboard' ? 'bg-blue-700' : 'hover:bg-gray-800'}`}
+            className={`flex items-center w-full px-4 py-3 ${activeTab === 'dashboard' ? 'bg-[#214f78] text-white' : 'hover:bg-[#e2e5df]'}`}
           >
             <DashboardIcon />
             <span>Dashboard</span>
@@ -103,7 +105,7 @@ function Admin() {
           
           <button 
             onClick={() => setActiveTab('users')}
-            className={`flex items-center w-full px-4 py-3 ${activeTab === 'users' ? 'bg-blue-700' : 'hover:bg-gray-800'}`}
+            className={`flex items-center w-full px-4 py-3 ${activeTab === 'users' ? 'bg-[#214f78] text-white' : 'hover:bg-[#e2e5df]'}`}
           >
             <UsersIcon />
             <span>Users</span>
@@ -111,7 +113,7 @@ function Admin() {
           
           <button 
             onClick={() => setActiveTab('content')}
-            className={`flex items-center w-full px-4 py-3 ${activeTab === 'content' ? 'bg-blue-700' : 'hover:bg-gray-800'}`}
+            className={`flex items-center w-full px-4 py-3 ${activeTab === 'content' ? 'bg-[#214f78] text-white' : 'hover:bg-[#e2e5df]'}`}
           >
             <ContentIcon />
             <span>Content</span>
@@ -119,7 +121,7 @@ function Admin() {
           
           <button 
             onClick={() => setActiveTab('settings')}
-            className={`flex items-center w-full px-4 py-3 ${activeTab === 'settings' ? 'bg-blue-700' : 'hover:bg-gray-800'}`}
+            className={`flex items-center w-full px-4 py-3 ${activeTab === 'settings' ? 'bg-[#214f78] text-white' : 'hover:bg-[#e2e5df]'}`}
           >
             <SettingsIcon />
             <span>Settings</span>
@@ -127,16 +129,16 @@ function Admin() {
           
           <button 
             onClick={() => setActiveTab('security')}
-            className={`flex items-center w-full px-4 py-3 ${activeTab === 'security' ? 'bg-blue-700' : 'hover:bg-gray-800'}`}
+            className={`flex items-center w-full px-4 py-3 ${activeTab === 'security' ? 'bg-[#214f78] text-white' : 'hover:bg-[#e2e5df]'}`}
           >
             <SecurityIcon />
             <span>Security</span>
           </button>
         </nav>
         
-        <div className="absolute bottom-0 w-64 p-4 bg-gray-800">
+        <div className="admin-account p-4 bg-[#eeeee6]">
           <div className="flex items-center">
-            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-[#214f78] text-white flex items-center justify-center">
               <UserIcon />
             </div>
             <div className="ml-3">
@@ -145,10 +147,10 @@ function Admin() {
             </div>
           </div>
         </div>
-      </div>
+      </aside>
       
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="admin-main flex-1 min-w-0">
         {/* Header */}
         <div className="bg-white shadow-sm">
           <div className="flex justify-between items-center px-8 py-4">
@@ -166,13 +168,14 @@ function Admin() {
                 <span className="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
               </div>
               
-              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-[#214f78] text-white flex items-center justify-center">
                 <UserIcon />
               </div>
             </div>
           </div>
         </div>
         
+        <figure className="admin-art"><img src="/images/page-sitemap-atlas.webp" alt=""/><figcaption>Administration · Existing demonstration data</figcaption></figure>
         {/* Dashboard Content */}
         {activeTab === 'dashboard' && (
           <div className="p-8">
@@ -354,7 +357,7 @@ function Admin() {
             <div className="bg-white rounded-lg shadow">
               <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 className="font-semibold text-gray-800">User Management</h2>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                <button className="px-4 py-2 bg-[#214f78] text-white text-white rounded-lg hover:bg-[#214f78] text-white transition duration-200">
                   Add User
                 </button>
               </div>
@@ -393,7 +396,7 @@ function Admin() {
           </div>
         )}
       </div>
-    </div>
+    </div></>
   );
 }
 

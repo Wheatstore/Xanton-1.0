@@ -1,5 +1,5 @@
 import Login from "../../authenticationComponents/loginForm";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import Navbar from "../../components/navbar/navbar";
 
 function LoginPage() {
