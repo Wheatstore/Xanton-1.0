@@ -19,7 +19,6 @@ export default function DirectoryFigureCard({ figure }) {
   const navigate = useNavigate();
 
   figure = normalizeFigure(figure);
-  const { role, period } = figure;
   const summary = figure.description || "Discover their life, ideas, and the world they knew.";
 
   useEffect(() => {
@@ -82,10 +81,8 @@ export default function DirectoryFigureCard({ figure }) {
           />
         ) : null}
         {(!figure.img || imageFailed) && <div className="bd-card-placeholder"><UserRound /></div>}
-        {period && <span className="bd-card-period">{period}</span>}
       </div>
       <div className="bd-card-content">
-        <p className="bd-card-role">{role}</p>
         <h2>{figure.name}</h2>
         <p className="bd-card-summary">{summary}</p>
         <button type="button" onClick={openConversation} disabled={opening} aria-label={`Start a conversation with ${figure.name}`}>
