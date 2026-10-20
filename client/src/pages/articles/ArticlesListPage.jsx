@@ -5,25 +5,28 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 import Navbar from "../../components/navbar/navbar";
 import { MuseumFooter, MuseumPageHero } from "../../components/museum/MuseumPage";
+import { articles as localArticles } from "../../content/articles";
 
 export default function ArticleListPage() {
-  const [articles, setArticles] = useState([]);
-  const [status, setStatus] = useState("loading");
+  const [articles, setArticles] = useState(localArticles);
+  const [status, setStatus] = useState("ready");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     async function loadArticles() {
       try {
-        if (!db) { setStatus("error"); return; }
+        if (!db) return;
         const snap = await getDocs(query(collection(db, "articles"), orderBy("title", "asc")));
-        setArticles(snap.docs.map((item) => {
+        const remote = snap.docs.map((item) => {
           const data = item.data() || {};
-          return { id:item.id, slug:data.slug ?? item.id, title:data.title ?? "Untitled", author:data.author ?? "Unknown", excerpt:data.excerpt ?? "", category:data.category ?? "Essay", readTime:data.readTime ?? "", date:data.date ?? "", coverImage:data.coverImage ?? data.image ?? "" };
-        }));
+          return { id:item.id, slug:data.slug ?? item.id, title:data.title ?? "Untitled", author:data.author ?? "Unknown", excerpt:data.excerpt ?? "", category:data.category ?? "Essay", readTime:data.readTime ?? "", date:data.date ?? "" };
+        });
+        setArticles([...localArticles, ...remote.filter(article => !localArticles.some(local => local.slug === article.slug))]);
         setStatus("ready");
       } catch (error) {
         console.error("Error fetching articles:", error);
-        setStatus("error");
+        // The built-in reading room remains available if the legacy archive is offline.
+        setStatus("ready");
       }
     }
     loadArticles();
@@ -48,9 +51,8 @@ export default function ArticleListPage() {
         {status === "error" && <div className="mp-state"><h2>The articles are taking a little longer.</h2><p>We couldn’t connect to the reading room. Please try again later.</p></div>}
         {status === "ready" && filtered.length === 0 && <div className="mp-state"><h2>No record matches that search.</h2><p>Try a broader subject, author, or title.</p></div>}
         {status === "ready" && filtered.length > 0 && <div className="article-grid">
-          {filtered.map((article,index) => <Link className="article-card" to={`/articles/${encodeURIComponent(article.slug)}`} key={article.id}>
-            <div className="article-cover">{article.coverImage ? <img src={article.coverImage} alt="" loading="lazy"/> : <img src={["/images/page-features-cabinet.webp","/images/page-about-gallery.webp","/images/page-discovery-flowers.webp"][index % 3]} alt="" loading="lazy"/>}<span>PLATE {String(index+1).padStart(2,"0")}</span></div>
-            <div className="article-caption"><p>{article.category} {article.readTime && `· ${article.readTime}`}</p><h2>{article.title}</h2><p>{article.excerpt || "Open this record to continue reading."}</p><div><span>{article.author}{article.date && ` · ${article.date}`}</span><ArrowUpRight/></div></div>
+          {filtered.map((article) => <Link className="article-card" to={`/articles/${encodeURIComponent(article.slug)}`} key={article.id}>
+            <div className="article-caption"><p>{article.category} {article.readTime && `· ${article.readTime}`}</p><h2>{article.title}</h2><p>{article.excerpt || "Open this record to continue reading."}</p><div><span>{article.author}</span><ArrowUpRight/></div></div>
           </Link>)}
         </div>}
       </main>

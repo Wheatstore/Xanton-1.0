@@ -6,5 +6,6 @@ import tailwindcss from '@tailwindcss/vite';
 // Never serialize the build machine's process.env into the browser bundle.
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  build: { outDir: 'dist' },
+  ssr: { noExternal: ['react-helmet-async'] },
+  build: { outDir: 'dist', manifest: true },
 });

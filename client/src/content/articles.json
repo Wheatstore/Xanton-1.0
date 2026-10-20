@@ -1,0 +1,612 @@
+[
+  {
+    "slug": "why-did-julius-caesar-cross-the-rubicon",
+    "title": "Why Did Julius Caesar Cross the Rubicon?",
+    "author": "Echoes of History",
+    "date": "2026-10-20",
+    "category": "Historical questions",
+    "readTime": "4 min read",
+    "excerpt": "A small river marked a much larger divide: who could command an army, hold office, and decide Rome’s future.",
+    "figure": "Julius Caesar",
+    "editorialNote": "AI-assisted historical explanation. Ancient accounts reflect their authors’ perspectives; source notes distinguish reported events from interpretation.",
+    "sections": [
+      {
+        "id": "short-answer",
+        "heading": "The short answer",
+        "paragraphs": [
+          "Julius Caesar crossed the Rubicon with troops in January 49 BCE because his dispute with political opponents at Rome had reached a confrontation over his military command and political future. Giving up his army would surrender his strongest source of leverage. Bringing it into Italy turned that dispute into armed conflict.",
+          "The river separated his province of Cisalpine Gaul from Italy. Its importance was political rather than military: crossing with an army meant moving beyond the territory of his provincial command. The decision helped begin the civil war against Pompey and the senatorial leaders aligned with him."
+        ],
+        "sources": [
+          1
+        ]
+      },
+      {
+        "id": "political-stakes",
+        "heading": "What was Caesar trying to protect?",
+        "paragraphs": [
+          "Suetonius describes a struggle over whether Caesar could seek another consulship while retaining the protection of his command. A consul was one of Rome’s two chief annual magistrates. A provincial command gave Caesar troops and authority; returning as a private citizen would leave him more exposed to his enemies.",
+          "In chapters 29–30, Suetonius records several explanations for Caesar’s decision, including fear of prosecution and ambition for supreme power. These are explanations preserved by an ancient biographer, not a transcript of Caesar’s private thoughts. The disagreement matters: no single motive should be treated as the whole story."
+        ],
+        "sources": [
+          2
+        ]
+      },
+      {
+        "id": "negotiations",
+        "heading": "Could the conflict have been avoided?",
+        "paragraphs": [
+          "Suetonius reports proposals in which Caesar would relinquish most of his troops or disarm if Pompey also did so. That does not establish that either side was ready to accept a lasting settlement. It does show that the confrontation involved bargaining over the distribution of power, not merely a sudden desire to march on Rome.",
+          "The central difficulty was trust. Disarmament might look like a reasonable constitutional demand to Caesar’s opponents and like political surrender to Caesar. This is an interpretation of the competing positions, rather than evidence that war was inevitable."
+        ],
+        "sources": [
+          2
+        ]
+      },
+      {
+        "id": "famous-scene",
+        "heading": "Did he really say “the die is cast”?",
+        "paragraphs": [
+          "Suetonius places a version of that famous saying at the crossing. His account also includes a supernatural apparition sounding a trumpet and leading the way across the river. Those dramatic details should make readers cautious about treating the scene as a literal record.",
+          "Written long after the event, the biography tells us how the crossing was remembered as well as what its author believed had happened. The military decision is firmer ground than the precise words spoken on the riverbank."
+        ],
+        "sources": [
+          2
+        ]
+      },
+      {
+        "id": "consequences",
+        "heading": "Why did the crossing matter?",
+        "paragraphs": [
+          "The immediate result was a war over control of the Roman state. Caesar’s later victory did not make him a Roman emperor in the later Augustan sense. Suetonius describes his accumulation of offices and exceptional honors, followed by his assassination in 44 BCE.",
+          "The episode offers a useful question for studying political institutions: what happens when a leader’s personal security depends on retaining military power? An army can make a politician harder to threaten, while making compromise harder for everyone else. That tension helps explain why this small boundary became such a powerful historical symbol."
+        ],
+        "sources": [
+          2
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Before the crossing",
+        "event": "Negotiations focus on Caesar’s command, his candidacy, and whether rival forces should disarm.",
+        "sources": [
+          2
+        ]
+      },
+      {
+        "date": "January 49 BCE",
+        "event": "Caesar brings troops across the Rubicon into Italy.",
+        "sources": [
+          1
+        ]
+      },
+      {
+        "date": "44 BCE",
+        "event": "Caesar is assassinated after accumulating extraordinary powers.",
+        "sources": [
+          2
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": 1,
+        "title": "Livius — Rubico (49 BCE)",
+        "url": "https://www.livius.org/articles/battle/rubico-49-bce/",
+        "note": "Modern historical overview of the boundary and crossing."
+      },
+      {
+        "id": 2,
+        "title": "Suetonius — Life of Julius Caesar, chapters 29–34, 76 and 82",
+        "url": "https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Suetonius/12Caesars/Julius*.html",
+        "note": "Ancient biography, written after Caesar’s lifetime. Useful for competing explanations and the later tradition; not an eyewitness account of the crossing."
+      }
+    ],
+    "questions": [
+      "Why did keeping your command matter so much to you?",
+      "What compromise with Pompey might you have accepted?",
+      "How would your opponents have described your decision?"
+    ]
+  },
+  {
+    "slug": "why-did-napoleon-invade-russia",
+    "title": "Why Did Napoleon Invade Russia?",
+    "figure": "Napoleon Bonaparte",
+    "excerpt": "The invasion of 1812 began as a struggle over trade, alliances, and power. Capturing Moscow could not deliver the agreement Napoleon wanted.",
+    "author": "Echoes of History",
+    "date": "2026-10-20",
+    "category": "Historical questions",
+    "readTime": "4 min read",
+    "editorialNote": "AI-assisted historical explanation, checked against the linked sources. Interpretations and limitations of the evidence are identified in the text.",
+    "sections": [
+      {
+        "id": "short-answer",
+        "heading": "The short answer",
+        "sources": [
+          1,
+          2
+        ],
+        "paragraphs": [
+          "Napoleon invaded Russia in 1812 to force Tsar Alexander I back into cooperation with his European system. A deteriorating alliance, conflict over the Continental Blockade against Britain, and competing interests in eastern Europe all contributed. The invasion was an attempt to impose a political settlement through military pressure.",
+          "That distinction helps explain the campaign. Napoleon did not need to occupy every part of the Russian Empire to achieve his immediate purpose. He needed the Russian government to accept his demands. The difficulty was that moving an army farther into Russia did not necessarily bring that agreement any closer."
+        ]
+      },
+      {
+        "id": "alliance",
+        "heading": "Why had the alliance broken down?",
+        "sources": [
+          1,
+          2
+        ],
+        "paragraphs": [
+          "The settlement at Tilsit in 1807 had brought France and Russia into an alliance, but cooperation did not eliminate rivalry. Russia remained concerned about French influence near its western frontier and about the future of the Ottoman Empire. Both rulers were trying to preserve room to act independently.",
+          "Trade sharpened those disagreements. Napoleon’s Continental Blockade sought to isolate Britain economically. Russian resistance to that system challenged the consistency of his policy and exposed the limits of French influence. The quarrel therefore concerned more than commercial rules: it also raised the question of how far Alexander would accept Napoleon’s leadership in Europe."
+        ]
+      },
+      {
+        "id": "decisive-battle",
+        "heading": "What did Napoleon expect military victory to achieve?",
+        "sources": [
+          3
+        ],
+        "paragraphs": [
+          "French-led forces crossed the Niemen in June 1812. Napoleon sought a decisive encounter, but Russian armies withdrew into the interior rather than allowing him an early, conclusive victory. Their retreat extended the distance his soldiers had to travel and delayed the result he wanted.",
+          "The campaign eventually brought a major battle at Borodino in September. The French advance continued toward Moscow, yet the Russian army had not simply disappeared. Taking territory and ending resistance were different achievements. The continuing existence of an opposing army left Alexander with choices even after a costly battlefield confrontation."
+        ]
+      },
+      {
+        "id": "moscow",
+        "heading": "Why did taking Moscow fail to end the war?",
+        "sources": [
+          4
+        ],
+        "paragraphs": [
+          "Moscow’s occupation did not produce the surrender Napoleon expected. Much of the population had left, fires devastated the city, and his attempts to open peace discussions did not bring the desired response. Possession of an important city could not compel the tsar to negotiate on French terms.",
+          "Napoleon eventually withdrew in October. Fighting, shortages, and worsening weather made the retreat disastrous. Winter belongs in the explanation of the catastrophe, but it cannot explain why the war began: the invasion had started in June, in pursuit of diplomatic and strategic objectives."
+        ]
+      },
+      {
+        "id": "lesson",
+        "heading": "What does the campaign reveal?",
+        "sources": [
+          2,
+          3,
+          4
+        ],
+        "paragraphs": [
+          "A useful interpretation is that Napoleon’s military advance outran its political value. His soldiers could cross a frontier, fight a battle, and occupy a city, but none of those actions guaranteed that Alexander would concede. A campaign designed to enforce cooperation instead revealed how difficult it was to compel it.",
+          "This is why the question should not be reduced to whether Napoleon remembered to plan for cold weather. The deeper problem was the connection between means and ends. What specific military success would make the Russian government change its policy, and what could Napoleon do if that government kept refusing?"
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "date": "1807",
+        "event": "The Tilsit settlement establishes a Franco-Russian alliance.",
+        "sources": [
+          1
+        ]
+      },
+      {
+        "date": "June 1812",
+        "event": "French-led forces cross the Niemen into the Russian Empire.",
+        "sources": [
+          3
+        ]
+      },
+      {
+        "date": "September 1812",
+        "event": "The battle of Borodino is followed by the occupation of Moscow.",
+        "sources": [
+          3,
+          4
+        ]
+      },
+      {
+        "date": "October 1812",
+        "event": "Napoleon begins the withdrawal from Moscow.",
+        "sources": [
+          4
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": 1,
+        "title": "Fondation Napoléon — The march to the Niemen",
+        "url": "https://www.napoleon.org/en/history-of-the-two-empires/close-up/a-close-up-on-napoleons-russian-campaign-1-the-march-to-the-niemen/",
+        "note": "Overview of the alliance and the diplomatic causes of the invasion."
+      },
+      {
+        "id": 2,
+        "title": "Peter Hicks — Russia and France: the messy break-up",
+        "url": "https://www.napoleon.org/en/history-of-the-two-empires/articles/russia-and-france-the-messy-break-up/",
+        "note": "Historical interpretation of the competing political interests behind the campaign."
+      },
+      {
+        "id": 3,
+        "title": "Fondation Napoléon — From the Niemen to Moscow",
+        "url": "https://www.napoleon.org/en/history-of-the-two-empires/timelines/napoleons-russian-campaign-from-the-niemen-to-moscow",
+        "note": "Chronology of the advance and the search for a decisive battle."
+      },
+      {
+        "id": 4,
+        "title": "Fondation Napoléon — The retreat",
+        "url": "https://www.napoleon.org/en/history-of-the-two-empires/timelines/napoleons-russian-campaign-the-retreat",
+        "note": "Chronology of the occupation of Moscow, failed peace initiatives, and withdrawal."
+      }
+    ],
+    "questions": [
+      "What agreement did you expect Alexander to accept?",
+      "Why did you keep advancing when the Russian armies withdrew?",
+      "When did occupying Moscow stop serving your political goal?"
+    ]
+  },
+  {
+    "slug": "why-did-abraham-lincoln-issue-the-emancipation-proclamation",
+    "title": "Why Did Abraham Lincoln Issue the Emancipation Proclamation?",
+    "figure": "Abraham Lincoln",
+    "excerpt": "Lincoln used wartime authority to strike at slavery in the rebellion. The proclamation changed the Union cause, but it did not abolish slavery everywhere.",
+    "author": "Echoes of History",
+    "date": "2026-10-20",
+    "category": "Historical questions",
+    "readTime": "4 min read",
+    "editorialNote": "AI-assisted historical explanation, checked against the linked sources. Interpretations and limitations of the evidence are identified in the text.",
+    "sections": [
+      {
+        "id": "short-answer",
+        "heading": "The short answer",
+        "sources": [
+          1,
+          2
+        ],
+        "paragraphs": [
+          "Abraham Lincoln issued the Emancipation Proclamation as a wartime measure against slavery in areas rebelling against the United States. It joined the Union’s military struggle to a commitment to emancipation in those places. Its final text took effect on January 1, 1863, and also authorized the recruitment of Black men into federal military service.",
+          "The document was both an exercise of military power and a statement about freedom. Lincoln grounded it in his authority as commander in chief, while describing emancipation as just. Those two purposes belonged to the same policy: undermining slavery could weaken the rebellion and make the Union war effort a means of liberation."
+        ]
+      },
+      {
+        "id": "scope",
+        "heading": "Who did the proclamation cover?",
+        "sources": [
+          2
+        ],
+        "paragraphs": [
+          "The proclamation identified states and parts of states that remained in rebellion. It did not apply to the loyal slaveholding border states, and it specifically excluded certain areas of the Confederacy. Reading those exclusions is essential to understanding what Lincoln actually ordered.",
+          "The boundaries reflected the document’s use of war powers. This was not a nationwide constitutional amendment abolishing slavery. It was an executive action directed at the rebellion. That limited reach does not make it meaningless; it explains both the legal form Lincoln chose and why additional action would still be needed."
+        ]
+      },
+      {
+        "id": "enforcement",
+        "heading": "Did freedom arrive immediately?",
+        "sources": [
+          1,
+          2
+        ],
+        "paragraphs": [
+          "A proclamation could change the government’s declared policy without instantly changing conditions wherever slavery existed. Enforcing freedom in Confederate territory depended on the progress of the war and on the ability of enslaved people to reach protection. The order’s practical effects unfolded as Union power expanded.",
+          "Enslaved people were also participants in this history. The National Archives emphasizes that they had pursued their own liberty from the war’s beginning. The proclamation should therefore be understood alongside their actions, rather than as a story in which freedom was simply handed down to passive recipients."
+        ]
+      },
+      {
+        "id": "military-service",
+        "heading": "Why did military service matter?",
+        "sources": [
+          1,
+          2
+        ],
+        "paragraphs": [
+          "The final proclamation made provision for receiving eligible people into the armed services. That decision created a direct connection between emancipation and the military struggle. Black service members could fight for the defeat of the government that sought to preserve their enslavement.",
+          "This provision also helps explain why the proclamation was more than a symbolic announcement. It changed what the federal government would do. The executive promised to uphold the freedom it declared, and the military could enlist people whose participation strengthened the Union’s capacity to carry that promise forward."
+        ]
+      },
+      {
+        "id": "amendment",
+        "heading": "Why was the Thirteenth Amendment still necessary?",
+        "sources": [
+          3
+        ],
+        "paragraphs": [
+          "The Thirteenth Amendment provided a different and broader foundation. Passed by Congress on January 31, 1865, and ratified on December 6, it prohibited slavery and involuntary servitude throughout the United States and its jurisdiction, with an exception for punishment following conviction of a crime.",
+          "That constitutional change should not be confused with the earlier wartime order. The proclamation targeted the rebellion; the amendment addressed the institution across the country. Together, the two documents show why ending slavery involved more than one presidential decision, one date, or one legal instrument."
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "date": "September 22, 1862",
+        "event": "Lincoln issues the preliminary proclamation, announcing the coming emancipation policy.",
+        "sources": [
+          2
+        ]
+      },
+      {
+        "date": "January 1, 1863",
+        "event": "The final proclamation takes effect for the designated areas in rebellion.",
+        "sources": [
+          2
+        ]
+      },
+      {
+        "date": "January 31, 1865",
+        "event": "Congress passes the Thirteenth Amendment.",
+        "sources": [
+          3
+        ]
+      },
+      {
+        "date": "December 6, 1865",
+        "event": "The Thirteenth Amendment is ratified.",
+        "sources": [
+          3
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": 1,
+        "title": "National Archives — The Emancipation Proclamation",
+        "url": "https://www.archives.gov/exhibits/featured-documents/emancipation-proclamation",
+        "note": "Historical overview, including the limits of enforcement and the actions of enslaved people."
+      },
+      {
+        "id": 2,
+        "title": "National Archives — Transcript of the proclamation",
+        "url": "https://www.archives.gov/exhibits/featured-documents/emancipation-proclamation/transcript.html",
+        "note": "Primary document: authority claimed, designated areas, exclusions, and military recruitment."
+      },
+      {
+        "id": 3,
+        "title": "National Archives — Thirteenth Amendment",
+        "url": "https://www.archives.gov/milestone-documents/13th-amendment",
+        "note": "Constitutional text and the dates of congressional passage and ratification."
+      }
+    ],
+    "questions": [
+      "Why did you use your authority as commander in chief?",
+      "How did you understand the proclamation’s geographical limits?",
+      "Why did ending slavery require a constitutional amendment?"
+    ]
+  },
+  {
+    "slug": "why-was-socrates-put-on-trial",
+    "title": "Why Was Socrates Put on Trial?",
+    "figure": "Socrates",
+    "excerpt": "Athens prosecuted Socrates for impiety and corrupting the young. Plato’s account asks what happens when a city treats persistent questioning as a threat.",
+    "author": "Echoes of History",
+    "date": "2026-10-20",
+    "category": "Historical questions",
+    "readTime": "4 min read",
+    "editorialNote": "AI-assisted historical explanation, checked against the linked sources. Interpretations and limitations of the evidence are identified in the text.",
+    "sections": [
+      {
+        "id": "short-answer",
+        "heading": "The short answer",
+        "sources": [
+          1,
+          3
+        ],
+        "paragraphs": [
+          "Socrates was tried in Athens in 399 BCE on charges involving impiety and the corruption of young people. In Plato’s account, the accusation includes failing to recognize the city’s gods and introducing new divine beings. The court convicted him, and he was sentenced to death.",
+          "It is tempting to summarize the case as a prosecution for asking questions. That captures part of its philosophical significance, but not the formal charges. A careful explanation separates what the accusers alleged, how Socrates defended himself, and what later readers think the trial means."
+        ]
+      },
+      {
+        "id": "reputation",
+        "heading": "Why had his questioning made enemies?",
+        "sources": [
+          1
+        ],
+        "paragraphs": [
+          "In the Apology, Plato presents Socrates as a man who tests claims to wisdom. He questions people with respected positions and finds that their confidence can exceed their understanding. Socrates explains the resentment against him partly through the embarrassment these encounters cause.",
+          "Younger listeners, in his telling, enjoy watching these examinations and sometimes imitate them. People who feel exposed may blame Socrates rather than reconsider their own claims. This is the defense’s explanation of hostility, not independent proof of the motives of every accuser or juror."
+        ]
+      },
+      {
+        "id": "religion",
+        "heading": "Was Socrates simply an atheist?",
+        "sources": [
+          1
+        ],
+        "paragraphs": [
+          "Plato’s Socrates challenges the religious accusation by examining Meletus, one of his accusers. He argues that it is inconsistent to accuse him of believing in divine activities or beings while also saying that he believes in no gods at all. His defense turns the prosecution’s language into a problem for the prosecution.",
+          "The argument does not settle every question about Socrates’s religious outlook. It does show why calling the trial merely a punishment for atheism can mislead. The controversy concerned his relationship to the city’s religion, and Plato depicts him invoking a divine mission for his philosophical work."
+        ]
+      },
+      {
+        "id": "defense",
+        "heading": "Why did he refuse to promise silence?",
+        "sources": [
+          1
+        ],
+        "paragraphs": [
+          "In the Apology, Socrates insists that he would continue examining himself and others even if acquittal depended on stopping. He presents moral inquiry as a responsibility that cannot simply be exchanged for personal safety. He also resists turning his defense into a performance designed to win sympathy.",
+          "For readers, this creates the central tension of the work. A defense normally aims to secure release, but Plato’s Socrates refuses to treat survival as the highest good. The text asks whether preserving a life is enough if doing so requires abandoning the activity that gives that life its purpose."
+        ]
+      },
+      {
+        "id": "sources",
+        "heading": "How much of this account can we trust?",
+        "sources": [
+          1,
+          2,
+          3
+        ],
+        "paragraphs": [
+          "The Apology is a literary and philosophical work by an admirer, not a surviving courtroom transcript. Socrates left no writings of his own. The Stanford Encyclopedia of Philosophy emphasizes the difficulty of reconstructing him from authors whose portraits differ. We can identify the trial and its outcome more securely than every word of the defense.",
+          "Plato’s Crito extends the problem beyond the courtroom. There, an imprisoned Socrates rejects an escape plan and examines his obligations to the laws. Read together, the dialogues present a demanding combination: he challenges the city’s judgment while refusing to assume that an unjust judgment excuses every possible response."
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "date": "423 BCE",
+        "event": "Aristophanes stages Clouds, an influential comic portrayal of Socrates.",
+        "sources": [
+          3
+        ]
+      },
+      {
+        "date": "399 BCE: trial",
+        "event": "An Athenian court convicts Socrates on the charges brought against him.",
+        "sources": [
+          1,
+          3
+        ]
+      },
+      {
+        "date": "399 BCE: imprisonment and death",
+        "event": "Plato’s dialogues portray Socrates facing the consequences of his sentence.",
+        "sources": [
+          2,
+          3
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": 1,
+        "title": "Plato — Apology, translated by Benjamin Jowett",
+        "url": "https://www.gutenberg.org/files/1656/1656-h/1656-h.htm",
+        "note": "Primary ancient literary source. The dialogue presents Socrates’s defense through Plato’s perspective; it is not a verbatim court record."
+      },
+      {
+        "id": 2,
+        "title": "Plato — Crito, translated by Benjamin Jowett",
+        "url": "https://www.gutenberg.org/files/1657/1657-h/1657-h.htm",
+        "note": "Primary ancient dialogue about the proposed escape and obligations to the laws."
+      },
+      {
+        "id": 3,
+        "title": "Stanford Encyclopedia of Philosophy — Socrates",
+        "url": "https://plato.stanford.edu/entries/socrates/",
+        "note": "Scholarly discussion of the sources, historical context, and chronology."
+      }
+    ],
+    "questions": [
+      "How could questioning someone benefit them even when it embarrassed them?",
+      "Why would you refuse freedom if it required you to stop philosophizing?",
+      "How can you challenge a city’s judgment while respecting its laws?"
+    ]
+  },
+  {
+    "slug": "how-did-marie-curie-discover-radium",
+    "title": "How Did Marie Curie Discover Radium?",
+    "figure": "Marie Curie",
+    "excerpt": "An unexpectedly strong measurement pointed to an unknown element. Turning that clue into convincing chemical evidence took years of separation and testing.",
+    "author": "Echoes of History",
+    "date": "2026-10-20",
+    "category": "Historical questions",
+    "readTime": "4 min read",
+    "editorialNote": "AI-assisted historical explanation, checked against the linked sources. Interpretations and limitations of the evidence are identified in the text.",
+    "sections": [
+      {
+        "id": "short-answer",
+        "heading": "The short answer",
+        "sources": [
+          1
+        ],
+        "paragraphs": [
+          "Marie Curie discovered radium by following a mismatch between a mineral’s measured radioactivity and what its known ingredients could explain. Working with Pierre Curie, she separated the mineral into chemical fractions and tested which fractions retained the strongest activity. Their measurements led them to announce radium in December 1898.",
+          "The announcement was not the end of the discovery. Evidence that an unknown substance exists is different from obtaining enough of it in a sufficiently pure form to establish its chemical properties. Curie’s work on purification continued for years after the initial identification."
+        ]
+      },
+      {
+        "id": "clue",
+        "heading": "What was unusual about pitchblende?",
+        "sources": [
+          1
+        ],
+        "paragraphs": [
+          "In her account of the research, Curie explains that some uranium minerals were more active than expected. After checking that the discrepancy was not an experimental mistake, she proposed that the ores contained a small amount of another substance with much stronger radioactivity.",
+          "This was an inference from measurement. The researchers could not simply point to a visible piece of radium inside the ore. They had to ask what hidden component would explain the observation, then design a way to separate that component from the much larger quantities of ordinary material around it."
+        ]
+      },
+      {
+        "id": "separation",
+        "heading": "How did they track an element they could not yet isolate?",
+        "sources": [
+          1
+        ],
+        "paragraphs": [
+          "The Curies combined chemical separation with repeated radioactivity measurements. Each treatment divided the material into different products. Measuring those products indicated where the activity had gone, allowing subsequent work to focus on the most promising fraction.",
+          "The activity did not all behave alike. They identified two distinct radioactive components, announcing polonium in July 1898 and radium that December. Radium accompanied barium during separation, while polonium was associated with bismuth. These chemical relationships helped determine the next experimental steps."
+        ]
+      },
+      {
+        "id": "purification",
+        "heading": "Why did purification take so long?",
+        "sources": [
+          1
+        ],
+        "paragraphs": [
+          "The new substances were present in extremely small proportions. Curie describes obtaining large quantities of residues from uranium processing and treating them in difficult working conditions. The work required both heavy physical handling and delicate procedures for separating closely associated materials.",
+          "For radium, she used repeated crystallization of salts to increase its concentration relative to barium. In 1902 she prepared a small quantity of sufficiently pure radium chloride to examine its spectrum and determine an atomic weight. Those measurements supplied chemical evidence that complemented the earlier radioactivity results.",
+          "Radium chloride is a compound, not a sample of pure radium metal. Keeping that distinction clear prevents the story from collapsing several different achievements into one moment. Identifying a new element, preparing a pure salt, and obtaining the element in metallic form are related but separate milestones."
+        ]
+      },
+      {
+        "id": "evidence",
+        "heading": "What made the discovery convincing?",
+        "sources": [
+          1,
+          2
+        ],
+        "paragraphs": [
+          "The argument became stronger because different kinds of evidence supported one another. The unexplained radioactivity suggested something new. Chemical separation concentrated it. Measurements of the purified material helped establish a distinct element. The discovery depended on the relationship between those steps, rather than on a single dramatic observation.",
+          "Curie’s 1911 Nobel Prize in Chemistry recognized her work on radium and polonium, including radium’s isolation and properties. Her later account is especially valuable because it explains the research from a participant’s perspective, though it remains a retrospective account. Reading it alongside the award record helps distinguish the experimental process from the public recognition that followed."
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "date": "July 1898",
+        "event": "Marie and Pierre Curie announce polonium.",
+        "sources": [
+          1
+        ]
+      },
+      {
+        "date": "December 1898",
+        "event": "The research team announces radium.",
+        "sources": [
+          1
+        ]
+      },
+      {
+        "date": "1902",
+        "event": "Marie Curie prepares sufficiently pure radium chloride for chemical characterization.",
+        "sources": [
+          1
+        ]
+      },
+      {
+        "date": "1911",
+        "event": "Marie Curie receives the Nobel Prize in Chemistry.",
+        "sources": [
+          2
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": 1,
+        "title": "Marie Curie — Pierre Curie, chapter IV and autobiographical notes",
+        "url": "https://www.gutenberg.org/files/69617/69617-h/69617-h.htm",
+        "note": "Participant’s retrospective account, published in English in 1923. Describes the measurements, separation methods, and preparation of radium salts."
+      },
+      {
+        "id": 2,
+        "title": "Nobel Prize — Chemistry 1911",
+        "url": "https://www.nobelprize.org/prizes/chemistry/1911/summary/",
+        "note": "Official award record identifying the discoveries and chemical work recognized by the prize."
+      }
+    ],
+    "questions": [
+      "How did you rule out a measurement error before proposing a new element?",
+      "Why did radioactivity make a useful guide for chemical separation?",
+      "What evidence did you need beyond the first announcement of radium?"
+    ]
+  }
+]
